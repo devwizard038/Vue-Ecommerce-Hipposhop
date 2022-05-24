@@ -1,13 +1,14 @@
 <template>
- <h1>Shop Cart</h1>
- <div id="app">
-   <div id="nav">
-    <router-link class="link" to="/">Home</router-link>
-    <router-link class="link" to="/admin">AdminPage</router-link>
-   </div>
-  <router-view />
- </div>
- 
+  
+  <div id="app">
+    <div id="nav">
+      <p>Shop Cart</p>
+      <router-link class="link" to="/">Home</router-link>
+      <router-link class="link" to="/admin">AdminPage</router-link>
+    </div>
+    <router-view />
+  </div>
+
 </template>
 
 
@@ -22,8 +23,10 @@
   margin-top: 60px;
 }
 
-.link{
+.link {
   padding: 30px;
   padding-left: 30px;
 }
+
+.nav{}
 </style>

@@ -1,9 +1,6 @@
 <template>
-	<h1>Admin Page</h1>
-	<div>
-		<button @click="saveList">Save List</button>
-		<button @click="clearList">Clear list</button>
-	</div>
+	<h1 class="logo">Admin Page</h1>
+	<button @click="saveList" class="btn-load">Load Product List</button>
 
 	<div v-if="table != null" class="tabel">
 		<table>
@@ -20,7 +17,9 @@
 			</tr>
 		</table>
 	</div>
+
 	<h2 v-else>No data in localStorage</h2>
+	<button v-if="table != null" @click="clearList" class="btn-clear">Clear list</button>
 </template>
 
 <script>
@@ -53,6 +52,40 @@ export default {
 </script>
 
 <style>
+.btn-load {
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	background-color: rgb(69, 172, 69);
+	font-weight: bold;
+	font-size: 0.8rem;
+	padding: 0.7rem;
+	color: white;
+	border: rgb(69, 172, 69);
+	border-radius: 0.8rem;
+	margin-right: 1rem;
+}
+
+.btn-load:hover {
+	background-color: rgb(40, 90, 40);
+	cursor: pointer;
+}
+
+.btn-clear {
+	background-color: rgb(194, 34, 34);
+	font-weight: bold;
+	font-size: 0.8rem;
+	padding: 0.7rem;
+	color: white;
+	border: rgb(69, 172, 69);
+	border-radius: 0.8rem;
+	margin-right: 1rem;
+	margin-top: 1rem;
+}
+
+.btn-clear:hover {
+	background-color: rgb(240, 53, 53);
+	cursor: pointer;
+}
+
 .tabel {
 	padding-top: 1rem;
 }
