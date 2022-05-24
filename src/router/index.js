@@ -1,8 +1,8 @@
 
 import { createWebHistory, createRouter } from 'vue-router';
 
-import HomePage from "./views/HomePage";
-import AdminPage from "./views/AdminPage";
+import HomePage from "../views/HomePage";
+import AdminPage from "../views/AdminPage";
 
 
 const routes = [
