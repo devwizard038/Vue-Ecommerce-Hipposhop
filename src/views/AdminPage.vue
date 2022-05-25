@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import json from '../../src/assets/test.json'
+import json from '../../src/assets/products.json'
 
 
 export default {
@@ -53,7 +53,7 @@ export default {
 
 <style>
 .btn-load {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
+
 	background-color: rgb(69, 172, 69);
 	font-weight: bold;
 	font-size: 0.8rem;

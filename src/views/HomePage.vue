@@ -4,5 +4,18 @@
 </template>
 
 <script>
-export default{}
+
+export default{
+    data(){
+        return{
+            products: null,
+            data:null
+        }
+    },
+
+    mounted(){
+            this.data=this.products
+    }
+
+}
 </script>
