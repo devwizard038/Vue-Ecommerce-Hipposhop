@@ -23,22 +23,23 @@
 </template>
 
 <script>
-import json from '../../src/assets/products.json'
-
+// import json from '../../src/assets/products.json';
+import json2 from '../../src/assets/products2.json';
+import {SHOP_KEY, TABLES} from "@/const";
 
 export default {
 	name: 'AdminPage',
 	data() {
 		return {
-			table: JSON.parse(localStorage.getItem('LOCAL_KEY_CART_products')),
+			table: JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`)),
 		}
 	},
 	props: {},
 	methods: {
 		saveList() {
 			// Functie stocare in Local Storage
-			localStorage.setItem('LOCAL_KEY_CART_products', JSON.stringify(json));
-			this.table = JSON.parse(localStorage.getItem('LOCAL_KEY_CART_products'));
+			localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(json2));
+			this.table = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
 		},
 		clearList() {
 			localStorage.clear()

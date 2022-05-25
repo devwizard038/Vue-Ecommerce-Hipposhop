@@ -1,10 +1,24 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+// import store from './store'
+import { createStore } from 'vuex';
+import products from "@/store/products";
+
+// Create a new store instance.
+const store = createStore({
+	modules: {
+		products,
+		// categories
+	}
+});
 
 
-createApp(App).use(router).use(store).mount('#app')
+let app = createApp(App);
+app.use(router);
+app.use(store);
+
+app.mount('#app');
 
 
 // iterare localStorage
