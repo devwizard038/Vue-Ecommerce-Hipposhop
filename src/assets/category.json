@@ -1,0 +1,42 @@
+[
+ {
+  "id": 1,
+  "name": "Materiale de construcții"
+ },
+ {
+  "id": 2,
+  "name": "Unelte și accesorii"
+ },
+ {
+  "id": 3,
+  "name": "Instalații electrice"
+ },
+ {
+  "id": 4,
+  "name": "Instalații apă"
+ },
+ {
+  "id": 5,
+  "name": "Lemnărie"
+ },
+ {
+  "id": 6,
+  "name": "Decorațiuni"
+ },
+ {
+  "id": 7,
+  "name": "Iluminat"
+ },
+ {
+  "id": 8,
+  "name": "Amenajări interioare"
+ },
+ {
+  "id": 9,
+  "name": "Amenajări exterioare"
+ },
+ {
+  "id": 10,
+  "name": "Echipament de protectie"
+ }
+]
