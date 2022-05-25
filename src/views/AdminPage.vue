@@ -23,9 +23,10 @@
 </template>
 
 <script>
-// import json from '../../src/assets/products.json';
-import json2 from '../../src/assets/products2.json';
+import jsonProducts from '../../src/assets/products.json';
+import jsonCategory from '../../src/assets/category.json';
 import {SHOP_KEY, TABLES} from "@/const";
+
 
 export default {
 	name: 'AdminPage',
@@ -38,7 +39,9 @@ export default {
 	methods: {
 		saveList() {
 			// Functie stocare in Local Storage
-			localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(json2));
+			localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
+			localStorage.setItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`, JSON.stringify(jsonCategory));
+
 			this.table = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
 		},
 		clearList() {

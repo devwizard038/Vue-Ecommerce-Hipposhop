@@ -1,9 +1,9 @@
 <template>
 
-<h3>Products</h3>
-<ol>
-    <li v-for="product in products" :key="product.id">{{`${product.title} - pret: ${product.price} lei `}}</li>
-</ol>
+<h3>Categories</h3>
+<ul>
+    <li v-for="categ in category" :key="categ.id"><a href="#">{{categ.name}}</a></li>
+</ul>
 
 </template>
 
@@ -11,17 +11,17 @@
 // import { SHOP_KEY,TABLES } from '@/const';
 
 export default{
-   name:'ProductsComponent',
+   name:'CategoryComponent',
    
    computed: {
-        products() {
-            return this.$store.getters["products/getList"];
+        category() {
+            return this.$store.getters["category/getList"];
         }
     },
     mounted() {
         console.log(this.$store);
         // let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`));
-        this.$store.dispatch("products/loadList", this.data);
+        this.$store.dispatch("category/loadList", this.data);
         // this.products = this.$store.getters["getList"];
     },
 }
@@ -29,9 +29,13 @@ export default{
 </script>
 
 <style>
-ol{
+ul{
+  list-style: none;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+a{
+    text-decoration: none;
 }
 </style>

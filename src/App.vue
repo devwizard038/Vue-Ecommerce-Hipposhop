@@ -26,7 +26,14 @@
 .link {
   padding: 30px;
   padding-left: 30px;
-}
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-decoration: none;
+  }
+  link:hover{
+    color: green;
+  }
+  a:visited{ color: #2c3e50; }
 
-.nav{}
+
 </style>
