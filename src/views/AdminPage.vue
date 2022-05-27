@@ -1,5 +1,6 @@
 <template>
-	<h1 class="logo">Admin Page</h1>
+	<h1 >Admin Page</h1>
+	<hr />
 	<button @click="saveList" class="btn-load">Load Product List</button>
 
 	<div v-if="table != null" class="tabel">

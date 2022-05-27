@@ -1,12 +1,13 @@
 <template>
 <h1>Home Page</h1>
+<hr />
 <!-- {{ products }} -->
 <section class="tabel">
   <div>
-  <CategoryComp />
+  <CategoryComp @clickId="categoryId = $event" />
   </div>
   <div>
-  <ProductPage />
+  <ProductPage :categoryId = "categoryId"/>
   </div>
 </section>
 </template>
@@ -23,6 +24,7 @@ export default {
         return {
         // products: null,
         // data: null
+        categoryId : 0,
         };
     },
     computed: {
@@ -40,7 +42,6 @@ export default {
     //   console.log("beforeMounted");
     // },
     mounted() {
-        console.log(this.$store);
         let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
         this.$store.dispatch("products/loadList", data);
         // this.products = this.$store.getters["getList"];
