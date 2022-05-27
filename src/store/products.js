@@ -19,6 +19,11 @@ export default {
 		}
 	},
 	actions: {
+		/**
+		 *
+		 * @param commit
+		 * @param data
+		 */
 		loadList ({ commit }, data) {
 			
 			// TODO: recuperer la list des products du localStorage

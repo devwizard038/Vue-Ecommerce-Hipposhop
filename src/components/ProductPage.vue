@@ -3,16 +3,18 @@
     <h3>Products</h3>
     <div class="product-box">
         <!-- Loop and display products -->
-        <ol v-if="categoryId === 0">
-            <li class="product" v-for="product in products" :key="product.id">{{ `${product.title} - pret:
-                            ${product.price} lei / ${[product.unit]} `
-            }}</li>
+        <ol>
+				<li class="product" v-for="product in products" :key="product.id">
+					{{ `${product.title} - pret:
+					${product.price} lei / ${[product.unit]} `
+					}}
+				</li>
         </ol>
         <!-- Loop and display category_id filtered products -->
-        <ol v-else>
-            <li class="product" v-for="product in products.filter(product => product.category_id === categoryId)"
-                :key="product.id">{{ `${product.title} - pret: ${product.price} lei / ${[product.unit]} ` }}</li>
-        </ol>
+<!--        <ol v-else>-->
+<!--            <li class="product" v-for="product in products.filter(product => product.category_id === categoryId)"-->
+<!--                :key="product.id">{{ `${product.title} - pret: ${product.price} lei / ${[product.unit]} ` }}</li>-->
+<!--        </ol>-->
     </div>
 
 </template>
@@ -20,13 +22,22 @@
 <script>
 
 export default {
-    props: ['categoryId'],
+    props: {
+			categoryId: {
+				type: Number,
+				default: () => 0
+			}
+		},
     name: 'ProductsComponent',
 
     computed: {
         //  Retrieve list from LocalStorage.
         products() {
-            return this.$store.getters["products/getList"];
+            return this.categoryId
+							? this.$store.getters["products/getList"].filter(
+								product => product.category_id === this.categoryId
+							)
+							: this.$store.getters["products/getList"]
         }
     },
     mounted() {

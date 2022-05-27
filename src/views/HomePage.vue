@@ -4,7 +4,7 @@
     <!-- {{ products }} -->
     <section class="tabel">
         <div>
-            <CategoryComp @clickId="categoryId = $event" />
+            <CategoryComp @selected="getSelectedCategory" />
         </div>
         <div>
             <ProductPage :categoryId="categoryId" />
@@ -20,6 +20,7 @@ import ProductPage from "@/components/ProductPage.vue";
 
 
 export default {
+    components: { CategoryComp, ProductPage },
     data() {
         return {
             categoryId: 0,
@@ -34,7 +35,16 @@ export default {
         let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
         this.$store.dispatch("products/loadList", data);
     },
-    components: { CategoryComp, ProductPage }
+		methods: {
+			/**
+			 * Catch selected category id
+			 * @param {Integer} id
+			 */
+			getSelectedCategory(id) {
+				this.categoryId = id;
+			}
+		}
+
 }
 </script>
 

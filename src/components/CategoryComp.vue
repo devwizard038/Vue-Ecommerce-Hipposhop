@@ -5,33 +5,31 @@
         <!-- Filter Reset -->
         <li class="all-products"><a @click="clickId(0)">Toate produsele</a></li>
         <!-- Loop for iterating over category list and onClick filter -->
-        <li class="category-item" v-for="categ in category" :key="categ.id"><a @click="clickId(categ.id)">{{ categ.name
-        }}</a></li>
+        <li class="category-item" v-for="categ in category" :key="categ.id"><a @click="clickId(categ.id)">{{ categ.name }}</a></li>
     </ul>
 
 </template>
 
 <script>
 
-
 export default {
     name: 'CategoryComponent',
-    emits: ['clickId'],
+    emits: ['selected'],
     computed: {
         category() {
             return this.$store.getters["category/getList"];
         },
-
     },
     mounted() {
-
         this.$store.dispatch("category/loadList", this.data);
-
     },
     methods: {
-        // Emits to data property in parent page (HomePage)
-        clickId(e) {
-            this.$emit("clickId", e)
+			/**
+			 * Emits to data property in parent page (HomePage)
+			 * @param id
+			 */
+			clickId(id) {
+            this.$emit("selected", id)
         }
     }
 }
