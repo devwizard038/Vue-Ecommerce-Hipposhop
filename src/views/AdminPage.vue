@@ -26,7 +26,8 @@
 import jsonProducts from '../../src/assets/products.json';
 import jsonCategory from '../../src/assets/category.json';
 import {SHOP_KEY, TABLES} from "@/const";
-
+// import products from '@/store/products';
+// import category from '@/store/category';
 
 export default {
 	name: 'AdminPage',

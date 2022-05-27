@@ -1,8 +1,9 @@
 <template>
 
 <h3>Products</h3>
+
 <ol>
-    <li v-for="product in products" :key="product.id">{{`${product.title} - pret: ${product.price} lei `}}</li>
+    <li v-for="product in products" :key="product.id">{{`${product.title} - pret: ${product.price} lei / ${[product.unit]} `}}</li>
 </ol>
 
 </template>
@@ -33,5 +34,9 @@ ol{
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  overflow:hidden; 
+  overflow-y:scroll;
+  height:200px; 
+  width:100%;
 }
 </style>
