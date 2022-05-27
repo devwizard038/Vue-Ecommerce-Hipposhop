@@ -1,5 +1,5 @@
 <template>
-	<h1 >Admin Page</h1>
+	<h1>Admin Page</h1>
 	<hr />
 	<button @click="saveList" class="btn-load">Load Product List</button>
 
@@ -10,7 +10,7 @@
 				<th>Title</th>
 				<th>Price</th>
 			</tr>
-			<!-- Loop tabel -->
+			<!-- Loop and display table -->
 			<tr v-for="n in table" :key="n">
 				<td>{{ n.id }}</td>
 				<td>{{ n.title }}</td>
@@ -20,33 +20,35 @@
 	</div>
 
 	<h2 v-else>No data in localStorage</h2>
+	<!-- Clear LocalStorage initiator -->
 	<button v-if="table != null" @click="clearList" class="btn-clear">Clear list</button>
 </template>
 
 <script>
 import jsonProducts from '../../src/assets/products.json';
 import jsonCategory from '../../src/assets/category.json';
-import {SHOP_KEY, TABLES} from "@/const";
-// import products from '@/store/products';
-// import category from '@/store/category';
+import { SHOP_KEY, TABLES } from "@/const";
 
 export default {
 	name: 'AdminPage',
 	data() {
 		return {
+			// Transfrom JSON data from string to object
 			table: JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`)),
 		}
 	},
 	props: {},
 	methods: {
 		saveList() {
-			// Functie stocare in Local Storage
+			// Stores data in LocalStorage
 			localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
 			localStorage.setItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`, JSON.stringify(jsonCategory));
 
+			// List live update
 			this.table = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
 		},
 		clearList() {
+			// Clears LocalStorage
 			localStorage.clear()
 			this.table = null;
 		}

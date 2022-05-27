@@ -1,5 +1,5 @@
 <template>
-  
+
   <div id="app">
     <div id="nav">
       <p class="logo">Shop Cart</p>
@@ -30,13 +30,17 @@
   text-decoration: none;
   right: 100%;
   color: white;
-  }
-.link:hover{
-    color: #fc5000;
-  }
-.link:active{ color: #fc5000; }
+}
 
-#nav{
+.link:hover {
+  color: #fc5000;
+}
+
+.link:active {
+  color: #fc5000;
+}
+
+#nav {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -45,12 +49,12 @@
   background-color: rgb(7, 7, 7)
 }
 
-.logo{
-   font-family: Avenir, Helvetica, Arial, sans-serif;
+.logo {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #fc5000;
-   font-weight: bold;
+  font-weight: bold;
   font-size: 1.5rem;
   text-decoration: underline;
   padding-right: 10rem;
