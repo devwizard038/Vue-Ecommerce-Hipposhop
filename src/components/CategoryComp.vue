@@ -1,80 +1,89 @@
 <template>
 
-    <h3>Categories</h3>
-    <ul>
-        <!-- Filter Reset -->
-        <li class="all-products"><a @click="clickId(0)">Toate produsele</a></li>
-        <!-- Loop for iterating over category list and onClick filter -->
-        <li class="category-item" v-for="categ in category" :key="categ.id"><a @click="clickId(categ.id)">{{ categ.name }}</a></li>
-    </ul>
-
+	<h3>Categories</h3>
+	<ul>
+		<!-- Filter Reset -->
+		<li class="category-item" :id="0"><a @click="clickId(0);clickedFilter(0)">Toate produsele</a></li>
+		<!-- Loop for iterating over category list and onClick filter -->
+		<li class="category-item" v-for="categ in category" :key="categ.id" :id="categ.id"><a @click="clickId(categ.id);clickedFilter(categ.id)">{{ categ.name
+		}}</a></li>
+	</ul>
+  
 </template>
 
 <script>
 
 export default {
-    name: 'CategoryComponent',
-    emits: ['selected'],
-    computed: {
-        category() {
-            return this.$store.getters["category/getList"];
-        },
-    },
-    mounted() {
-        this.$store.dispatch("category/loadList", this.data);
-    },
-    methods: {
-			/**
-			 * Emits to data property in parent page (HomePage)
-			 * @param id
-			 */
-			clickId(id) {
-            this.$emit("selected", id)
-        }
-    }
+	name: 'CategoryComponent',
+	emits: ['selected'],
+	computed: {
+		category() {
+			return this.$store.getters["category/getList"];
+		},
+	},
+	mounted() {
+		this.$store.dispatch("category/loadList", this.data);
+	},
+	methods: {
+		/**
+		 * Emits to data property in parent page (HomePage)
+		 * @param id
+		 */
+		clickId(id) {
+			this.$emit("selected", id)
+		},
+		clickedFilter(id) {
+			console.log(typeof id)
+			// console.log(document.querySelectorAll('.selected-item').length > 0)
+			if (document.querySelectorAll('.selected-item').length > 0) {
+				document.querySelector('.selected-item').classList.replace('selected-item', 'category-item')
+			}
+			document.getElementById(id).classList.replace('category-item', 'selected-item')
+		}
+	}
 }
 
 </script>
 
 <style>
 ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-weight: bold;
-    border: 2px solid black;
-    padding-right: 3rem;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	font-weight: bold;
+	border: 2px solid black;
+	padding-right: 3rem;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
 }
 
 a {
-    text-decoration: none;
-    cursor: pointer;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 .all-products {
-    color: rgb(185, 59, 0);
+	color: rgb(185, 59, 0);
 }
 
 .all-products:hover {
-    color: rgb(255, 92, 16);
+	color: rgb(255, 92, 16);
 }
 
 .category-item {
-    color: rgb(0, 0, 0);
+	color: rgb(0, 0, 0);
 }
 
 .category-item:hover {
-    color: rgb(255, 92, 16);
+	color: rgb(255, 92, 16);
 }
 
 .category-item:active {
-    color: rgb(255, 92, 16);
+	color: rgb(255, 92, 16);
 }
 
 .selected-item {
-    color: rgb(255, 92, 16);
+	color: rgb(255, 92, 16);
 }
 </style>
