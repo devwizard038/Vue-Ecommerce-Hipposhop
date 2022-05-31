@@ -1,6 +1,3 @@
-import { SHOP_KEY, TABLES } from "@/const";
-
-
 export default {
 	namespaced: true,
 	state () {

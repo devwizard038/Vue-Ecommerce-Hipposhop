@@ -1,29 +1,29 @@
 <template>
     <h1>Home Page</h1>
+    
     <hr />
     <!-- {{ products }} -->
     <section class="tabel">
         <div>
-            <CategoryComp @selected="getSelectedCategory" />
+            <CategoryComp @selected="getSelectedCategory" @breadCrumb="getBreadCrumb" />
         </div>
         <div>
-            <ProductPage :categoryId="categoryId" />
+            <ProductPage :categoryId="categoryId" :breadCrumb="breadCrumb"/>
         </div>
     </section>
 </template>
 
 <script>
-
 import { SHOP_KEY, TABLES } from "@/const";
 import CategoryComp from "@/components/CategoryComp.vue";
 import ProductPage from "@/components/ProductPage.vue";
-
 
 export default {
     components: { CategoryComp, ProductPage },
     data() {
         return {
             categoryId: 0,
+            breadCrumb: '',
         };
     },
     computed: {
@@ -41,8 +41,12 @@ export default {
 			 * @param {Integer} id
 			 */
 			getSelectedCategory(id) {
-				this.categoryId = id;
-			}
+				this.categoryId = Number(id);
+			},
+            getBreadCrumb(list){
+                this.breadCrumb = list;
+            }
+
 		}
 
 }
