@@ -23,7 +23,7 @@ export default {
     data() {
         return {
             categoryId: 0,
-            breadCrumb: '',
+            breadCrumb: ['Toate Produsele'],
         };
     },
     computed: {
