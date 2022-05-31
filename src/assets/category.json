@@ -1,84 +1,82 @@
- [
-        {
-            "id": 1,
-            "name": "Materiale de construcții",
-            "parent_id": "0"
-        },
-        {
-            "id": 2,
-            "name": "Unelte și accesorii",
-            "parent_id": "0"
-        },
-        {
-            "id": 3,
-            "name": "Instalații electrice",
-            "parent_id": "0"
-        },
-        {
-            "id": 4,
-            "name": "Instalații apă",
-            "parent_id": "0"
-        },
-        {
-            "id": 5,
-            "name": "Lemnărie",
-            "parent_id": "0"
-        },
-        {
-            "id": 6,
-            "name": "Decorațiuni",
-            "parent_id": "0"
-        },
-        {
-            "id": 7,
-            "name": "Iluminat",
-            "parent_id": "0"
-        },
-        {
-            "id": 8,
-            "name": "Amenajări interioare",
-            "parent_id": "0"
-        },
-        {
-            "id": 9,
-            "name": "Amenajări exterioare",
-            "parent_id": "0"
-        },
-        {
-            "id": 10,
-            "name": "Echipament de protectie",
-            "parent_id": "0"
-        },
-        {
-            "id": 11,
-            "name": "Rigips",
-            "parent_id": "1"
-        },
-        {
-            "id": 12,
-            "name": "Glet",
-            "parent_id": "1"
-        },
-        {
-            "id": 13,
-            "name": "Mortar",
-            "parent_id": "1"
-        },
-        {
-            "id": 14,
-            "name": "Șapă",
-            "parent_id": "1"
-        },
-        {
-            "id": 15,
-            "name": "Adeziv",
-            "parent_id": "8"
-        },
-        {
-            "id": 16,
-            "name": "Rigips mini",
-            "parent_id": "11"
-        }
-    ]
-
-    
+[
+ {
+  "id": 1,
+  "name": "Materiale de construcții",
+  "parent_id": 0
+ },
+ {
+  "id": 2,
+  "name": "Unelte și accesorii",
+  "parent_id": 0
+ },
+ {
+  "id": 3,
+  "name": "Instalații electrice",
+  "parent_id": 0
+ },
+ {
+  "id": 4,
+  "name": "Instalații apă",
+  "parent_id": 0
+ },
+ {
+  "id": 5,
+  "name": "Lemnărie",
+  "parent_id": 0
+ },
+ {
+  "id": 6,
+  "name": "Decorațiuni",
+  "parent_id": 0
+ },
+ {
+  "id": 7,
+  "name": "Iluminat",
+  "parent_id": 0
+ },
+ {
+  "id": 8,
+  "name": "Amenajări interioare",
+  "parent_id": 0
+ },
+ {
+  "id": 9,
+  "name": "Amenajări exterioare",
+  "parent_id": 0
+ },
+ {
+  "id": 10,
+  "name": "Echipament de protectie",
+  "parent_id": 0
+ },
+ {
+  "id": 11,
+  "name": "Rigips",
+  "parent_id": 1
+ },
+ {
+  "id": 12,
+  "name": "Glet",
+  "parent_id": 1
+ },
+ {
+  "id": 13,
+  "name": "Mortar",
+  "parent_id": 1
+ },
+ {
+  "id": 14,
+  "name": "Șapă",
+  "parent_id": 1
+ },
+ {
+  "id": 15,
+  "name": "Adeziv",
+  "parent_id": 1
+ },
+ {
+  "id": 16,
+  "name": "Rigips mini",
+  "parent_id": 11
+ }
+]
