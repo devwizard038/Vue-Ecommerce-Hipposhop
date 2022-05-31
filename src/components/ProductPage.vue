@@ -1,7 +1,7 @@
 <template>
 
 	<h3>Products</h3>
-	<p><a v-for="items in breadCrumb" :key="items">{{items}} / </a></p>
+	<p class="breadCrumb"><a v-for="items in breadCrumb" :key="items">{{items}} / </a></p>
 	<div class="product-box">
 		<!-- Loop and display products -->
 		<ol>
@@ -79,5 +79,14 @@ li {
 .product {
 	word-spacing: 0.1rem;
 	padding-block: 0.4rem;
+}
+.breadCrumb{
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-style: italic;
+  word-spacing: 0.3rem;
 }
 </style>

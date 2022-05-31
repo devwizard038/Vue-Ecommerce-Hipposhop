@@ -3,7 +3,7 @@
 	<h3>Categories</h3>
 	<ul>
 		<!-- Filter Reset -->
-		<li class="category-item" :id="0"><a @click="clickId(0); clickedFilter(0)">Toate
+		<li class="category-item" :id="0"><a @click="clickId(0); clickedFilter(0);treeOrigins('')">Toate
 				produsele</a></li>
 
 		<!-- Category Tree Loop -->
@@ -54,11 +54,9 @@ export default {
 			for (let i = 0; i < list.length; i++) {
 				for (let j = 0; j < list.length; j++) {
 					if (Number(list[j].parent_id) === temp[temp.length - 1]) {
-						
 						temp.push(Number(list[j].id));
 						list[j].position = temp.length - 1;
 						this.catTree.push(list[j]);
-						
 					} else if (Number(list[j].id) === temp[temp.length - 1]) {
 						temp.pop(Number(list[j].id));
 					}
@@ -69,16 +67,12 @@ export default {
 		treeOrigins(selected) {
 			let list = [selected.name]
 			let position = selected.position
-
 			for (let i = 0; i < position-1; i++) {
 				let test = this.catTree.filter(n => n.id == selected.parent_id);
 				list.unshift(test[0].name)
 				selected = test[0];
-
-				console.log(selected)
-				console.log(list)
 			}
-
+			list.unshift('Toate Produsele')
 			this.$emit("breadCrumb", list);
 		}
 	}
