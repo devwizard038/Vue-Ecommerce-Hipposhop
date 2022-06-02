@@ -81,10 +81,11 @@ export default {
   align-items: flex-start;
   justify-content: flex-start;
   background: #fbf7ec;
-  border: 0.5rem solid white;
+  border: 0.2rem solid white;
   padding: 0.5rem;
   font-family: "Open Sans", sans-serif;
 }
+
 .card p {
   position: relative;
   display: flex;
@@ -94,12 +95,23 @@ export default {
   padding-left: 1rem;
 }
 
+.card:hover {
+  border: 0.1rem solid rgb(255, 92, 16);
+}
+
 img {
   width: 8rem;
   height: 6rem;
 }
+
 .cell {
   align-items: center;
   width: 2rem;
+  border: 0.1rem solid white;
+  outline-color: rgb(255, 92, 16);
+}
+
+.cell:hover{
+  border: 0.1rem solid rgb(255, 92, 16);
 }
 </style>

@@ -11,19 +11,17 @@
   </div>
 
   <div class="product-box">
-    <ol class="product">
-      <div>
-        <ProductComp
-          v-for="product in products"
-          :key="product.id"
-          :name="product.title"
-          :price="product.price"
-          :image="product.image"
-          :unit="product.unit"
-          :product="product"
-        />
-      </div>
-    </ol>
+    <div class="product">
+      <ProductComp
+        v-for="product in products"
+        :key="product.id"
+        :name="product.title"
+        :price="product.price"
+        :image="product.image"
+        :unit="product.unit"
+        :product="product"
+      />
+    </div>
     <!-- Loop and display products -->
     <!-- <ol>
 			<li class="product" v-for="product in products" :key="product.id">
@@ -87,16 +85,16 @@ export default {
 </script>
 
 <style scoped>
-ol {
+/* ol {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  overflow: hidden;
+  overflow: scroll;
   overflow-y: scroll;
   height: 50vh;
   width: auto;
   border: 2px solid black;
-}
+} */
 
 li {
   padding-top: 0.3rem;
@@ -109,7 +107,28 @@ li {
 .product {
   word-spacing: 0.1rem;
   padding-block: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: auto;
+  overflow-y: auto;
+  height: 50vh;
+  width: auto;
+  /* border: 2px solid black; */
 }
+
+.product::-webkit-scrollbar {
+    width: 16px;
+}
+.product::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+}
+.product::-webkit-scrollbar-thumb {
+    background-color: #d4aa70;
+    border-radius: 100px;
+}
+
 
 .breadCrumb {
   display: flex;
