@@ -5,7 +5,7 @@
 			<button @click="closeCart()">X</button>
 		</div>
 		<div class="itemContainer">
-			<div class="itemList" v-for="item in cart" :key="item.id">
+			<div class="itemList" v-for="item in cartItems" :key="item.id">
 				<p>{{item.title}}</p>
 				<p class="price">{{item.price}}$</p>
 				<p class="price">{{item.quantity}} {{item.unit}}</p>
@@ -29,7 +29,7 @@ export default {
 	
 	data() {
 		return {
-			cart: JSON.parse(this.$store.getters["cart/getList"]),
+			cart: null,
 			totalPrice: 0,
 		}
 	},
@@ -38,9 +38,9 @@ export default {
 			this.$emit('closeCart')
 		},
 		totalPriceDisplay(){
-			for(let item in this.cart){
+			for(let item in this.cartItems){
 				console.log(item)
-				this.totalPrice = this.totalPrice + (this.cart[item].quantity * this.cart[item].price)
+				this.totalPrice = this.totalPrice + (this.cartItems[item].quantity * this.cartItems[item].price)
 			}
 			return this.totalPrice
 		},
