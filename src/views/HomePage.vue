@@ -1,6 +1,6 @@
 <template>
     <h1>Home Page</h1>
-    
+
     <hr />
     <!-- {{ products }} -->
     <section class="tabel">
@@ -8,7 +8,7 @@
             <CategoryComp @selected="getSelectedCategory" @breadCrumb="getBreadCrumb" />
         </div>
         <div>
-            <ProductPage :categoryId="categoryId" :breadCrumb="breadCrumb"/>
+            <ProductPage :categoryId="categoryId" :breadCrumb="breadCrumb" @breadCrumbSelect="breadCrumbSelect" />
         </div>
     </section>
 </template>
@@ -23,7 +23,7 @@ export default {
     data() {
         return {
             categoryId: 0,
-            breadCrumb: ['Toate Produsele'],
+            breadCrumb: {id:0,name:'Toate Produsele'},
         };
     },
     computed: {
@@ -35,24 +35,29 @@ export default {
         let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
         this.$store.dispatch("products/loadList", data);
     },
-		methods: {
-			/**
-			 * Catch selected category id
-			 * @param {Integer} id
-			 */
-			getSelectedCategory(id) {
-				this.categoryId = Number(id);
-			},
-            getBreadCrumb(list){
-                this.breadCrumb = list;
-            }
+    methods: {
+        /**
+         * Catch selected category id
+         * @param {Integer} id
+         */
+        getSelectedCategory(id) {
+            this.categoryId = Number(id);
+        },
+        getBreadCrumb(list) {
+            this.breadCrumb = list;
+        },
+        breadCrumbSelect(item){
+            this.categoryId = Number(item.id);
+            let index = this.breadCrumb.indexOf(item)
+            this.breadCrumb = this.breadCrumb.slice(0, index + 1)
+        }
 
-		}
+    }
 
 }
 </script>
 
-<style>
+<style scoped>
 .tabel {
     display: flex;
     justify-content: center;
