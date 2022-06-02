@@ -18,13 +18,11 @@
       <div>
         <p>Cantitate:</p>
 
-        <input class="cell" type="number" v-model.number="quantity" />
+        <input class="cell" type="number" min="0" v-model.number="quantity" />
       </div>
       <div></div>
 
-      <div>
-        <button @click="addToCart(product)">Add to cart</button>
-      </div>
+      <button @click="addToCart(product)">Add to cart</button>
     </div>
   </div>
 </template>
@@ -34,52 +32,42 @@ import { SHOP_KEY, TABLES } from "@/const";
 
 export default {
   props: ["image", "name", "price", "unit", "product"],
-  // image: {
-  //   type: String,
-  //   default: null,
-  // },
-  // name: {
-  //   type: String,
-  //   required: true,
-  // },
-  // price: {
-  //   type: Number,
-  //   required: true,
-  // },
-  // unit: {
-  //   type: String,
-  //   required: true,
-  // },
   data() {
     return {
       quantity: 0,
-      localCart: [],
     };
   },
   methods: {
     addToCart(product) {
       product.quantity = this.quantity;
-      //this.localCart.push(product)
-      let cartOld = JSON.parse(
+
+      let localCart = [];
+      localCart = JSON.parse(
         localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
       );
-      console.log(cartOld);
-      if (cartOld != null) {
-        cartOld.push(product);
+
+      if (this.quantity === 0) {
+        return;
+      } else if (
+        localCart.filter((product) => product.id === this.product.id) != 0
+      ) {
+        localCart.filter(
+          (product) => product.id === this.product.id
+        )[0].quantity =
+          localCart.filter((product) => product.id === this.product.id)[0]
+            .quantity + this.quantity;
         localStorage.setItem(
           `${SHOP_KEY}-${TABLES.CART}`,
-          JSON.stringify(cartOld)
+          JSON.stringify(localCart)
         );
       } else {
-        cartOld = [];
-        cartOld.push(product);
+        localCart.push(product);
         localStorage.setItem(
           `${SHOP_KEY}-${TABLES.CART}`,
-          JSON.stringify(cartOld)
+          JSON.stringify(localCart)
         );
       }
-
-      console.log(localStorage);
+      this.quantity = 0;
     },
   },
 };
