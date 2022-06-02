@@ -23,15 +23,17 @@
       <div></div>
 
       <div>
-        <button>Add to cart</button>
+        <button @click="addToCart(product)">Add to cart</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { SHOP_KEY, TABLES } from "@/const";
+
 export default {
-  props: ["image", "name", "price", "unit"],
+  props: ["image", "name", "price", "unit", "product"],
   // image: {
   //   type: String,
   //   default: null,
@@ -51,7 +53,34 @@ export default {
   data() {
     return {
       quantity: 0,
+      localCart: [],
     };
+  },
+  methods: {
+    addToCart(product) {
+      product.quantity = this.quantity;
+      //this.localCart.push(product)
+      let cartOld = JSON.parse(
+        localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
+      );
+      console.log(cartOld);
+      if (cartOld != null) {
+        cartOld.push(product);
+        localStorage.setItem(
+          `${SHOP_KEY}-${TABLES.CART}`,
+          JSON.stringify(cartOld)
+        );
+      } else {
+        cartOld = [];
+        cartOld.push(product);
+        localStorage.setItem(
+          `${SHOP_KEY}-${TABLES.CART}`,
+          JSON.stringify(cartOld)
+        );
+      }
+
+      console.log(localStorage);
+    },
   },
 };
 </script>
@@ -84,6 +113,5 @@ img {
 .cell {
   align-items: center;
   width: 2rem;
-
 }
 </style>

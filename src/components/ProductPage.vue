@@ -10,7 +10,6 @@
     </div>
   </div>
 
-<<<<<<< HEAD
   <div class="product-box">
     <ol class="product">
       <div>
@@ -21,25 +20,12 @@
           :price="product.price"
           :image="product.image"
           :unit="product.unit"
+          :product="product"
         />
       </div>
     </ol>
     <!-- Loop and display products -->
     <!-- <ol>
-=======
-	<h3>Products</h3>
-	<div class="breadCrumb">
-		<div  v-for="items in breadCrumb" :key="items.id">
-			<a @click="clickBread(items)" >{{ items.name }}</a>
-		<!-- TO FIX: 'Toate Produsele' is not showing when you first load the page -->
-			<span class="separator" v-if="items != breadCrumb[breadCrumb.length-1]"> | </span>
-		</div>
-	</div>
-		
-	<div class="product-box">
-		<!-- Loop and display products -->
-		<ol>
->>>>>>> 468606e340ce8896ad1d8a1923ddbc14d5de3667
 			<li class="product" v-for="product in products" :key="product.id">
 				{{ `${product.title} - pret:
 								${product.price} lei / ${[product.unit]} `
@@ -57,7 +43,6 @@
 <script>
 import ProductComp from "./ProductComp.vue";
 
-<<<<<<< HEAD
 export default {
   components: {
     ProductComp,
@@ -98,44 +83,6 @@ export default {
       this.$emit("breadCrumbSelect", item);
     },
   },
-=======
-	props: {
-		categoryId: {
-			type: Number,
-			default: () => 0,
-		},
-		breadCrumb: {
-			type: Array,
-			default: () => [{id:0,name:'Toate Produsele'}],
-		},
-	},
-	name: "ProductsComponent",
-	emits: ["breadCrumbSelect","breadCrumbUpdate"],
-	computed: {
-		//  Retrieve list from LocalStorage.
-		products() {
-			if (this.categoryId) {
-				return this.$store.getters["products/getList"].filter(
-					(product) =>
-						(String(product.category_id) + ",")
-							.split(",")
-							.includes(String(this.categoryId)) === true
-				);
-			} else {
-				return this.$store.getters["products/getList"];
-			}
-		},
-	},
-	mounted() {
-		// Mounts LocalStorage list.
-		this.$store.dispatch("products/loadList", this.data);
-	},
-	methods: {
-		clickBread(item) {
-			this.$emit("breadCrumbSelect", item);
-		},
-	}
->>>>>>> 468606e340ce8896ad1d8a1923ddbc14d5de3667
 };
 </script>
 

@@ -4,13 +4,15 @@ import router from './router';
 // import store from './store'
 import { createStore } from 'vuex';
 import products from "@/store/products";
-import category from "@/store/category"
+import category from "@/store/category";
+import cart from "@/store/cart"
 
 // Create a new store instance.
 const store = createStore({
 	modules: {
 		products,
 		category,
+		cart,
 		// categories
 	}
 });
