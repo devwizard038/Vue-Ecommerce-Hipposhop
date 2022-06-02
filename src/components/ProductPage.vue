@@ -4,7 +4,7 @@
 	<div class="breadCrumb">
 		<div  v-for="items in breadCrumb" :key="items.id">
 			<a @click="clickBread(items)" >{{ items.name }}</a>
-		<!-- **item is not the last -->
+		<!-- TO FIX: 'Toate Produsele' is not showing when you first load the page -->
 			<span class="separator" v-if="items != breadCrumb[breadCrumb.length-1]"> | </span>
 		</div>
 	</div>
@@ -37,7 +37,7 @@ export default {
 		},
 		breadCrumb: {
 			type: Array,
-			default: () => ["Toate produsele"],
+			default: () => [{id:0,name:'Toate Produsele'}],
 		},
 	},
 	name: "ProductsComponent",

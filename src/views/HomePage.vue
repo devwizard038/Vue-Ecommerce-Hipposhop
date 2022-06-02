@@ -18,8 +18,9 @@ import { SHOP_KEY, TABLES } from "@/const";
 import CategoryComp from "@/components/CategoryComp.vue";
 import ProductPage from "@/components/ProductPage.vue";
 
+
 export default {
-    components: { CategoryComp, ProductPage },
+    components: { CategoryComp, ProductPage},
     data() {
         return {
             categoryId: 0,

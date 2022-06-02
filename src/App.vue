@@ -1,17 +1,40 @@
 <template>
-
+  <div v-if="this.showCart == true">
+    <ShoppingCart @closeCart="closeCart" />
+  </div>
   <div id="app">
     <div id="nav">
       <p class="logo">Shop Cart</p>
       <router-link class="link" to="/">Home</router-link>
       <router-link class="link" to="/admin">AdminPage</router-link>
+      <p class="cart" @click="openCart">&#x1F6D2;</p>
     </div>
     <router-view />
   </div>
 
 </template>
 
+<script>
+import ShoppingCart from "@/components/ShoppingCart.vue";
 
+export default {
+  components: { ShoppingCart },
+  data() {
+    return {
+      showCart: false
+    }
+  },
+  methods: {
+    closeCart() {
+      console.log("i work !")
+      this.showCart = false;
+    },
+    openCart() {
+      this.showCart = true;
+    }
+  }
+}
+</script>
 
 <style scoped>
 #app {
@@ -21,6 +44,16 @@
   text-align: center;
   color: #2c3e50;
   margin: 0;
+}
+
+.cart {
+  margin-left: 30px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-decoration: none;
+  right: 100%;
+  color: white;
+  cursor: pointer;
 }
 
 .link {
