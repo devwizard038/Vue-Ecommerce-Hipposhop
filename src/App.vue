@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.showCart == true">
+  <div v-if="this.showCart === true">
     <ShoppingCart @closeCart="closeCart" />
   </div>
   <div id="app">
@@ -26,7 +26,6 @@ export default {
   },
   methods: {
     closeCart() {
-      console.log("i work !")
       this.showCart = false;
     },
     openCart() {

@@ -7,8 +7,8 @@
         alt="{{ name }}"
       />
       <img v-else :src="image" v-bind:alt="name" />
-      <div>
-        <p>{{ name }}</p>
+      <div class="productName">
+        <p @click="toggleModal()">{{ name }}</p>
       </div>
       <div>
         <p>Preț:</p>
@@ -22,62 +22,28 @@
       </div>
       <div></div>
 
-      <button @click="addToCart(product)">Add to cart</button>
+      <button @click="addToCart(product,this.quantity)">Add to cart</button>
     </div>
   </div>
 </template>
 
 <script>
-import { SHOP_KEY, TABLES } from "@/const";
 
 export default {
-  props: ["image", "name", "price", "unit", "product"],
+  props: ["image", "name", "price", "unit", "product","showModal"],
+  emits:['toggleModal','addToCart'],
   data() {
     return {
       quantity: 0,
     };
   },
   methods: {
-    addToCart(item) {
-      item.quantity = this.quantity;
-
-      let localCart = [];
-      localCart = JSON.parse(
-        localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
-      );
-      if(localCart === null && this.quantity > 0){
-        localCart = [];
-        localCart.push(item)
-        localStorage.setItem(
-          `${SHOP_KEY}-${TABLES.CART}`,
-          JSON.stringify(localCart));
-        this.quantity = 0;
-        return
-      }
-      console.log(localCart)
-      console.log(localCart.filter((product) => product.id == item.id))
-
-      if (this.quantity === 0) {
-        return;
-      } else if (localCart.filter((product) => product.id == item.id).length != 0
-      ) {
-        localCart.filter(
-          (product) => product.id === item.id
-        )[0].quantity =
-          localCart.filter((product) => product.id === item.id)[0]
-            .quantity + this.quantity;
-        localStorage.setItem(
-          `${SHOP_KEY}-${TABLES.CART}`,
-          JSON.stringify(localCart)
-        );
-      } else {
-        localCart.push(item);
-        localStorage.setItem(
-          `${SHOP_KEY}-${TABLES.CART}`,
-          JSON.stringify(localCart)
-        );
-      }
-      this.quantity = 0;
+    toggleModal(){
+      this.$emit("toggleModal",this.product)
+    },
+    addToCart(item,quantity) {
+      this.$emit('addToCart',item,quantity)
+      this.quantity = 0
     },
   },
 };
@@ -123,5 +89,11 @@ img {
 
 .cell:hover{
   border: 0.1rem solid rgb(255, 92, 16);
+}
+
+.productName p:hover{
+  font-weight: bold;
+  color:rgb(255, 92, 16);
+  cursor: pointer;
 }
 </style>

@@ -10,9 +10,10 @@
     </div>
   </div>
 
+  <ProductDetailComp  @toggleModal="toggleModal" @addToCart="addToCart" :data="data" v-if="showModal"/>
   <div class="product-box">
     <div class="product">
-      <ProductComp
+      <ProductComp :showModal="this.showModal" @toggleModal="toggleModal" @addToCart="addToCart"
         v-for="product in products"
         :key="product.id"
         :name="product.title"
@@ -22,29 +23,25 @@
         :product="product"
       />
     </div>
-    <!-- Loop and display products -->
-    <!-- <ol>
-			<li class="product" v-for="product in products" :key="product.id">
-				{{ `${product.title} - pret:
-								${product.price} lei / ${[product.unit]} `
-				}}
-			</li>
-		</ol> -->
-    <!-- Loop and display category_id filtered products -->
-    <!--        <ol v-else>-->
-    <!--            <li class="product" v-for="product in products.filter(product => product.category_id === categoryId)"-->
-    <!--                :key="product.id">{{ `${product.title} - pret: ${product.price} lei / ${[product.unit]} ` }}</li>-->
-    <!--        </ol>-->
   </div>
 </template>
 
 <script>
 import ProductComp from "./ProductComp.vue";
-
+import ProductDetailComp from "@/components/ProductDetailComp.vue";
+import { SHOP_KEY, TABLES } from "@/const";
 export default {
+  
+  data(){
+    return{
+      showModal: false,
+      dataModal:null,
+    }
+  },
   components: {
     ProductComp,
-  },
+    ProductDetailComp
+},
   props: {
     categoryId: {
       type: Number,
@@ -80,6 +77,50 @@ export default {
     clickBread(item) {
       this.$emit("breadCrumbSelect", item);
     },
+    toggleModal(item){
+      this.showModal = !this.showModal
+      this.data = item;
+    },
+    // TESTING
+    addToCart(item,quantity) {
+      
+      item.quantity = quantity;
+
+      let localCart = [];
+      localCart = JSON.parse(
+        localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
+      );
+      if(localCart === null && quantity > 0){
+        localCart = [];
+        localCart.push(item)
+        localStorage.setItem(
+          `${SHOP_KEY}-${TABLES.CART}`,
+          JSON.stringify(localCart));
+        quantity = 0;
+        return
+      }
+      if (quantity === 0) {
+        return;
+      } else if (localCart.filter((product) => product.id == item.id).length != 0
+      ) {
+        localCart.filter(
+          (product) => product.id === item.id
+        )[0].quantity =
+          Number(localCart.filter((product) => product.id === item.id)[0]
+            .quantity) + quantity;
+        localStorage.setItem(
+          `${SHOP_KEY}-${TABLES.CART}`,
+          JSON.stringify(localCart)
+        );
+      } else {
+        localCart.push(item);
+        localStorage.setItem(
+          `${SHOP_KEY}-${TABLES.CART}`,
+          JSON.stringify(localCart)
+        );
+      }
+      quantity = 0;
+    }
   },
 };
 </script>
@@ -113,7 +154,8 @@ li {
   overflow: auto;
   overflow-y: auto;
   height: 50vh;
-  width: auto;
+  max-width: 45vw;
+
   /* border: 2px solid black; */
 }
 

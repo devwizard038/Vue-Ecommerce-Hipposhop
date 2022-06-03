@@ -48,8 +48,10 @@ export default {
 			this.table = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
 		},
 		clearList() {
-			// Clears LocalStorage
-			localStorage.clear()
+			// Clears Product List from LocalStorage
+			localStorage.removeItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`)
+			// Resets Cart List from LocalStorage
+			localStorage.setItem(`${SHOP_KEY}-${TABLES.CART}`,"[]")
 			this.table = null;
 		}
 	},

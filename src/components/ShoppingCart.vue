@@ -1,4 +1,5 @@
 <template>
+<div class="container">
 	<div class="cartContainer">
 		<div class="topContainer">
 			<h1>Your Cart</h1>
@@ -9,8 +10,8 @@
 				<div class="itemList" v-for="item in cart" :key="item.id">
 					<img v-if="item.image === null"
 						src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
-						alt="{{ name }}" />
-					<img v-else :src="item.image" v-bind:alt="name" />
+						alt="{{ item.name }}" />
+					<img v-else :src="item.image" v-bind:alt="item.name" />
 					<p class="title">{{ item.title }}</p>
 					<p class="price">{{ item.price }}$</p>
 					<input type="number" min="1" :value="item.quantity" @input="event => modifyItem(event.target.value, item)">
@@ -20,7 +21,7 @@
 			</div>
 			<p>+ Shipping: 1.99$</p>
 			<div class="checkOutContainer">
-				<h2>Total : {{ this.totalPrice }} $</h2>
+				<h2>Total : {{ this.totalPrice + this.shipping }} $</h2>
 				<button class="outBtn">Check Out</button>
 			</div>
 		</div>
@@ -29,7 +30,7 @@
 		</div>
 
 	</div>
-
+</div>
 </template>
 
 <script>
@@ -42,7 +43,9 @@ export default {
 		return {
 			cart: JSON.parse(
 				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)),
-			totalPrice: 1.99
+			totalPrice: 0,
+			shipping:1.99,
+
 		}
 	},
 	methods: {
@@ -50,8 +53,8 @@ export default {
 			this.$emit('closeCart')
 		},
 		totalPriceDisplay() {
+			this.totalPrice = 0;
 			for (let item in this.cart) {
-				console.log(item)
 				this.totalPrice = this.totalPrice + (this.cart[item].quantity * this.cart[item].price)
 			}
 			return this.totalPrice
@@ -68,7 +71,7 @@ export default {
 			);
 			this.cart = JSON.parse(
 				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`));
-			this.totalPrice = 1.99;
+			this.totalPrice = 0;
 			this.totalPriceDisplay();
 		},
 		modifyItem(value, item) {
@@ -84,7 +87,7 @@ export default {
 			);
 			this.cart = JSON.parse(
 				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`));
-				this.totalPrice = 1.99
+				this.totalPrice = 0;
 				this.totalPriceDisplay();
 				}
 			}
@@ -101,14 +104,6 @@ export default {
 	mounted() {
 		this.$store.dispatch("cart/loadList", this.data)
 		this.totalPriceDisplay()
-		console.log(this.cartItems)
-	},
-	watch: {
-		cartUpdate() {
-			if (this.$store.getters["cart/getList"] != this.cartItems) {
-				this.cartItems = this.$store.getters["cart/getList"];
-			}
-		}
 	}
 }
 
@@ -117,6 +112,15 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.container{
+	position: absolute;
+	display: flex;
+	background-color:rgba(0, 0, 0, 0.459);
+	width: 100vw;
+	height: 100vh;
+	z-index: 1000;
+}
 
 .topContainer {
 	background: rgb(173, 58, 12);
