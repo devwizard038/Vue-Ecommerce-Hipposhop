@@ -4,19 +4,30 @@
 			<h1>Your Cart</h1>
 			<button @click="closeCart()">X</button>
 		</div>
-		<div class="itemContainer">
-			<div class="itemList" v-for="item in cartItems" :key="item.id">
-				<p>{{item.title}}</p>
-				<p class="price">{{item.price}}$</p>
-				<p class="price">{{item.quantity}} {{item.unit}}</p>
-				<a @click="deleteCartItem(item)">&#9747;</a>
+		<div class="itemContainer" v-if="this.cart.length > 0">
+			<div class="itemBox">
+				<div class="itemList" v-for="item in cart" :key="item.id">
+					<img v-if="item.image === null"
+						src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
+						alt="{{ name }}" />
+					<img v-else :src="item.image" v-bind:alt="name" />
+					<p class="title">{{ item.title }}</p>
+					<p class="price">{{ item.price }}$</p>
+					<input type="number" min="1" :value="item.quantity" @input="event => modifyItem(event.target.value, item)">
+					<p class="price">{{ item.unit }}</p>
+					<a @click="deleteCartItem(item)">&#9747;</a>
+				</div>
 			</div>
 			<p>+ Shipping: 1.99$</p>
+			<div class="checkOutContainer">
+				<h2>Total : {{ this.totalPrice }} $</h2>
+				<button class="outBtn">Check Out</button>
+			</div>
 		</div>
-		<div class="checkOutContainer">
-			<h2>Total : {{this.totalPrice}} $</h2>
-			<button class="outBtn">Check Out</button>
+		<div class="empty" v-else>
+			<h2>Your cart is empty !</h2>
 		</div>
+
 	</div>
 
 </template>
@@ -26,52 +37,75 @@ import { SHOP_KEY, TABLES } from "@/const";
 export default {
 	name: "ShoppingCartComponent",
 	emits: ['closeCart'],
-	
+
 	data() {
 		return {
-			cart: null,
-			totalPrice: 0,
+			cart: JSON.parse(
+				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)),
+			totalPrice: 1.99
 		}
 	},
 	methods: {
 		closeCart() {
 			this.$emit('closeCart')
 		},
-		totalPriceDisplay(){
-			for(let item in this.cartItems){
+		totalPriceDisplay() {
+			for (let item in this.cart) {
 				console.log(item)
-				this.totalPrice = this.totalPrice + (this.cartItems[item].quantity * this.cartItems[item].price)
+				this.totalPrice = this.totalPrice + (this.cart[item].quantity * this.cart[item].price)
 			}
 			return this.totalPrice
 		},
-		deleteCartItem(item){
-			let cartOld =  JSON.parse(
-        localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
-      );
+		deleteCartItem(item) {
+			let cartOld = JSON.parse(
+				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
+			);
 			let index = cartOld.indexOf(item);
-			cartOld.splice(index,1)
+			cartOld.splice(index, 1)
 			localStorage.setItem(
-          `${SHOP_KEY}-${TABLES.CART}`,
-          JSON.stringify(cartOld)
-        );
-			this.cart=this.$store.getters["cart/getList"];
+				`${SHOP_KEY}-${TABLES.CART}`,
+				JSON.stringify(cartOld)
+			);
+			this.cart = JSON.parse(
+				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`));
+			this.totalPrice = 1.99;
+			this.totalPriceDisplay();
+		},
+		modifyItem(value, item) {
+			let cartOld = JSON.parse(
+				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
+			);
+			for(let i=0; i< cartOld.length; i++){
+				if(cartOld[i].id === item.id){
+					cartOld[i].quantity = value
+					localStorage.setItem(
+				`${SHOP_KEY}-${TABLES.CART}`,
+				JSON.stringify(cartOld)
+			);
+			this.cart = JSON.parse(
+				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`));
+				this.totalPrice = 1.99
+				this.totalPriceDisplay();
+				}
+			}
+			
 		}
-		
+
 	},
 	computed: {
-    //  Retrieve list from LocalStorage.
-    cartItems() {
-      return this.$store.getters["cart/getList"]
-    }
-  },
+		//  Retrieve list from LocalStorage.
+		cartItems() {
+			return this.$store.getters["cart/getList"]
+		}
+	},
 	mounted() {
 		this.$store.dispatch("cart/loadList", this.data)
 		this.totalPriceDisplay()
 		console.log(this.cartItems)
 	},
-	watch:{
-		cartUpdate(){
-			if(this.$store.getters["cart/getList"] != this.cartItems){
+	watch: {
+		cartUpdate() {
+			if (this.$store.getters["cart/getList"] != this.cartItems) {
 				this.cartItems = this.$store.getters["cart/getList"];
 			}
 		}
@@ -126,7 +160,7 @@ h2 {
 .cartContainer {
 	position: fixed;
 	z-index: 999;
-	width: 30vw;
+	width: 30vw auto;
 	height: 100vh;
 	margin: 0 0;
 	background-color: white;
@@ -143,13 +177,40 @@ h2 {
 	font-family: 'Roboto', sans-serif;
 }
 
+.itemBox {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: auto;
+}
+
 .itemList {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	background-color: white;
+	justify-content: center;
+	background-color: #fbf7ec;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	border: 0.1px black solid;
+	border-radius: 8px;
+	margin-bottom: 0.7rem;
 	width: auto;
 	/* border: 2px solid black; */
+	width: 100%;
+}
+
+.itemList input {
+	width: 4ch;
+}
+
+.itemList img {
+	height: 5.2rem;
+	width: 6.5rem;
+	/* max-height: 5rem; */
+	padding-right: 2rem;
+	padding-left: 1rem;
 }
 
 .itemList a {
@@ -159,6 +220,7 @@ h2 {
 	border: black 2px solid;
 	cursor: pointer;
 	font-weight: bold;
+	margin-right: 1rem;
 }
 
 .itemList a:hover {
@@ -171,7 +233,12 @@ h2 {
 
 .itemList p {
 	padding-right: 2rem;
+	max-width: 10ch;
+}
 
+.itemList .title {
+	position: relative;
+	left: 0;
 }
 
 .checkOutContainer {
@@ -197,5 +264,12 @@ h2 {
 
 .outBtn:hover {
 	background-color: rgb(219, 115, 74);
+}
+
+.empty {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 2rem;
 }
 </style>

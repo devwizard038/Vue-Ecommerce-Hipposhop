@@ -38,30 +38,40 @@ export default {
     };
   },
   methods: {
-    addToCart(product) {
-      product.quantity = this.quantity;
+    addToCart(item) {
+      item.quantity = this.quantity;
 
       let localCart = [];
       localCart = JSON.parse(
         localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
       );
+      if(localCart === null && this.quantity > 0){
+        localCart = [];
+        localCart.push(item)
+        localStorage.setItem(
+          `${SHOP_KEY}-${TABLES.CART}`,
+          JSON.stringify(localCart));
+        this.quantity = 0;
+        return
+      }
+      console.log(localCart)
+      console.log(localCart.filter((product) => product.id == item.id))
 
       if (this.quantity === 0) {
         return;
-      } else if (
-        localCart.filter((product) => product.id === this.product.id) != 0
+      } else if (localCart.filter((product) => product.id == item.id).length != 0
       ) {
         localCart.filter(
-          (product) => product.id === this.product.id
+          (product) => product.id === item.id
         )[0].quantity =
-          localCart.filter((product) => product.id === this.product.id)[0]
+          localCart.filter((product) => product.id === item.id)[0]
             .quantity + this.quantity;
         localStorage.setItem(
           `${SHOP_KEY}-${TABLES.CART}`,
           JSON.stringify(localCart)
         );
       } else {
-        localCart.push(product);
+        localCart.push(item);
         localStorage.setItem(
           `${SHOP_KEY}-${TABLES.CART}`,
           JSON.stringify(localCart)
