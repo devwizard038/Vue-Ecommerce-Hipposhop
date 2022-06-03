@@ -53,6 +53,9 @@ export default {
 		},
 		// Category Tree Organisation
 		categoryTree(list) {
+			if(list === null){
+				return
+			}
 			let temp = [0];
 			for (let i = 0; i < list.length; i++) {
 				for (let j = 0; j < list.length; j++) {

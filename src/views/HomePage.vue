@@ -20,11 +20,11 @@ import ProductPage from "@/components/ProductPage.vue";
 
 
 export default {
-    components: { CategoryComp, ProductPage},
+    components: { CategoryComp, ProductPage },
     data() {
         return {
             categoryId: 0,
-            breadCrumb: [{id:0,name:'Toate Produsele'}],
+            breadCrumb: [{ id: 0, name: 'Toate Produsele' }],
         };
     },
     computed: {
@@ -35,6 +35,13 @@ export default {
     mounted() {
         let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
         this.$store.dispatch("products/loadList", data);
+        if (localStorage.getItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`)===null){
+            localStorage.setItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`, "[]")
+        } 
+        if (localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)===null){
+            localStorage.setItem(`${SHOP_KEY}-${TABLES.CART}`, "[]")
+        } 
+        
     },
     methods: {
         /**
@@ -47,7 +54,7 @@ export default {
         getBreadCrumb(list) {
             this.breadCrumb = list;
         },
-        breadCrumbSelect(item){
+        breadCrumbSelect(item) {
             this.categoryId = Number(item.id);
             let index = this.breadCrumb.indexOf(item)
             this.breadCrumb = this.breadCrumb.slice(0, index + 1)

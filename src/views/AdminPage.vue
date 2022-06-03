@@ -50,8 +50,11 @@ export default {
 		clearList() {
 			// Clears Product List from LocalStorage
 			localStorage.removeItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`)
+			localStorage.removeItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`)
+			localStorage.removeItem(`${SHOP_KEY}-${TABLES.CART}`)
+
 			// Resets Cart List from LocalStorage
-			localStorage.setItem(`${SHOP_KEY}-${TABLES.CART}`,"[]")
+			localStorage.setItem(`${SHOP_KEY}-${TABLES.CART}`, "[]")
 			this.table = null;
 		}
 	},
