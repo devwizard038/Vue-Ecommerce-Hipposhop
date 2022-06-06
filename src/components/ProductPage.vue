@@ -1,10 +1,10 @@
 <template>
   <h3>Products</h3>
   <div class="breadCrumb">
-    <div v-for="items in breadCrumb" :key="items.id">
-      <a @click="clickBread(items)">{{ items.name }}</a>
+    <div v-for="items in updatedBreadCrumb" :key="items.id">
+      <a @click="clickBread(items)">{{ items.name ? items.name : items.title }}</a>
       <!-- **item is not the last -->
-      <span class="separator" v-if="items != breadCrumb[breadCrumb.length - 1]">
+      <span class="separator" v-if="items != updatedBreadCrumb[updatedBreadCrumb.length - 1]">
         |
       </span>
     </div>
@@ -68,6 +68,11 @@ export default {
         return this.$store.getters["products/getList"];
       }
     },
+    updatedBreadCrumb(){
+      if(this.showModal===true){
+        return [...this.breadCrumb,this.data]
+      } else return this.breadCrumb
+    }
   },
   mounted() {
     // Mounts LocalStorage list.
@@ -76,10 +81,12 @@ export default {
   methods: {
     clickBread(item) {
       this.$emit("breadCrumbSelect", item);
+      this.showModal = false;
     },
     toggleModal(item){
       this.showModal = !this.showModal
       this.data = item;
+      if(this.showModal === true) console.log(this.breadCrumb)
     },
     // TESTING
     addToCart(item,quantity) {
@@ -121,7 +128,7 @@ export default {
       }
       quantity = 0;
     }
-  },
+  }
 };
 </script>
 
@@ -155,7 +162,6 @@ li {
   overflow-y: auto;
   height: 50vh;
   max-width: 45vw;
-
   /* border: 2px solid black; */
 }
 

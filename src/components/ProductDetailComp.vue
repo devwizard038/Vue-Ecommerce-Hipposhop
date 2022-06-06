@@ -125,7 +125,10 @@ export default {
   padding: 1rem;
   border-radius: 5px;
 	font-family: 'Roboto', sans-serif;
+}
 
+.details button:hover{
+  background-color: rgb(194, 63, 2);;
 }
 
 .details button{

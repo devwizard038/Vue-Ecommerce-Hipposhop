@@ -80,7 +80,6 @@ export default {
 				selected = test[0];
 			}
 			list.unshift({id:0,name:'Toate Produsele'});
-			console.log(list)
 			this.$emit("breadCrumb", list);
 		},
 	},
