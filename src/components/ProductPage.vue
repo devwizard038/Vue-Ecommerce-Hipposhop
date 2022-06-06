@@ -2,7 +2,7 @@
   <h3>Products</h3>
   <div class="breadCrumb">
     <div v-for="items in updatedBreadCrumb" :key="items.id">
-      <a @click="clickBread(items)">{{ items.name ? items.name : items.title }}</a>
+      <a :class="items.title ? 'innactive' : ''" @click="clickBread(items)">{{ items.name ? items.name : items.title }}</a>
       <!-- **item is not the last -->
       <span class="separator" v-if="items != updatedBreadCrumb[updatedBreadCrumb.length - 1]">
         |
@@ -68,6 +68,8 @@ export default {
         return this.$store.getters["products/getList"];
       }
     },
+
+    // Adds Product to BreadCrumb
     updatedBreadCrumb(){
       if(this.showModal===true){
         return [...this.breadCrumb,this.data]
@@ -87,6 +89,7 @@ export default {
       this.showModal = !this.showModal
       this.data = item;
       if(this.showModal === true) console.log(this.breadCrumb)
+      this.$emit('showModal',this.showModal)
     },
     // TESTING
     addToCart(item,quantity) {
@@ -196,4 +199,10 @@ li {
 .breadCrumb a:hover {
   color: rgb(255, 92, 16);
 }
+
+.innactive{
+  color:grey;
+  pointer-events: none;
+}
+
 </style>
