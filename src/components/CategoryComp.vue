@@ -9,7 +9,7 @@
 		<!-- Category Tree Loop -->
 		<li v-for="categ in catTree" :key="categ.id">
 			<a class="category-item" :style="{ 'padding-left': categ.position + 'rem' }"
-				@click="clickId(categ.id); clickedFilter(categ.id); treeOrigins(categ)" :id="categ.id">
+				@click="clickCateg(categ)" :id="categ.id">
 				{{ categ.name }}
 			</a>
 		</li>
@@ -18,22 +18,29 @@
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
+
 export default {
 	name: "CategoryComponent",
 	data() {
-		return { catTree: [] };
+		return {
+			catTree: []
+		};
 	},
 	emits: ["selected", "breadCrumb"],
-	computed: {
-		category() {
-			return this.$store.getters["category/getList"];
-		},
-	},
 	mounted() {
-		this.$store.dispatch("category/loadList", this.data);
-		this.categoryTree(this.category);
+		this.loadList();
+		this.categoryTree(this.getList());
 	},
 	methods: {
+		...mapGetters({
+			getList: "category/getList",
+		}),
+		...mapActions({
+			loadList: "category/loadList",
+		}),
 		/**
 		 * Emits category ID to data property in parent page (HomePage)
 		 * @param id
@@ -82,6 +89,11 @@ export default {
 			list.unshift({id:0,name:'Toate Produsele'});
 			this.$emit("breadCrumb", list);
 		},
+		clickCateg(categ) {
+			this.clickId(categ.id);
+			this.clickedFilter(categ.id);
+			this.treeOrigins(categ);
+		}
 	},
 };
 </script>
