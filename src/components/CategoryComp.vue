@@ -1,6 +1,7 @@
 <template>
 
 	<h3>Categories</h3>
+<<<<<<< HEAD
 <!--De adaugat recursiune pentru category-->
   <TreeBrowser
     :node="categoryTree"
@@ -9,6 +10,28 @@
 
 <script>
 import TreeBrowser from "./TreeBrowser"
+=======
+	<ul>
+		<!-- Filter Reset -->
+		<li class="category-item" :id="0"><a @click="clickId(0); clickedFilter(0); treeOrigins('')">Toate
+				produsele</a></li>
+
+		<!-- Category Tree Loop -->
+		<li v-for="categ in catTree" :key="categ.id">
+			<a class="category-item" :style="{ 'padding-left': categ.position + 'rem' }"
+				@click="clickCateg(categ)" :id="categ.id">
+				{{ categ.name }}
+			</a>
+		</li>
+	</ul>
+
+</template>
+
+<script>
+
+import { mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
+>>>>>>> 0109c74dc5a19de7f4c2e497c7ee1cee852efd65
 
 export default {
 	name: "CategoryComponent",
@@ -17,17 +40,18 @@ export default {
   },
 	data() {
 		return {
+<<<<<<< HEAD
       catTree: [],
       categoryTree: [],
     };
+=======
+			catTree: []
+		};
+>>>>>>> 0109c74dc5a19de7f4c2e497c7ee1cee852efd65
 	},
 	emits: ["selected", "breadCrumb"],
-	computed: {
-		category() {
-			return this.$store.getters["category/getList"];
-		},
-	},
 	mounted() {
+<<<<<<< HEAD
 		this.$store.dispatch("category/loadList", this.data);
 		/*
 		* Obs : Posibil sa trebuiasca un computed ca sa nu fie chemata functia de fiecare data cand isi ia mount.
@@ -59,6 +83,71 @@ export default {
       this.categoryTree = root;
     }
 
+=======
+		this.loadList();
+		this.categoryTree(this.getList());
+	},
+	methods: {
+		...mapGetters({
+			getList: "category/getList",
+		}),
+		...mapActions({
+			loadList: "category/loadList",
+		}),
+		/**
+		 * Emits category ID to data property in parent page (HomePage)
+		 * @param id
+		 */
+		clickId(id) {
+			this.$emit("selected", id);
+		},
+		clickedFilter(id) {
+			if (document.querySelectorAll(".selected-item").length > 0) {
+				document
+					.querySelector(".selected-item")
+					.classList.replace("selected-item", "category-item");
+			}
+			document
+				.getElementById(id)
+				.classList.replace("category-item", "selected-item");
+		},
+		// Category Tree Organisation
+		categoryTree(list) {
+			if(list === null){
+				return
+			}
+			let temp = [0];
+			for (let i = 0; i < list.length; i++) {
+				for (let j = 0; j < list.length; j++) {
+					if (Number(list[j].parent_id) === temp[temp.length - 1]) {
+						temp.push(Number(list[j].id));
+						list[j].position = temp.length - 1;
+						this.catTree.push(list[j]);
+					} else if (Number(list[j].id) === temp[temp.length - 1]) {
+						temp.pop(Number(list[j].id));
+					}
+				}
+			}
+		},
+		// Tree Origins
+		treeOrigins(selected) {
+			let list = [selected];
+			let position = selected.position;
+			for (let i = 0; i < position - 1; i++) {
+				let test = this.catTree.filter((n) => n.id == selected.parent_id);
+				console.log(test)
+				list.unshift(test[0]);
+				selected = test[0];
+			}
+			list.unshift({id:0,name:'Toate Produsele'});
+			this.$emit("breadCrumb", list);
+		},
+		clickCateg(categ) {
+			this.clickId(categ.id);
+			this.clickedFilter(categ.id);
+			this.treeOrigins(categ);
+		}
+>>>>>>> 0109c74dc5a19de7f4c2e497c7ee1cee852efd65
 	},
 };
 </script>

@@ -18,9 +18,9 @@ export default {
     },
   },
   actions: {
-    loadList({ commit }, data) {
+    loadList({ commit }) {
       // TODO: recuperer la list des products du localStorage
-      data = JSON.parse(
+      let data = JSON.parse(
         localStorage.getItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`)
       );
       commit("setList", data);
