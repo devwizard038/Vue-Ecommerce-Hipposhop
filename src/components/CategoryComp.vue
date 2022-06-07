@@ -21,21 +21,24 @@ export default {
 	},
 	emits: ["selected", "breadCrumb"],
 	computed: {
-		category() {
-			return this.getCategories;
-		},
+		// category() {
+    //   this.loadCategories()
+    //   return this.getCategories;
+		// },
+    ...mapGetters({
+      getCategories: "category/getCategories",
+    })
 	},
 	mounted() {
     this.loadCategories();
     /*
 		* Obs : Posibil sa trebuiasca un computed ca sa nu fie chemata functia de fiecare data cand isi ia mount.
 		* */
-		this.mapCategory(this.category)
+    this.catTree = this.getCategories
+    console.log(this.catTree)
+		this.mapCategory(this.catTree)
 	},
 	methods: {
-    ...mapGetters({
-      getCategories: "category/getCategories",
-    }),
     ...mapActions({
       loadCategories: "category/loadCategories",
     }),
@@ -45,14 +48,16 @@ export default {
 		* */
 		mapCategory(category) {
 			// catch error
-			if (category.length < 1) {
+      console.log(category)
+			if ((Array.isArray(category)&&category.length < 1) || category === null) {
 				this.categoryTree = {
 					children: [],
 					id: 0,
 					name: "Incarcati din LocalStorage",
 					parent_id: null
 				}
-				return
+        console.log(this.categoryTree)
+				return this.categoryTree
 			}
 			// //
 			const map = category.reduce((prev, current, index) => {

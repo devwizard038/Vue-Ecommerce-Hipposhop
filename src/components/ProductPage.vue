@@ -85,8 +85,7 @@ export default {
       let list = this.getCategories
       let index = this.getId
       let arr=[]
-      console.log(list.length)
-      if(list.length === 0) return arr = []
+      if((Array.isArray(list)&&list.length<1)|| list === null) return arr = []
       else {while(index != null){
         let temp = list.filter(n=> n.id === index);
         arr.unshift(...temp)
@@ -99,7 +98,7 @@ export default {
   },
   mounted() {
     // Mounts LocalStorage list
-    // this.$store.dispatch("products/loadList", this.data);
+    this.loadProducts()
   },
   methods: {
     ...mapActions({

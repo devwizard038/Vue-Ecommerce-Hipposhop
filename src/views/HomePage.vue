@@ -4,11 +4,11 @@
   <hr/>
   <!-- {{ products }} -->
   <section class="tabel">
-    <div v-if="memory != null && memory != []">
+    <div>
       <CategoryComp @selected="getSelectedCategory"
                     @breadCrumb="getBreadCrumb"/>
     </div>
-    <div v-if="memory != null && memory != []">
+    <div>
       <ProductPage :categoryId="categoryId" :breadCrumb="breadCrumb"
                    @breadCrumbSelect="breadCrumbSelect"/>
     </div>
