@@ -1,32 +1,41 @@
-import { SHOP_KEY, TABLES } from "@/const";
+// noinspection JSVoidFunctionReturnValueUsed
+
+import {SHOP_KEY, TABLES} from "@/const";
+import jsonProducts from "@/assets/products.json";
 
 export default {
-  namespaced: true,
-  state() {
-    return {
-      list: [],
-    };
-  },
-  getters: {
-    getList(state) {
-      return state.list;
+    namespaced: true,
+    state() {
+        return {
+            productList: [],
+        };
     },
-  },
-  mutations: {
-    setList(state, data) {
-      state.list = data;
+    getters: {
+        getProducts(state) {
+            return state.productList;
+        },
     },
-  },
-  actions: {
-    /**
-     *
-     * @param commit
-     * @param data
-     */
-    loadList({ commit }, data) {
-      // TODO: recuperer la list des products du localStorage
-      data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-      commit("setList", data);
+    mutations: {
+        setProducts(state, data) {
+            state.productList = data;
+        },
     },
-  },
+    actions: {
+        loadProducts({commit}) {
+            let data = JSON.parse(
+                localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+            commit("setProducts", data);
+        },
+        saveProducts({commit}) {
+            let data =
+                localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`,
+                    JSON.stringify(jsonProducts));
+            commit("setProducts", data);
+        },
+        deleteProducts({commit}) {
+            let data =
+                localStorage.removeItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`);
+            commit("setProducts", data);
+        },
+    },
 };

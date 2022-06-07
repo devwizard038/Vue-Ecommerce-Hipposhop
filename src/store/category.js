@@ -1,29 +1,47 @@
-import { SHOP_KEY, TABLES } from "@/const";
+// noinspection JSVoidFunctionReturnValueUsed
+
+import {SHOP_KEY, TABLES} from "@/const";
+import jsonCategory from '../../src/assets/category.json';
 
 export default {
-  namespaced: true,
-  state() {
-    return {
-      list: [],
-    };
-  },
-  getters: {
-    getList(state) {
-      return state.list;
+    namespaced: true,
+    state() {
+        return {
+            categoryList: [],
+        };
     },
-  },
-  mutations: {
-    setList(state, data) {
-      state.list = data;
+    getters: {
+        getCategories(state) {
+            return state.categoryList;
+        },
     },
-  },
-  actions: {
-    loadList({ commit }) {
-      // TODO: recuperer la list des products du localStorage
-      let data = JSON.parse(
-        localStorage.getItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`)
-      );
-      commit("setList", data);
+    mutations: {
+        setCategories(state, data) {
+            state.categoryList = data;
+        },
     },
-  },
+    actions: {
+        loadCategories({commit}) {
+            let data = JSON.parse(
+                localStorage.getItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`));
+            commit("setCategories", data);
+        },
+        saveCategories({commit}) {
+            let data =
+                localStorage.setItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`,
+                    JSON.stringify(jsonCategory));
+            commit("setCategories", data);
+        },
+        deleteCategories({commit}) {
+            let data =
+                localStorage.removeItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`);
+            commit("setCategories", data);
+        },
+        updateCategories({commit}, data) {
+            data =
+                localStorage.setItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`,
+                    JSON.stringify(data));
+            commit("setCategories", data);
+        },
+    },
 };

@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions} from 'vuex';
 import TreeBrowser from "./TreeBrowser"
 export default {
 	name: "CategoryComponent",
@@ -21,17 +22,23 @@ export default {
 	emits: ["selected", "breadCrumb"],
 	computed: {
 		category() {
-			return this.$store.getters["category/getList"];
+			return this.getCategories;
 		},
 	},
 	mounted() {
-		this.$store.dispatch("category/loadList", this.data);
-		/*
+    this.loadCategories();
+    /*
 		* Obs : Posibil sa trebuiasca un computed ca sa nu fie chemata functia de fiecare data cand isi ia mount.
 		* */
 		this.mapCategory(this.category)
 	},
 	methods: {
+    ...mapGetters({
+      getCategories: "category/getCategories",
+    }),
+    ...mapActions({
+      loadCategories: "category/loadCategories",
+    }),
 		/*
 		* Function: Process JSON Category data into a Tree like object.
 		* Result: JSON Object in Tree Structure with nested components.

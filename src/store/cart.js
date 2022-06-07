@@ -1,32 +1,36 @@
+// noinspection JSVoidFunctionReturnValueUsed
+
 import { SHOP_KEY, TABLES } from "@/const";
+
 
 export default {
   namespaced: true,
   state() {
     return {
-      list: [],
+      cartList: [],
     };
   },
   getters: {
-    getList(state) {
-      return state.list;
+    getCart(state) {
+      return state.cartList;
     },
   },
   mutations: {
-    setList(state, data) {
-      state.list = data;
+    setCart(state, data) {
+      state.cartList = data;
     },
   },
   actions: {
-    /**
-     *
-     * @param commit
-     * @param data
-     */
-    loadList({ commit }, data) {
-      // TODO: recuperer la list des products du localStorage
-      data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`));
-      commit("setList", data);
+    loadCart({commit}) {
+      let data = JSON.parse(
+          localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`));
+      commit("setCart", data);
+    },
+    updateCart({commit}, data) {
+      data =
+          localStorage.setItem(`${SHOP_KEY}-${TABLES.CART}`,
+              JSON.stringify(data));
+      commit("setCart", data);
     },
   },
 };

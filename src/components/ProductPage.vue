@@ -4,7 +4,8 @@
     <div v-for="items in updatedBreadCrumb" :key="items.id">
       <a :class="items.title ? 'innactive' : ''" @click="clickBread(items)">{{ items.name ? items.name : items.title }}</a>
       <!-- **item is not the last -->
-      <span class="separator" v-if="items != updatedBreadCrumb[updatedBreadCrumb.length - 1]">
+      <span class="separator" v-if="items !==
+      updatedBreadCrumb[updatedBreadCrumb.length - 1]">
         |
       </span>
     </div>
@@ -29,8 +30,8 @@
 <script>
 import ProductComp from "./ProductComp.vue";
 import ProductDetailComp from "@/components/ProductDetailComp.vue";
-import { SHOP_KEY, TABLES } from "@/const";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
+
 export default {
   
   data(){
@@ -56,17 +57,23 @@ export default {
   name: "ProductsComponent",
   emits: ["breadCrumbSelect", "breadCrumbUpdate","showModal"],
   computed: {
+    ...mapGetters({
+      getProducts: "products/getProducts",
+      getCart: "cart/getCart",
+      getCategories: "category/getCategories",
+      getId: "selectedcateg/getId"
+    }),
     //  Retrieve list from LocalStorage.
     products() {
       if (this.categoryId) {
-        return this.$store.getters["products/getList"].filter(
+        return this.getProducts.filter(
           (product) =>
             (String(product.category_id) + ",")
               .split(",")
               .includes(String(this.categoryId)) === true
         );
       } else {
-        return this.$store.getters["products/getList"];
+        return this.getProducts;
       }
     },
 
@@ -74,11 +81,12 @@ export default {
     * Adds selected categories to breadCrumb
     * */
     updatedBreadCrumb(){
-      let list = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`))
+      this.loadCategories()
+      let list = this.getCategories
       let index = this.getId
       let arr=[]
       console.log(list.length)
-      if(list.length == 0) return arr = []
+      if(list.length === 0) return arr = []
       else {while(index != null){
         let temp = list.filter(n=> n.id === index);
         arr.unshift(...temp)
@@ -87,16 +95,20 @@ export default {
       return arr
       }
       
-    },
-    ...mapGetters({
-      getId: "selectedcateg/getId"
-    }),
+    }
   },
   mounted() {
     // Mounts LocalStorage list
     // this.$store.dispatch("products/loadList", this.data);
   },
   methods: {
+    ...mapActions({
+      loadProducts: "products/loadProducts",
+      loadCart: "cart/loadCart",
+      updateCart: "cart/updateCart",
+      loadCategories: "category/loadCategories"
+    }),
+
     clickBread(item) {
       this.$emit("breadCrumbSelect", item);
       let index = this.updatedBreadCrumb.indexOf(item);
@@ -109,7 +121,7 @@ export default {
     * */
     toggleModal(item){
       console.log(item)
-      if(item != undefined) {
+      if(item !== undefined) {
         this.showModal = !this.showModal
         this.updatedBreadCrumb.push(item)
         this.data = item
@@ -132,37 +144,29 @@ export default {
       item.quantity = quantity;
 
       let localCart = [];
-      localCart = JSON.parse(
-        localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
-      );
+      this.loadCart()
+      localCart = this.getCart
       if(localCart === null && quantity > 0){
         localCart = [];
         localCart.push(item)
-        localStorage.setItem(
-          `${SHOP_KEY}-${TABLES.CART}`,
-          JSON.stringify(localCart));
+        this.updateCart(localCart)
         quantity = 0;
         return
       }
       if (quantity === 0) {
         return;
-      } else if (localCart.filter((product) => product.id == item.id).length != 0
+      } else if (localCart.filter((product) => product.id === item.id).length
+          !== 0
       ) {
         localCart.filter(
           (product) => product.id === item.id
         )[0].quantity =
           Number(localCart.filter((product) => product.id === item.id)[0]
             .quantity) + quantity;
-        localStorage.setItem(
-          `${SHOP_KEY}-${TABLES.CART}`,
-          JSON.stringify(localCart)
-        );
+        this.updateCart(localCart)
       } else {
         localCart.push(item);
-        localStorage.setItem(
-          `${SHOP_KEY}-${TABLES.CART}`,
-          JSON.stringify(localCart)
-        );
+        this.updateCart(localCart)
       }
       quantity = 0;
     }

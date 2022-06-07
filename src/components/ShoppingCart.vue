@@ -34,21 +34,25 @@
 </template>
 
 <script>
-import { SHOP_KEY, TABLES } from "@/const";
+import {mapActions, mapGetters} from "vuex";
+
 export default {
 	name: "ShoppingCartComponent",
 	emits: ['closeCart'],
 
 	data() {
 		return {
-			cart: JSON.parse(
-				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)),
+      cart: [],
 			totalPrice: 0,
 			shipping:1.99,
 
 		}
 	},
 	methods: {
+    ...mapActions({
+      loadCart: "cart/loadCart",
+      updateCart: "cart/updateCart"
+    }),
 		closeCart() {
 			this.$emit('closeCart')
 		},
@@ -60,50 +64,39 @@ export default {
 			return this.totalPrice
 		},
 		deleteCartItem(item) {
-      console.log(item)
-			let cartOld = JSON.parse(
-				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
-			);
-			let updateCart = cartOld.filter(n => n.id != item.id);
-			localStorage.setItem(
-				`${SHOP_KEY}-${TABLES.CART}`,
-				JSON.stringify(updateCart)
-			);
-			this.cart = JSON.parse(
-				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`));
-			this.totalPrice = 0;
-			this.totalPriceDisplay();
+      let cartOld = this.getCart
+      let newCart = cartOld.filter(n => n.id !== item.id);
+      this.updateCart(newCart)
+      this.loadCart()
+      this.cart = this.getCart;
+      this.totalPrice = 0;
+      this.totalPriceDisplay();
 		},
 		modifyItem(value, item) {
-			let cartOld = JSON.parse(
-				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
-			);
-			for(let i=0; i< cartOld.length; i++){
-				if(cartOld[i].id === item.id){
-					cartOld[i].quantity = value
-					localStorage.setItem(
-				`${SHOP_KEY}-${TABLES.CART}`,
-				JSON.stringify(cartOld)
-			);
-			this.cart = JSON.parse(
-				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`));
-				this.totalPrice = 0;
-				this.totalPriceDisplay();
-				}
-			}
+      let cartOld = this.getCart
+      for(let i=0; i< cartOld.length; i++){
+        if(cartOld[i].id === item.id){
+          cartOld[i].quantity = value
+          this.updateCart(cartOld)
+          this.loadCart()
+          this.cart = this.getCart;
+          this.totalPrice = 0;
+          this.totalPriceDisplay();
+        }
+      }
 			
 		}
 
 	},
 	computed: {
-		//  Retrieve list from LocalStorage.
-		cartItems() {
-			return this.$store.getters["cart/getList"]
-		}
+    ...mapGetters({
+      getCart: "cart/getCart"
+    })
 	},
 	mounted() {
-		this.$store.dispatch("cart/loadList", this.data)
-		this.totalPriceDisplay()
+    this.loadCart()
+    this.cart = this.getCart
+    this.totalPriceDisplay()
 	}
 }
 

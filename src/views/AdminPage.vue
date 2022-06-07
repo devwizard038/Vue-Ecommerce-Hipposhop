@@ -25,36 +25,52 @@
 </template>
 
 <script>
-import jsonProducts from '../../src/assets/products.json';
-import jsonCategory from '../../src/assets/category.json';
-import { SHOP_KEY, TABLES } from "@/const";
+import {mapActions, mapGetters,} from "vuex";
 
 export default {
 	name: 'AdminPage',
 	data() {
 		return {
 			// Transfrom JSON data from string to object
-			table: JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`)),
+      table: [],
 		}
 	},
-	props: {},
+  computed: {
+    ...mapGetters({
+      getProducts: "products/getProducts"
+    })
+  },
+  mounted() {
+    this.loadProducts();
+    this.table = this.getProducts
+  },
 	methods: {
+    ...mapActions({
+      saveProducts: "products/saveProducts",
+      loadProducts: "products/loadProducts",
+      deleteProducts: "products/deleteProducts",
+      saveCategories: "category/saveCategories",
+      deleteCategories: "category/deleteCategories",
+      loadCart: "cart/loadCart",
+      updateCart: "cart/updateCart"
+    }),
 		saveList() {
 			// Stores data in LocalStorage
-			localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
-			localStorage.setItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`, JSON.stringify(jsonCategory));
+      this.saveProducts();
+      this.loadProducts();
+      this.saveCategories();
 
 			// List live update
-			this.table = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+			this.table = this.getProducts;
 		},
 		clearList() {
 			// Clears Product List from LocalStorage
-			localStorage.removeItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`)
-			localStorage.removeItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`)
-			localStorage.removeItem(`${SHOP_KEY}-${TABLES.CART}`)
+      this.deleteProducts();
+      this.deleteCategories();
+      this.loadCart();
 
 			// Resets Cart List from LocalStorage
-			localStorage.setItem(`${SHOP_KEY}-${TABLES.CART}`, "[]")
+      this.updateCart([])
 			this.table = null;
 		}
 	},
