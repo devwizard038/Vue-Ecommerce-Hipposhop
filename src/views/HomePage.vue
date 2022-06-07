@@ -17,6 +17,7 @@
 import { SHOP_KEY, TABLES } from "@/const";
 import CategoryComp from "@/components/CategoryComp.vue";
 import ProductPage from "@/components/ProductPage.vue";
+import {mapGetters} from "vuex";
 
 
 export default {
@@ -30,6 +31,17 @@ export default {
     computed: {
         products() {
             return this.$store.getters["products/getList"];
+        },
+        ...mapGetters({
+            getId: "selectedcateg/getId"
+        }),
+        id(){
+          return this.getId
+        }
+    },
+    watch:{
+        id(newId){
+          this.getSelectedCategory(newId)
         }
     },
     mounted() {
@@ -40,8 +52,7 @@ export default {
         } 
         if (localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)===null){
             localStorage.setItem(`${SHOP_KEY}-${TABLES.CART}`, "[]")
-        } 
-        
+        }
     },
     methods: {
         /**
@@ -59,7 +70,6 @@ export default {
             let index = this.breadCrumb.indexOf(item)
             this.breadCrumb = this.breadCrumb.slice(0, index + 1)
         }
-
     }
 
 }

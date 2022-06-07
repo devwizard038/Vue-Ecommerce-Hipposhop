@@ -6,6 +6,7 @@ import { createStore } from 'vuex';
 import products from "@/store/products";
 import category from "@/store/category";
 import cart from "@/store/cart"
+import selectedcateg from "@/store/selectedcateg";
 
 // Create a new store instance.
 const store = createStore({
@@ -13,7 +14,7 @@ const store = createStore({
 		products,
 		category,
 		cart,
-		// categories
+		selectedcateg
 	}
 });
 

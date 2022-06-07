@@ -1,27 +1,25 @@
 <template>
 
 	<h3>Categories</h3>
-	<ul>
-		<!-- Filter Reset -->
-		<li class="category-item" :id="0"><a @click="clickId(0); clickedFilter(0); treeOrigins('')">Toate
-				produsele</a></li>
-
-		<!-- Category Tree Loop -->
-		<li v-for="categ in catTree" :key="categ.id">
-			<a class="category-item" :style="{ 'padding-left': categ.position + 'rem' }"
-				@click="clickId(categ.id); clickedFilter(categ.id); treeOrigins(categ)" :id="categ.id">
-				{{ categ.name }}
-			</a>
-		</li>
-	</ul>
-
+<!--De adaugat recursiune pentru category-->
+  <TreeBrowser
+    :node="categoryTree"
+  ></TreeBrowser>
 </template>
 
 <script>
+import TreeBrowser from "./TreeBrowser"
+
 export default {
 	name: "CategoryComponent",
+  components:{
+    TreeBrowser
+  },
 	data() {
-		return { catTree: [] };
+		return {
+      catTree: [],
+      categoryTree: [],
+    };
 	},
 	emits: ["selected", "breadCrumb"],
 	computed: {
@@ -31,57 +29,36 @@ export default {
 	},
 	mounted() {
 		this.$store.dispatch("category/loadList", this.data);
-		this.categoryTree(this.category);
+		/*
+		* Obs : Posibil sa trebuiasca un computed ca sa nu fie chemata functia de fiecare data cand isi ia mount.
+		* */
+    this.mapCategory(this.category)
 	},
 	methods: {
-		/**
-		 * Emits category ID to data property in parent page (HomePage)
-		 * @param id
-		 */
-		clickId(id) {
-			this.$emit("selected", id);
-		},
-		clickedFilter(id) {
-			if (document.querySelectorAll(".selected-item").length > 0) {
-				document
-					.querySelector(".selected-item")
-					.classList.replace("selected-item", "category-item");
-			}
-			document
-				.getElementById(id)
-				.classList.replace("category-item", "selected-item");
-		},
-		// Category Tree Organisation
-		categoryTree(list) {
-			if(list === null){
-				return
-			}
-			let temp = [0];
-			for (let i = 0; i < list.length; i++) {
-				for (let j = 0; j < list.length; j++) {
-					if (Number(list[j].parent_id) === temp[temp.length - 1]) {
-						temp.push(Number(list[j].id));
-						list[j].position = temp.length - 1;
-						this.catTree.push(list[j]);
-					} else if (Number(list[j].id) === temp[temp.length - 1]) {
-						temp.pop(Number(list[j].id));
-					}
-				}
-			}
-		},
-		// Tree Origins
-		treeOrigins(selected) {
-			let list = [selected];
-			let position = selected.position;
-			for (let i = 0; i < position - 1; i++) {
-				let test = this.catTree.filter((n) => n.id == selected.parent_id);
-				console.log(test)
-				list.unshift(test[0]);
-				selected = test[0];
-			}
-			list.unshift({id:0,name:'Toate Produsele'});
-			this.$emit("breadCrumb", list);
-		},
+    /*
+    * Function: Process JSON Category data into a Tree like object.
+    * Result: JSON Object in Tree Structure with nested components.
+    * */
+    mapCategory(category){
+      const map = category.reduce((prev,current,index)=>{
+        prev[current.id] = index;
+        return prev;
+      },{})
+
+      let root;
+
+      category.forEach((el)=>{
+        if(el.parent_id === null){
+          root = el;
+          return
+        }
+        const parentEl = category[map[el.parent_id]];
+
+        parentEl.children = [...(parentEl.children || []), el];
+      })
+      this.categoryTree = root;
+    }
+
 	},
 };
 </script>

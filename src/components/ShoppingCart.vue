@@ -60,14 +60,14 @@ export default {
 			return this.totalPrice
 		},
 		deleteCartItem(item) {
+      console.log(item)
 			let cartOld = JSON.parse(
 				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`)
 			);
-			let index = cartOld.indexOf(item);
-			cartOld.splice(index, 1)
+			let updateCart = cartOld.filter(n => n.id != item.id);
 			localStorage.setItem(
 				`${SHOP_KEY}-${TABLES.CART}`,
-				JSON.stringify(cartOld)
+				JSON.stringify(updateCart)
 			);
 			this.cart = JSON.parse(
 				localStorage.getItem(`${SHOP_KEY}-${TABLES.CART}`));

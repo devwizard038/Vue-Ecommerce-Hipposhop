@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <ProductDetailComp  @toggleModal="toggleModal" @addToCart="addToCart" :data="data" v-if="showModal"/>
+  <ProductDetailComp  @closeModal="closeModal" @addToCart="addToCart" :data="data" v-if="showModal"/>
   <div class="product-box">
     <div class="product">
       <ProductComp :showModal="this.showModal" @toggleModal="toggleModal" @addToCart="addToCart"
@@ -30,6 +30,7 @@
 import ProductComp from "./ProductComp.vue";
 import ProductDetailComp from "@/components/ProductDetailComp.vue";
 import { SHOP_KEY, TABLES } from "@/const";
+import {mapGetters} from "vuex";
 export default {
   
   data(){
@@ -49,11 +50,11 @@ export default {
     },
     breadCrumb: {
       type: Array,
-      default: () => ["Toate produsele"],
+      default: () => [],
     },
   },
   name: "ProductsComponent",
-  emits: ["breadCrumbSelect", "breadCrumbUpdate"],
+  emits: ["breadCrumbSelect", "breadCrumbUpdate","showModal"],
   computed: {
     //  Retrieve list from LocalStorage.
     products() {
@@ -69,31 +70,61 @@ export default {
       }
     },
 
-    // Adds Product to BreadCrumb
+    /*
+    * Adds selected categories to breadCrumb
+    * */
     updatedBreadCrumb(){
-      if(this.showModal===true){
-        return [...this.breadCrumb,this.data]
-      } else return this.breadCrumb
-    }
+      let list = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`))
+      let index = this.getId
+      let arr=[]
+      while(index != null){
+        let temp = list.filter(n=> n.id === index);
+        arr.unshift(...temp)
+        index = temp[0].parent_id
+      }
+      return arr
+    },
+    ...mapGetters({
+      getId: "selectedcateg/getId"
+    }),
   },
   mounted() {
-    // Mounts LocalStorage list.
-    this.$store.dispatch("products/loadList", this.data);
+    // Mounts LocalStorage list
+    // this.$store.dispatch("products/loadList", this.data);
   },
   methods: {
     clickBread(item) {
       this.$emit("breadCrumbSelect", item);
+      let index = this.updatedBreadCrumb.indexOf(item);
+      this.updatedBreadCrumb.splice(index+1);
       this.showModal = false;
     },
+
+    /*
+    * Open details page and add item name to breadCrumb
+    * */
     toggleModal(item){
-      this.showModal = !this.showModal
-      this.data = item;
-      if(this.showModal === true) console.log(this.breadCrumb)
-      this.$emit('showModal',this.showModal)
+      console.log(item)
+      if(item != undefined) {
+        this.showModal = !this.showModal
+        this.updatedBreadCrumb.push(item)
+        this.data = item
+        // console.log(this.updatedBreadCrumb.slice(-1))
+        if (this.showModal === true) console.log(this.updatedBreadCrumb)
+        this.$emit('showModal', this.showModal)
+      }
     },
-    // TESTING
+    closeModal(){
+      if(this.showModal === true){
+        this.showModal = false
+        this.updatedBreadCrumb.pop()
+      }
+    },
+    /*
+    * @button: addToCart function
+    * */
     addToCart(item,quantity) {
-      
+
       item.quantity = quantity;
 
       let localCart = [];

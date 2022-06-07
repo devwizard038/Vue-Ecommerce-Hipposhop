@@ -3,7 +3,7 @@
     <div class="product-details">
       <div class="image">
         <img :src="data.image" />
-        <p @click="toggleModal()">&#9747;</p>
+        <p @click="closeModal()">&#9747;</p>
       </div>
       <div class="details">
         <h2>{{data.title}}</h2>
@@ -13,7 +13,7 @@
       </div>
       <div class="description">
         <h3>Despre produs</h3>
-        <p>i.e., "from the outset," referring to an inquiry or investigation. Ab initio mundi means "from the beginning of the world." In literature, it refers to a story told from the beginning rather than in medias res ('from the middle'). In science, it refers to the first principles. In other contexts, it often refers to beginner or training courses. In law, it refers to a thing being true from its beginning or from the instant of the act, rather than from when the court declared it so. Likewise, an annulment is a judicial declaration of the invalidity or nullity of a marriage ab initio: the so-called marriage was "no thing" (Latin: nullius, from which the word "nullity" derives) and never existed, except perhaps in name only.</p>
+        <p>i.e., "from the outset," referring to an inquiry or investigation. Ab initio mundi means "from the begzzinning of the world." In literature, it refers to a story told from the beginning rather than in medias res ('from the middle'). In science, it refers to the first principles. In other contexts, it often refers to beginner or training courses. In law, it refers to a thing being true from its beginning or from the instant of the act, rather than from when the court declared it so. Likewise, an annulment is a judicial declaration of the invalidity or nullity of a marriage ab initio: the so-called marriage was "no thing" (Latin: nullius, from which the word "nullity" derives) and never existed, except perhaps in name only.</p>
       </div>
     </div>
 
@@ -24,15 +24,15 @@
 
 export default {
   props:['data'],
-  emits:['toggleModal','addToCart'],
+  emits:['closeModal','addToCart'],
   data(){
     return{
       quantity:0
     }
   },
   methods:{
-    toggleModal(){
-      this.$emit('toggleModal')
+    closeModal(){
+      this.$emit('closeModal')
     },
     addToCart(item,quantity){
       this.$emit('addToCart',item,quantity)
