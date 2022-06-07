@@ -4,10 +4,10 @@
     <hr />
     <!-- {{ products }} -->
     <section class="tabel">
-        <div>
+        <div v-if="memory != null && memory != []">
             <CategoryComp @selected="getSelectedCategory" @breadCrumb="getBreadCrumb" />
         </div>
-        <div>
+        <div v-if="memory != null && memory != []">
             <ProductPage :categoryId="categoryId" :breadCrumb="breadCrumb" @breadCrumbSelect="breadCrumbSelect" />
         </div>
     </section>
@@ -37,6 +37,9 @@ export default {
         }),
         id(){
           return this.getId
+        },
+        memory(){
+            return localStorage.getItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`);
         }
     },
     watch:{

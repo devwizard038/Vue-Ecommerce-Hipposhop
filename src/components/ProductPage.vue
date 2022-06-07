@@ -77,12 +77,16 @@ export default {
       let list = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.CATEGORIES}`))
       let index = this.getId
       let arr=[]
-      while(index != null){
+      console.log(list.length)
+      if(list.length == 0) return arr = []
+      else {while(index != null){
         let temp = list.filter(n=> n.id === index);
         arr.unshift(...temp)
         index = temp[0].parent_id
       }
       return arr
+      }
+      
     },
     ...mapGetters({
       getId: "selectedcateg/getId"

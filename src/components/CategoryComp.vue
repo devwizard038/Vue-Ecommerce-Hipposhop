@@ -1,153 +1,69 @@
 <template>
 
 	<h3>Categories</h3>
-<<<<<<< HEAD
-<!--De adaugat recursiune pentru category-->
-  <TreeBrowser
-    :node="categoryTree"
-  ></TreeBrowser>
+	<!--De adaugat recursiune pentru category-->
+	<TreeBrowser :node="categoryTree"></TreeBrowser>
 </template>
 
 <script>
 import TreeBrowser from "./TreeBrowser"
-=======
-	<ul>
-		<!-- Filter Reset -->
-		<li class="category-item" :id="0"><a @click="clickId(0); clickedFilter(0); treeOrigins('')">Toate
-				produsele</a></li>
-
-		<!-- Category Tree Loop -->
-		<li v-for="categ in catTree" :key="categ.id">
-			<a class="category-item" :style="{ 'padding-left': categ.position + 'rem' }"
-				@click="clickCateg(categ)" :id="categ.id">
-				{{ categ.name }}
-			</a>
-		</li>
-	</ul>
-
-</template>
-
-<script>
-
-import { mapGetters } from 'vuex';
-import { mapActions } from 'vuex';
->>>>>>> 0109c74dc5a19de7f4c2e497c7ee1cee852efd65
-
 export default {
 	name: "CategoryComponent",
-  components:{
-    TreeBrowser
-  },
+	components: {
+		TreeBrowser
+	},
 	data() {
 		return {
-<<<<<<< HEAD
-      catTree: [],
-      categoryTree: [],
-    };
-=======
-			catTree: []
+			catTree: [],
+			categoryTree: [],
 		};
->>>>>>> 0109c74dc5a19de7f4c2e497c7ee1cee852efd65
 	},
 	emits: ["selected", "breadCrumb"],
+	computed: {
+		category() {
+			return this.$store.getters["category/getList"];
+		},
+	},
 	mounted() {
-<<<<<<< HEAD
 		this.$store.dispatch("category/loadList", this.data);
 		/*
 		* Obs : Posibil sa trebuiasca un computed ca sa nu fie chemata functia de fiecare data cand isi ia mount.
 		* */
-    this.mapCategory(this.category)
+		this.mapCategory(this.category)
 	},
 	methods: {
-    /*
-    * Function: Process JSON Category data into a Tree like object.
-    * Result: JSON Object in Tree Structure with nested components.
-    * */
-    mapCategory(category){
-      const map = category.reduce((prev,current,index)=>{
-        prev[current.id] = index;
-        return prev;
-      },{})
-
-      let root;
-
-      category.forEach((el)=>{
-        if(el.parent_id === null){
-          root = el;
-          return
-        }
-        const parentEl = category[map[el.parent_id]];
-
-        parentEl.children = [...(parentEl.children || []), el];
-      })
-      this.categoryTree = root;
-    }
-
-=======
-		this.loadList();
-		this.categoryTree(this.getList());
-	},
-	methods: {
-		...mapGetters({
-			getList: "category/getList",
-		}),
-		...mapActions({
-			loadList: "category/loadList",
-		}),
-		/**
-		 * Emits category ID to data property in parent page (HomePage)
-		 * @param id
-		 */
-		clickId(id) {
-			this.$emit("selected", id);
-		},
-		clickedFilter(id) {
-			if (document.querySelectorAll(".selected-item").length > 0) {
-				document
-					.querySelector(".selected-item")
-					.classList.replace("selected-item", "category-item");
-			}
-			document
-				.getElementById(id)
-				.classList.replace("category-item", "selected-item");
-		},
-		// Category Tree Organisation
-		categoryTree(list) {
-			if(list === null){
+		/*
+		* Function: Process JSON Category data into a Tree like object.
+		* Result: JSON Object in Tree Structure with nested components.
+		* */
+		mapCategory(category) {
+			// catch error
+			if (category.length < 1) {
+				this.categoryTree = {
+					children: [],
+					id: 0,
+					name: "Incarcati din LocalStorage",
+					parent_id: null
+				}
 				return
 			}
-			let temp = [0];
-			for (let i = 0; i < list.length; i++) {
-				for (let j = 0; j < list.length; j++) {
-					if (Number(list[j].parent_id) === temp[temp.length - 1]) {
-						temp.push(Number(list[j].id));
-						list[j].position = temp.length - 1;
-						this.catTree.push(list[j]);
-					} else if (Number(list[j].id) === temp[temp.length - 1]) {
-						temp.pop(Number(list[j].id));
-					}
+			// //
+			const map = category.reduce((prev, current, index) => {
+				prev[current.id] = index;
+				return prev;
+			}, {})
+			let root;
+			category.forEach((el) => {
+				if (el.parent_id === null) {
+					root = el;
+					return
 				}
-			}
-		},
-		// Tree Origins
-		treeOrigins(selected) {
-			let list = [selected];
-			let position = selected.position;
-			for (let i = 0; i < position - 1; i++) {
-				let test = this.catTree.filter((n) => n.id == selected.parent_id);
-				console.log(test)
-				list.unshift(test[0]);
-				selected = test[0];
-			}
-			list.unshift({id:0,name:'Toate Produsele'});
-			this.$emit("breadCrumb", list);
-		},
-		clickCateg(categ) {
-			this.clickId(categ.id);
-			this.clickedFilter(categ.id);
-			this.treeOrigins(categ);
+				const parentEl = category[map[el.parent_id]];
+				parentEl.children = [...(parentEl.children || []), el];
+			})
+			this.categoryTree = root;
+			console.log(this.categoryTree)
 		}
->>>>>>> 0109c74dc5a19de7f4c2e497c7ee1cee852efd65
 	},
 };
 </script>
