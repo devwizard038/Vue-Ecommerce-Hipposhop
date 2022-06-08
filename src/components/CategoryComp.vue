@@ -35,7 +35,6 @@ export default {
 		* Obs : Posibil sa trebuiasca un computed ca sa nu fie chemata functia de fiecare data cand isi ia mount.
 		* */
     this.catTree = this.getCategories
-    console.log(this.catTree)
 		this.mapCategory(this.catTree)
 	},
 	methods: {
@@ -48,7 +47,6 @@ export default {
 		* */
 		mapCategory(category) {
 			// catch error
-      console.log(category)
 			if ((Array.isArray(category)&&category.length < 1) || category === null) {
 				this.categoryTree = {
 					children: [],
@@ -56,7 +54,6 @@ export default {
 					name: "Incarcati din LocalStorage",
 					parent_id: null
 				}
-        console.log(this.categoryTree)
 				return this.categoryTree
 			}
 			// //
@@ -74,7 +71,6 @@ export default {
 				parentEl.children = [...(parentEl.children || []), el];
 			})
 			this.categoryTree = root;
-			console.log(this.categoryTree)
 		}
 	},
 };

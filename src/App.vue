@@ -8,6 +8,7 @@
       <router-link class="link" to="/">Home</router-link>
       <router-link class="link" to="/admin">AdminPage</router-link>
       <p class="cart" @click="openCart">&#x1F6D2;</p>
+      <p style="color: #fc5000">({{ this.cartItems }})</p>
     </div>
     <router-view />
   </div>
@@ -16,15 +17,35 @@
 
 <script>
 import ShoppingCart from "@/components/ShoppingCart.vue";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   components: { ShoppingCart },
   data() {
     return {
-      showCart: false
+      showCart: false,
     }
   },
+  computed: {
+    ...mapGetters({
+      getCart: "cart/getCart",
+      getCartCount: "cart/getCartCount"
+    }),
+    /*
+    * Display count of products in the cart
+    * */
+    cartItems(){
+      this.loadCart()
+      return this.getCartCount
+    }
+  },
+  mounted() {
+    this.loadCart()
+  },
   methods: {
+    ...mapActions({
+      loadCart: "cart/loadCart"
+    }),
     closeCart() {
       this.showCart = false;
     },

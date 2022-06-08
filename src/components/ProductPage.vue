@@ -119,13 +119,11 @@ export default {
     * Open details page and add item name to breadCrumb
     * */
     toggleModal(item){
-      console.log(item)
       if(item !== undefined) {
         this.showModal = !this.showModal
         this.updatedBreadCrumb.push(item)
         this.data = item
-        // console.log(this.updatedBreadCrumb.slice(-1))
-        if (this.showModal === true) console.log(this.updatedBreadCrumb)
+        if (this.showModal === true)
         this.$emit('showModal', this.showModal)
       }
     },

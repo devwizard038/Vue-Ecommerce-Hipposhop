@@ -49,7 +49,6 @@ export default {
   },
   computed:{
     hasChildren(){
-      console.log(this.node)
       return this.node.children;
     },
     ...mapGetters({
