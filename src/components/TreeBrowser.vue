@@ -1,59 +1,71 @@
 <template>
   <div
-    :node = node
-    @click="expanded = !expanded"
-    :style="{'margin-left': `${depth*2}rem`}"
-    class="node">
-    <span
-        v-if="hasChildren"
-        class="type"> {{expanded ? '&#45;'  : '&#43;'}}</span>
-    <a @click="emitNode(node.id)">{{node.name}}</a>
-  </div>
-  <div v-if="expanded">
-    <TreeBrowser
-      v-for="item in node.children"
-      :key="item.id"
-      :node="item"
-      :depth="depth + 1"
-    />
+    :class="{ 'node': node.id }"
+	>
+		<div
+			v-if="node.id"
+			:class="{ 'selected': isSelected }"
+		>
+			<span
+				v-if="hasChildren"
+				@click="expanded = !expanded"
+				class="type"
+			>
+				{{ expanded ? '&#45;' : '&#43;' }}
+			</span>
+			<a @click="emitNode(node)">{{ node.name }}</a>
+		</div>
+
+		<div v-if="expanded || node.id === 0">
+			<TreeBrowser
+				v-for="item in node.children"
+				:key="item.id"
+				:node="item"
+			/>
+		</div>
+
   </div>
 </template>
 <script>
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-  name:'TreeBrowser',
-  emits:["emitNode"],
-  props:{
-    node:Object,
-    depth:{
-      type:Number,
-      default:0,
+  name: 'TreeBrowser',
+  emits: ["emitNode"],
+  props: {
+    node: Object,
+  },
+  data() {
+    return {
+      expanded: false,
     }
   },
-  data(){
-    return{
-      expanded:false,
-    }
-  },
-  methods:{
+  methods: {
+		...mapActions({
+			loadId: "selectedcateg/loadId",
+			loadCategory: "selectedcateg/loadCategory",
+		}),
     /*
     * Update selected category Id in selectedcateg.js
     * */
-    emitNode(value){
-      this.loadId(value)
+    emitNode(value) {
+      this.loadId(value.id);
+      this.loadCategory(value);
     },
-    ...mapActions({
-      loadId: "selectedcateg/loadId"
-    })
   },
   computed:{
-    hasChildren(){
-      return this.node.children;
+		...mapGetters({
+			getId: "selectedcateg/getId",
+			getCategory: "selectedcateg/getCategory",
+		}),
+
+    hasChildren() {
+      return this.node.children.length;
     },
-    ...mapGetters({
-      getId: "selectedcateg/getId"
-    })
+		isSelected() {
+			let category = this.getCategory;
+			return category ? this.node.id === this.getCategory.id : false;
+		}
   }
 }
 
@@ -63,6 +75,7 @@ export default {
   text-align: left;
   font-size: 1.5rem;
   cursor: pointer;
+	margin-left: 40px;
 }
 
 .type{
@@ -72,5 +85,7 @@ export default {
 .type:hover{
   color: orange;
 }
-
+.selected {
+	background-color: #efefef;
+}
 </style>

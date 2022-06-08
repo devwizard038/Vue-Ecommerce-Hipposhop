@@ -1,5 +1,12 @@
 <template>
   <h3>Products</h3>
+
+	<div class="bread-crumb">
+		<span  v-for="item in breadcrumb" :key="item.id">
+			>> {{ item.name }}
+		</span>
+	</div>
+
   <div class="breadCrumb">
     <div v-for="items in updatedBreadCrumb" :key="items.id">
       <a :class="items.title ? 'innactive' : ''" @click="clickBread(items)">{{ items.name ? items.name : items.title }}</a>
@@ -61,7 +68,8 @@ export default {
       getProducts: "products/getProducts",
       getCart: "cart/getCart",
       getCategories: "category/getCategories",
-      getId: "selectedcateg/getId"
+      getId: "selectedcateg/getId",
+      getCategory: "selectedcateg/getCategory",
     }),
     //  Retrieve list from LocalStorage.
     products() {
@@ -76,7 +84,10 @@ export default {
         return this.getProducts;
       }
     },
-
+		breadcrumb() {
+			let category = this.getCategory;
+			return category ? category.path() : [];
+		},
     /*
     * Adds selected categories to breadCrumb
     * */
@@ -239,6 +250,12 @@ li {
 .innactive{
   color:grey;
   pointer-events: none;
+}
+
+.bread-crumb {
+	display: flex;
+	flex-direction: row;
+	padding-left: 30px;
 }
 
 </style>

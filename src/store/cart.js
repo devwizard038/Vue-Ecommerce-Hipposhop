@@ -18,7 +18,7 @@ export default {
     * Custom getter to retrieve the number of items in the cart
     * */
     getCartCount(state) {
-      return state.cartList.length;
+      return state.cartList ? state.cartList.length : 0;
     }
   },
   mutations: {

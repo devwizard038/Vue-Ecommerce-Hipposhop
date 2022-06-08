@@ -2,17 +2,24 @@ export default {
     namespaced: true,
     state() {
         return {
-            id:0,
+            id: 0,
+            category: null
         };
     },
     getters: {
         getId(state) {
             return state.id;
         },
+        getCategory(state) {
+            return state.category;
+        },
     },
     mutations: {
         setId(state, data) {
             state.id = data;
+        },
+        setCategory(state, data) {
+            state.category = data;
         },
     },
     actions: {
@@ -23,6 +30,14 @@ export default {
          */
         loadId({ commit }, data) {
             commit("setId", data);
+        },
+        /**
+         *
+         * @param commit
+         * @param data
+         */
+        loadCategory({ commit }, data) {
+            commit("setCategory", data);
         },
     },
 };
