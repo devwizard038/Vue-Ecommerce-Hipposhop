@@ -8,6 +8,7 @@
 <script>
 import { mapGetters, mapActions} from 'vuex';
 import TreeBrowser from "./TreeBrowser"
+import {Category} from "@/models/Category";
 export default {
 	name: "CategoryComponent",
 	components: {
@@ -34,13 +35,34 @@ export default {
     /*
 		* Obs : Posibil sa trebuiasca un computed ca sa nu fie chemata functia de fiecare data cand isi ia mount.
 		* */
-    this.catTree = this.getCategories
-		this.mapCategory(this.catTree)
+    this.catTree = this.getCategories;
+		// this.mapCategory(this.catTree);
+
+		this.categoryTree = new Category();
+		this.mapCategory2(this.catTree, this.categoryTree);
+
+		console.log(this.categoryTree);
+
+		// console.log(this.catTree, this.categoryTree);
 	},
 	methods: {
     ...mapActions({
       loadCategories: "category/loadCategories",
     }),
+		mapCategory2(categories, currentNode) {
+
+			categories.forEach(category => {
+				if (currentNode.id === category.parent_id) {
+					let child = new Category({
+						id: category.id,
+						name: category.name
+					});
+					currentNode.addChild(child);
+					this.mapCategory2(categories, child);
+				}
+			});
+
+		},
 		/*
 		* Function: Process JSON Category data into a Tree like object.
 		* Result: JSON Object in Tree Structure with nested components.
