@@ -27,6 +27,8 @@
 
 <script>
 
+import {mapActions} from "vuex";
+
 export default {
   props: ["image", "name", "price", "unit", "product", "showModal"],
   emits: ['toggleModal', 'addToCart'],
@@ -36,10 +38,14 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      loadSelected: "selectedcateg/loadSelected"
+    }),
     toggleModal() {
       this.$emit("toggleModal", this.product);
     },
     addToCart(item, quantity) {
+      this.loadSelected(item)
       this.$emit('addToCart', item, quantity);
       this.quantity = 0;
     },

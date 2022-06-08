@@ -12,7 +12,6 @@
     <div>
       <ProductPage
           :categoryId="categoryId"
-
       />
     </div>
   </section>

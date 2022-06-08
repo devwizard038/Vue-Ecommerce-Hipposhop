@@ -38,6 +38,8 @@
 
 <script>
 
+import {mapActions} from "vuex";
+
 export default {
   props: ['data'],
   emits: ['closeModal', 'addToCart'],
@@ -47,10 +49,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      loadSelected: "selectedcateg/loadSelected"
+    }),
     closeModal() {
       this.$emit('closeModal');
     },
     addToCart(item, quantity) {
+      this.loadSelected(item);
       this.$emit('addToCart', item, quantity);
       this.quantity = 0;
     }

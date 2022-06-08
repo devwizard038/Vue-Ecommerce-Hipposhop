@@ -1,12 +1,13 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-// import store from './store'
+import 'animate.css';
 import { createStore } from 'vuex';
 import products from "@/store/products";
 import category from "@/store/category";
 import cart from "@/store/cart"
 import selectedcateg from "@/store/selectedcateg";
+
 
 // Create a new store instance.
 const store = createStore({

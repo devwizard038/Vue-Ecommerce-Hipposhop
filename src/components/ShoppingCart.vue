@@ -166,7 +166,7 @@ h2 {
 .cartContainer {
   position: fixed;
   z-index: 999;
-  width: 30vw auto;
+  width: 50vw;
   height: 100vh;
   margin: 0 0;
   background-color: white;
@@ -211,8 +211,10 @@ h2 {
 }
 
 .itemList img {
-  height: 5.2rem;
-  width: 6.5rem;
+  /*height: 5.2rem;*/
+  /*width: 6.5rem;*/
+  height: 20%;
+  width: 20%;
   /* max-height: 5rem; */
   padding-right: 2rem;
   padding-left: 1rem;
