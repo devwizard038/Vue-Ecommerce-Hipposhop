@@ -1,103 +1,112 @@
 <template>
-<div class="container">
-	<div class="cartContainer">
-		<div class="topContainer">
-			<h1>Your Cart</h1>
-			<button @click="closeCart()">X</button>
-		</div>
-		<div class="itemContainer" v-if="this.cart.length > 0">
-			<div class="itemBox">
-				<div class="itemList" v-for="item in cart" :key="item.id">
-					<img v-if="item.image === null"
-						src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
-						alt="{{ item.name }}" />
-					<img v-else :src="item.image" v-bind:alt="item.name" />
-					<p class="title">{{ item.title }}</p>
-					<p class="price">{{ item.price }}$</p>
-					<input type="number" min="1" :value="item.quantity" @input="event => modifyItem(event.target.value, item)">
-					<p class="price">{{ item.unit }}</p>
-					<a @click="deleteCartItem(item)">&#9747;</a>
-				</div>
-			</div>
-			<p>+ Shipping: 1.99$</p>
-			<div class="checkOutContainer">
-				<h2>Total : {{ this.totalPrice + this.shipping }} $</h2>
-				<button class="outBtn">Check Out</button>
-			</div>
-		</div>
-		<div class="empty" v-else>
-			<h2>Your cart is empty !</h2>
-		</div>
+  <div class="container">
+    <div class="cartContainer">
+      <div class="topContainer">
+        <h1>Your Cart</h1>
+        <button @click="closeCart()">X</button>
+      </div>
+      <div class="itemContainer" v-if="this.cart.length > 0">
+        <div class="itemBox">
+          <div class="itemList" v-for="item in cart" :key="item.id">
+            <img
+                v-if="item.image === null"
+                src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
+                alt="{{ item.name }}"
+            />
+            <img
+                v-else
+                :src="item.image"
+                :alt="item.name"
+            />
+            <p class="title">{{ item.title }}</p>
+            <p class="price">{{ item.price }}$</p>
+            <input
+                type="number"
+                min="1"
+                :value="item.quantity"
+                @input="event => modifyItem(event.target.value, item)"
+            >
+            <p class="price">{{ item.unit }}</p>
+            <a @click="deleteCartItem(item)">&#9747;</a>
+          </div>
+        </div>
+        <p>+ Shipping: 1.99$</p>
+        <div class="checkOutContainer">
+          <h2>Total : {{ this.totalPrice + this.shipping }} $</h2>
+          <button class="outBtn">Check Out</button>
+        </div>
+      </div>
+      <div class="empty" v-else>
+        <h2>Your cart is empty !</h2>
+      </div>
 
-	</div>
-</div>
+    </div>
+  </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-	name: "ShoppingCartComponent",
-	emits: ['closeCart'],
+  name: "ShoppingCartComponent",
+  emits: ['closeCart'],
 
-	data() {
-		return {
+  data() {
+    return {
       cart: [],
-			totalPrice: 0,
-			shipping:1.99,
-
-		}
-	},
-	methods: {
+      totalPrice: 0,
+      shipping: 1.99,
+    }
+  },
+  methods: {
     ...mapActions({
       loadCart: "cart/loadCart",
-      updateCart: "cart/updateCart"
+      updateCart: "cart/updateCart",
     }),
-		closeCart() {
-			this.$emit('closeCart')
-		},
-		totalPriceDisplay() {
-			this.totalPrice = 0;
-			for (let item in this.cart) {
-				this.totalPrice = this.totalPrice + (this.cart[item].quantity * this.cart[item].price)
-			}
-			return this.totalPrice
-		},
-		deleteCartItem(item) {
-      let cartOld = this.getCart
+    closeCart() {
+      this.$emit('closeCart')
+    },
+    totalPriceDisplay() {
+      this.totalPrice = 0;
+      for (let item in this.cart) {
+        this.totalPrice = this.totalPrice + (this.cart[item].quantity *
+            this.cart[item].price);
+      }
+      return this.totalPrice;
+    },
+    deleteCartItem(item) {
+      let cartOld = this.getCart;
       let newCart = cartOld.filter(n => n.id !== item.id);
-      this.updateCart(newCart)
-      this.loadCart()
+      this.updateCart(newCart);
+      this.loadCart();
       this.cart = this.getCart;
       this.totalPrice = 0;
       this.totalPriceDisplay();
-		},
-		modifyItem(value, item) {
+    },
+    modifyItem(value, item) {
       let cartOld = this.getCart
-      for(let i=0; i< cartOld.length; i++){
-        if(cartOld[i].id === item.id){
-          cartOld[i].quantity = value
-          this.updateCart(cartOld)
-          this.loadCart()
+      for (let i = 0; i < cartOld.length; i++) {
+        if (cartOld[i].id === item.id) {
+          cartOld[i].quantity = value;
+          this.updateCart(cartOld);
+          this.loadCart();
           this.cart = this.getCart;
           this.totalPrice = 0;
           this.totalPriceDisplay();
         }
       }
-			
-		}
-
-	},
-	computed: {
+    }
+  },
+  computed: {
     ...mapGetters({
-      getCart: "cart/getCart"
+      getCart: "cart/getCart",
     })
-	},
-	mounted() {
-    this.loadCart()
-    this.cart = this.getCart
-    this.totalPriceDisplay()
-	}
+  },
+  mounted() {
+    this.loadCart();
+    this.cart = this.getCart;
+    this.totalPriceDisplay();
+  }
 }
 
 </script>
@@ -106,167 +115,166 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-.container{
-	position: absolute;
-	display: flex;
-	background-color:rgba(0, 0, 0, 0.459);
-	width: 100vw;
-	height: 100vh;
-	z-index: 1000;
+.container {
+  position: absolute;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.459);
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
 }
 
 .topContainer {
-	background: rgb(173, 58, 12);
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	margin-bottom: 2rem;
+  background: rgb(173, 58, 12);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .topContainer button {
-	position: absolute;
-	right: 0;
-	margin-right: 0.4rem;
-	background-color: white;
-	color: rgb(173, 58, 12);
-	border: 2px white solid;
-	cursor: pointer;
+  position: absolute;
+  right: 0;
+  margin-right: 0.4rem;
+  background-color: white;
+  color: rgb(173, 58, 12);
+  border: 2px white solid;
+  cursor: pointer;
 }
 
 .topContainer button:hover {
 
-	background-color: red;
-	color: white;
-	border: 2px red solid;
+  background-color: red;
+  color: white;
+  border: 2px red solid;
 }
 
 h1 {
-	color: white;
-	display: flex;
-	/* align-items: center;
-	justify-content: center; */
-	font-family: 'Kanit', sans-serif;
+  color: white;
+  display: flex;
+  /* align-items: center;
+  justify-content: center; */
+  font-family: 'Kanit', sans-serif;
 }
 
 h2 {
-	font-family: 'Kanit', sans-serif;
+  font-family: 'Kanit', sans-serif;
 
 }
 
 .cartContainer {
-	position: fixed;
-	z-index: 999;
-	width: 30vw auto;
-	height: 100vh;
-	margin: 0 0;
-	background-color: white;
-	right: 0;
-	border: 2px solid rgb(173, 58, 12);
-	;
+  position: fixed;
+  z-index: 999;
+  width: 30vw auto;
+  height: 100vh;
+  margin: 0 0;
+  background-color: white;
+  right: 0;
+  border: 2px solid rgb(173, 58, 12);;
 }
 
 .itemContainer {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: 'Roboto', sans-serif;
 }
 
 .itemBox {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: auto;
 }
 
 .itemList {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	background-color: #fbf7ec;
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
-	border: 0.1px black solid;
-	border-radius: 8px;
-	margin-bottom: 0.7rem;
-	width: auto;
-	/* border: 2px solid black; */
-	width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #fbf7ec;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border: 0.1px black solid;
+  border-radius: 8px;
+  margin-bottom: 0.7rem;
+  width: auto;
+  /* border: 2px solid black; */
+  width: 100%;
 }
 
 .itemList input {
-	width: 4ch;
+  width: 4ch;
 }
 
 .itemList img {
-	height: 5.2rem;
-	width: 6.5rem;
-	/* max-height: 5rem; */
-	padding-right: 2rem;
-	padding-left: 1rem;
+  height: 5.2rem;
+  width: 6.5rem;
+  /* max-height: 5rem; */
+  padding-right: 2rem;
+  padding-left: 1rem;
 }
 
 .itemList a {
-	position: relative;
-	align-items: flex-end;
-	color: red;
-	border: black 2px solid;
-	cursor: pointer;
-	font-weight: bold;
-	margin-right: 1rem;
+  position: relative;
+  align-items: flex-end;
+  color: red;
+  border: black 2px solid;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 1rem;
 }
 
 .itemList a:hover {
-	color: white;
-	background-color: red;
-	border: red 2px solid;
-	font-weight: bold;
+  color: white;
+  background-color: red;
+  border: red 2px solid;
+  font-weight: bold;
 
 }
 
 .itemList p {
-	padding-right: 2rem;
-	max-width: 10ch;
+  padding-right: 2rem;
+  max-width: 10ch;
 }
 
 .itemList .title {
-	position: relative;
-	left: 0;
+  position: relative;
+  left: 0;
 }
 
 .checkOutContainer {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .outBtn {
-	background-color: rgb(173, 58, 12);
-	font-family: 'Roboto', sans-serif;
-	border: none;
-	font-size: 1rem;
-	padding-top: 0.3rem;
-	padding-bottom: 0.3rem;
-	padding-left: 0.5rem;
-	padding-right: 0.5rem;
-	color: white;
-	border-radius: 4px;
-	cursor: pointer;
+  background-color: rgb(173, 58, 12);
+  font-family: 'Roboto', sans-serif;
+  border: none;
+  font-size: 1rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .outBtn:hover {
-	background-color: rgb(219, 115, 74);
+  background-color: rgb(219, 115, 74);
 }
 
 .empty {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }
 </style>

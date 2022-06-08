@@ -1,28 +1,28 @@
 <template>
   <div
-    :class="{ 'node': node.id }"
-	>
-		<div
-			v-if="node.id"
-			:class="{ 'selected': isSelected }"
-		>
+      :class="{ 'node': node.id }"
+  >
+    <div
+        v-if="node.id"
+        :class="{ 'selected': isSelected }"
+    >
 			<span
-				v-if="hasChildren"
-				@click="expanded = !expanded"
-				class="type"
-			>
+          v-if="hasChildren"
+          @click="expanded = !expanded"
+          class="type"
+      >
 				{{ expanded ? '&#45;' : '&#43;' }}
 			</span>
-			<a @click="emitNode(node)">{{ node.name }}</a>
-		</div>
+      <a @click="emitNode(node)">{{ node.name }}</a>
+    </div>
 
-		<div v-if="expanded || node.id === 0">
-			<TreeBrowser
-				v-for="item in node.children"
-				:key="item.id"
-				:node="item"
-			/>
-		</div>
+    <div v-if="expanded || node.id === 0">
+      <TreeBrowser
+          v-for="item in node.children"
+          :key="item.id"
+          :node="item"
+      />
+    </div>
 
   </div>
 </template>
@@ -41,10 +41,10 @@ export default {
     }
   },
   methods: {
-		...mapActions({
-			loadId: "selectedcateg/loadId",
-			loadCategory: "selectedcateg/loadCategory",
-		}),
+    ...mapActions({
+      loadId: "selectedcateg/loadId",
+      loadCategory: "selectedcateg/loadCategory",
+    }),
     /*
     * Update selected category Id in selectedcateg.js
     * */
@@ -53,39 +53,41 @@ export default {
       this.loadCategory(value);
     },
   },
-  computed:{
-		...mapGetters({
-			getId: "selectedcateg/getId",
-			getCategory: "selectedcateg/getCategory",
-		}),
+  computed: {
+    ...mapGetters({
+      getId: "selectedcateg/getId",
+      getCategory: "selectedcateg/getCategory",
+    }),
 
     hasChildren() {
       return this.node.children.length;
     },
-		isSelected() {
-			let category = this.getCategory;
-			return category ? this.node.id === this.getCategory.id : false;
-		}
+    isSelected() {
+      let category = this.getCategory;
+      return category ? this.node.id === this.getCategory.id : false;
+    }
   }
 }
 
 </script>
 <style scoped>
-.node{
+.node {
   text-align: left;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   cursor: pointer;
-	margin-left: 40px;
+  margin-left: 40px;
 }
 
-.type{
+.type {
   font-size: 1.2rem;
   color: grey;
 }
-.type:hover{
+
+.type:hover {
   color: orange;
 }
+
 .selected {
-	background-color: #efefef;
+  background-color: #efefef;
 }
 </style>

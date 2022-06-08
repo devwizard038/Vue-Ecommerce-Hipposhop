@@ -1,12 +1,13 @@
 <template>
+  <!-- Formatting for each product card -->
   <div>
     <div class="card">
       <img
-        v-if="image === null"
-        src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
-        alt="{{ name }}"
+          v-if="image === null"
+          src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
+          alt="{{ name }}"
       />
-      <img v-else :src="image" v-bind:alt="name" />
+      <img v-else :src="image" v-bind:alt="name"/>
       <div class="productName">
         <p @click="toggleModal()">{{ name }}</p>
       </div>
@@ -14,14 +15,11 @@
         <p>Preț:</p>
         <p>{{ price }} / {{ unit }}</p>
       </div>
-
       <div>
         <p>Cantitate:</p>
-
-        <input class="cell" type="number" min="0" v-model.number="quantity" />
+        <input class="cell" type="number" min="0" v-model.number="quantity"/>
       </div>
       <div></div>
-
       <button @click="addToCart(product,this.quantity)">Add to cart</button>
     </div>
   </div>
@@ -30,20 +28,20 @@
 <script>
 
 export default {
-  props: ["image", "name", "price", "unit", "product","showModal"],
-  emits:['toggleModal','addToCart'],
+  props: ["image", "name", "price", "unit", "product", "showModal"],
+  emits: ['toggleModal', 'addToCart'],
   data() {
     return {
       quantity: 0,
     };
   },
   methods: {
-    toggleModal(){
-      this.$emit("toggleModal",this.product)
+    toggleModal() {
+      this.$emit("toggleModal", this.product);
     },
-    addToCart(item,quantity) {
-      this.$emit('addToCart',item,quantity)
-      this.quantity = 0
+    addToCart(item, quantity) {
+      this.$emit('addToCart', item, quantity);
+      this.quantity = 0;
     },
   },
 };
@@ -87,13 +85,13 @@ img {
   outline-color: rgb(255, 92, 16);
 }
 
-.cell:hover{
+.cell:hover {
   border: 0.1rem solid rgb(255, 92, 16);
 }
 
-.productName p:hover{
+.productName p:hover {
   font-weight: bold;
-  color:rgb(255, 92, 16);
+  color: rgb(255, 92, 16);
   cursor: pointer;
 }
 </style>

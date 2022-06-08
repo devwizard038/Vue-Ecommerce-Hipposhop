@@ -1,6 +1,6 @@
 <template>
   <div v-if="this.showCart === true">
-    <ShoppingCart @closeCart="closeCart" />
+    <ShoppingCart @closeCart="closeCart"/>
   </div>
   <div id="app">
     <div id="nav">
@@ -10,7 +10,7 @@
       <p class="cart" @click="openCart">&#x1F6D2;</p>
       <p style="color: #fc5000">({{ this.cartItems }})</p>
     </div>
-    <router-view />
+    <router-view/>
   </div>
 
 </template>
@@ -20,7 +20,7 @@ import ShoppingCart from "@/components/ShoppingCart.vue";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-  components: { ShoppingCart },
+  components: {ShoppingCart},
   data() {
     return {
       showCart: false,
@@ -28,13 +28,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getCart: "cart/getCart",
       getCartCount: "cart/getCartCount"
     }),
     /*
     * Display count of products in the cart
     * */
-    cartItems(){
+    cartItems() {
       this.loadCart()
       return this.getCartCount
     }

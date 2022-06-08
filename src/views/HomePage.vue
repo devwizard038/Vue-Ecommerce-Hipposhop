@@ -2,15 +2,18 @@
   <h1>Home Page</h1>
 
   <hr/>
-  <!-- {{ products }} -->
   <section class="tabel">
+    <!-- Display: Category bread crumb -->
     <div>
       <CategoryComp @selected="getSelectedCategory"
                     @breadCrumb="getBreadCrumb"/>
     </div>
+    <!-- Display: Products -->
     <div>
-      <ProductPage :categoryId="categoryId" :breadCrumb="breadCrumb"
-                   @breadCrumbSelect="breadCrumbSelect"/>
+      <ProductPage
+          :categoryId="categoryId"
+
+      />
     </div>
   </section>
 </template>
@@ -26,24 +29,20 @@ export default {
   data() {
     return {
       categoryId: 0,
-      breadCrumb: [{id: 0, name: 'Toate Produsele'}],
     };
   },
   computed: {
-    products() {
-      return this.getProducts;
-    },
     ...mapGetters({
       getId: "selectedcateg/getId",
       getProducts: "products/getProducts",
       getCategories: "category/getCategories",
       getCart: "cart/getCart"
     }),
+    products() {
+      return this.getProducts;
+    },
     id() {
       return this.getId
-    },
-    memory() {
-      return this.getCategories;
     }
   },
   watch: {
@@ -52,8 +51,9 @@ export default {
     }
   },
   mounted() {
-    // let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-    // this.$store.dispatch("products/loadList", data);
+    /**
+     * Catch error: for empty local storage for category and cart
+     */
     if (this.getCategories === null) {
       this.updateCategories([])
     }
