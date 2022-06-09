@@ -1,5 +1,6 @@
 <template>
   <h3>Categories</h3>
+  <hr />
   <!-- Category data organised in a tree -->
   <TreeBrowser
       :node="categoryTree"
@@ -60,15 +61,21 @@ export default {
 </script>
 
 <style scoped>
+h3{
+  text-align: center;
+  font-size: 1.5rem;
+  padding-bottom: 0;
+  margin: 0;
+}
+
 ul {
   list-style: none;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   font-weight: bold;
-  border: 2px solid black;
-  padding-right: 3rem;
-  padding-top: 2rem;
+  /*padding-right: 3rem;*/
+  /*padding-top: 2rem;*/
   padding-bottom: 2rem;
 }
 
@@ -77,31 +84,11 @@ a {
   cursor: pointer;
 }
 
-.all-products {
-  color: rgb(185, 59, 0);
-}
 
-.all-products:hover {
-  color: 0
-}
 
-.category-item {
-  color: rgb(0, 0, 0);
-}
-
-.category-item:hover {
-  color: rgb(255, 92, 16);
-}
-
-.category-item:active {
-  color: rgb(255, 92, 16);
-}
-
-.selected-item {
-  color: rgb(255, 92, 16);
-}
-
-.-sub {
-  padding-left: 1rem;
+@media(max-width: 600px){
+  h3{
+    font-size: 1rem;
+  }
 }
 </style>

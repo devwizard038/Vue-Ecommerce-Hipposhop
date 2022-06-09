@@ -113,7 +113,12 @@ export default {
 }
 
 .tabel {
+  display: inline-block;
+  text-align: center;
   padding-top: 1rem;
+  overflow-y: auto;
+  height: 50vh;
+  width: 90vw;
 }
 
 table {

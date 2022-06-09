@@ -56,9 +56,10 @@ export default {
       this.$emit('closeModal');
     },
     addToCart(item, quantity) {
+      if(quantity > 0){
       this.loadSelected(item);
       this.$emit('addToCart', item, quantity);
-      this.quantity = 0;
+      this.quantity = 0;}
     }
   }
 }

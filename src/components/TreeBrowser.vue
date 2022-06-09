@@ -76,10 +76,12 @@ export default {
   font-size: 1.1rem;
   cursor: pointer;
   margin-left: 40px;
+  padding-bottom: 0.3rem;
+  margin-right: 1rem;
 }
 
 .type {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: grey;
 }
 
@@ -90,4 +92,8 @@ export default {
 .selected {
   background-color: #efefef;
 }
+@media(max-width: 600px){
+  .node{
+    font-size: 0.8rem;
+}}
 </style>

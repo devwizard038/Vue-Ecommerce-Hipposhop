@@ -1,8 +1,9 @@
 <template>
   <h3>Products</h3>
+  <hr/>
   <!-- Display: Selected category bred crumb -->
   <div class="bread-crumb">
-		<span v-for="item in breadcrumb" :key="item.id">
+    <span v-for="item in breadcrumb" @click="emitNode(item)" :key="item.id">
 			>> {{ item.name ? item.name : item.title }}
 		</span>
   </div>
@@ -42,6 +43,7 @@ export default {
   data() {
     return {
       showModal: false,
+      category: '',
     }
   },
   components: {
@@ -59,7 +61,7 @@ export default {
     },
   },
   name: "ProductsComponent",
-  emits: ["breadCrumbSelect", "breadCrumbUpdate", "showModal"],
+  emits: ["showModal"],
   computed: {
     ...mapGetters({
       getProducts: "products/getProducts",
@@ -99,6 +101,8 @@ export default {
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
       loadCategories: "category/loadCategories",
+      loadId: "selectedcateg/loadId",
+      loadCategory: "selectedcateg/loadCategory",
     }),
     /*
     * Open details page and add item name to breadCrumb
@@ -151,19 +155,32 @@ export default {
         this.updateCart(localCart);
       }
       quantity = 0;
+    },
+    /**
+     * Sort: Display selected category clicked on BreadCrumb element.
+     * */
+    emitNode(value) {
+      console.log(value)
+      this.loadId(value.id);
+      this.loadCategory(value);
     }
   }
 };
 </script>
 
 <style scoped>
+h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 0;
+}
 
 li {
   padding-top: 0.3rem;
 }
 
 .product-box {
-  padding-left: 2rem;
+  margin-left: 2rem;
 }
 
 .product {
@@ -172,11 +189,9 @@ li {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  overflow: auto;
   overflow-y: auto;
   height: 50vh;
-  max-width: 45vw;
-  /* border: 2px solid black; */
+  width: 100%;
 }
 
 .product::-webkit-scrollbar {
@@ -189,33 +204,8 @@ li {
 }
 
 .product::-webkit-scrollbar-thumb {
-  background-color: #d4aa70;
+  background-color: rgb(16, 191, 255);
   border-radius: 100px;
-}
-
-
-.breadCrumb {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  font-weight: bold;
-  font-style: italic;
-  padding-left: 1.5rem;
-}
-
-.breadCrumb a {
-  padding-left: 0.3rem;
-  padding-right: 0.3rem;
-  cursor: pointer;
-}
-
-.breadCrumb a:hover {
-  color: rgb(255, 92, 16);
-}
-
-.innactive {
-  color: grey;
-  pointer-events: none;
 }
 
 .bread-crumb {
@@ -224,4 +214,25 @@ li {
   padding-left: 30px;
 }
 
+.bread-crumb span {
+  cursor: pointer;
+}
+
+.bread-crumb span:hover {
+  color: #2095E1FF;
+}
+
+@media (max-width: 600px) {
+  h3 {
+    font-size: 1rem;
+  }
+
+  .product::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .product-box {
+    /*margin-left: 0.2rem;*/
+  }
+}
 </style>

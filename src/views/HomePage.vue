@@ -1,7 +1,5 @@
 <template>
   <h1>Home Page</h1>
-
-  <hr/>
   <section class="tabel">
     <!-- Display: Category bread crumb -->
     <div>
@@ -89,8 +87,20 @@ export default {
 </script>
 
 <style scoped>
+h1{
+  text-align: center;
+}
 .tabel {
+  margin-right: 1rem;
+  margin-left: 1rem;
   display: flex;
   justify-content: center;
+  /*align-items: center;*/
+}
+
+@media(max-width: 600px){
+  h1{
+    font-size: 1.85rem;
+  }
 }
 </style>

@@ -118,19 +118,23 @@ export default {
 .container {
   position: absolute;
   display: flex;
-  background-color: rgba(0, 0, 0, 0.459);
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 1000;
 }
 
+h1{
+  font-size: 1.5rem;
+}
+
 .topContainer {
-  background: rgb(173, 58, 12);
+  background-color: #2d2d2d;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   margin-bottom: 2rem;
+  height: 3.5rem;
 }
 
 .topContainer button {
@@ -171,7 +175,7 @@ h2 {
   margin: 0 0;
   background-color: white;
   right: 0;
-  border: 2px solid rgb(173, 58, 12);;
+  border: 1px solid #2d2d2d;
 }
 
 .itemContainer {
@@ -195,15 +199,13 @@ h2 {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background-color: #fbf7ec;
+  flex-wrap: wrap;
+  background-color: #bbbbbb;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  border: 0.1px black solid;
   border-radius: 8px;
   margin-bottom: 0.7rem;
-  width: auto;
-  /* border: 2px solid black; */
-  width: 100%;
+  width: inherit;
 }
 
 .itemList input {
@@ -211,11 +213,8 @@ h2 {
 }
 
 .itemList img {
-  /*height: 5.2rem;*/
-  /*width: 6.5rem;*/
   height: 20%;
   width: 20%;
-  /* max-height: 5rem; */
   padding-right: 2rem;
   padding-left: 1rem;
 }

@@ -1,30 +1,44 @@
 <template>
   <transition
-  mode="in-out"
-  enter-active-class="animate__animated animate__fadeInRight"
-  leave-active-class="animate__animated animate__fadeOutRight"
+      mode="in-out"
+      enter-active-class="animate__animated animate__fadeInRight"
+      leave-active-class="animate__animated animate__fadeOutRight"
   >
     <div v-if="this.showCart === true">
       <ShoppingCart @closeCart="closeCart"/>
     </div>
   </transition>
   <div id="app">
-    <div id="nav">
-      <p class="logo">Shop Cart</p>
-      <router-link class="link" to="/">Home</router-link>
-      <router-link class="link" to="/admin">AdminPage</router-link>
-      <p class="cart" @click="openCart">&#x1F6D2;</p>
-      <p style="color: #fc5000">({{ this.cartItems }})</p>
-      <!-- Item added to CART POP-UP  -->
-      <transition
-          mode="in-out"
-          enter-active-class="animate__animated animate__fadeInDown"
-          leave-active-class="animate__animated animate__fadeOutUp"
+    <nav class="navbar">
+      <div class="brand-title">ShopCart.io</div>
+      <div class="toggle-button" @click="toggleMobile">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <div
+          :class="{active: this.active}"
+          class="navbar-links"
       >
-        <p class="popup" v-if="this.selected != null"><b>Ati adaugat in cos:</b>
-          {{ this.selected.quantity }}/{{ this.selected.unit }} de "{{ this.selected.title }}"</p>
-      </transition>
-    </div>
+        <ul>
+          <li>
+            <router-link to="/">Home</router-link>
+          </li>
+          <li>
+            <router-link to="/admin">AdminPage</router-link>
+          </li>
+          <li><a @click="openCart">&#x1F6D2;({{ this.cartItems }})</a></li>
+        </ul>
+      </div>
+    </nav>
+    <transition
+        mode="in-out"
+        enter-active-class="animate__animated animate__fadeInDown"
+        leave-active-class="animate__animated animate__fadeOutUp"
+    >
+      <p class="popup" v-if="this.selected != null"><b>Ati adaugat in cos:</b>
+        {{ this.selected.quantity }}/{{ this.selected.unit }} de "{{ this.selected.title }}"</p>
+    </transition>
     <router-view/>
   </div>
 
@@ -41,6 +55,7 @@ export default {
     return {
       showCart: false,
       selected: null,
+      active: false,
     }
   },
   computed: {
@@ -65,7 +80,6 @@ export default {
   watch: {
     selectedCart(nv) {
       if (nv != null) {
-        console.log(nv)
         this.selected = nv
       }
       setTimeout(() => {
@@ -84,17 +98,24 @@ export default {
     },
     openCart() {
       this.showCart = true;
+    },
+    toggleMobile() {
+      console.log(this.active)
+      this.active = !this.active
     }
   },
 }
 </script>
 
-<style scoped>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+body { margin: 0 !important; }
 .popup {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fc5000;
-  top: 10rem;
+  top: 4rem;
+  right: 0;
+  background-color: rgba(23, 59, 133, 0.8);
+  color: #f8f8f8;
   padding: 0.5rem;
   border-radius: 0.7rem;
   font-size: 0.9rem;
@@ -103,60 +124,100 @@ export default {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  align-items: center;
   color: #2c3e50;
   margin: 0;
+  padding: 0;
 }
 
-.cart {
-  margin-left: 30px;
-  font-weight: bold;
-  font-size: 1.5rem;
-  text-decoration: none;
-  right: 100%;
-  color: white;
-  cursor: pointer;
-}
-
-.link {
-  padding-left: 30px;
-  font-weight: bold;
-  font-size: 1.5rem;
-  text-decoration: none;
-  right: 100%;
-  color: white;
-}
-
-.link:hover {
-  color: #fc5000;
-}
-
-.link:active {
-  color: #fc5000;
-}
-
-#nav {
+.navbar {
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  margin: 0;
-  background-color: rgb(7, 7, 7)
+  background-color: #2d2d2d;
+  color: white;
+  height: 3.5rem;
 }
 
-.logo {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #fc5000;
-  font-weight: bold;
+.brand-title {
   font-size: 1.5rem;
-  text-decoration: underline;
-  padding-right: 10rem;
-  opacity: 80%;
+  margin: .5rem;
 }
 
+.navbar-links ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.navbar-links li {
+  list-style: none;
+}
+
+.navbar-links li a {
+  text-decoration: none;
+  color: white;
+  padding: 1rem;
+  display: block;
+}
+
+.navbar-links li:hover {
+  background-color: #555;
+}
+
+.toggle-button {
+  position: absolute;
+  top: .75rem;
+  right: 1rem;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  margin-top: 0.6rem;
+}
+
+.toggle-button .bar {
+  height: 3px;
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+  .toggle-button {
+    display: flex;
+  }
+
+  .navbar-links {
+    display: none;
+    width: 100%;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-links ul {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .navbar-links li {
+    text-align: center;
+  }
+
+  .navbar-links li a {
+    padding: .5rem 1rem;
+  }
+
+  .active {
+    display: flex;
+  }
+}
 </style>
