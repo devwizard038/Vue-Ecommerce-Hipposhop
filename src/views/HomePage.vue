@@ -96,7 +96,7 @@ export default {
   grid-template:
       "header" 80px
       "content" auto
-      / auto;
+      / 100%;
 }
 
 .header{
@@ -116,9 +116,7 @@ h1 {
   height: 100%;
   grid-area: content;
   display: grid;
-  grid-template:
-      "left right" auto
-      / auto;
+  grid-template-columns: 25% 75%;
 }
 
 .table .left{
@@ -126,7 +124,6 @@ h1 {
   height: auto;
   margin: 0;
   padding: 0;
-  grid-area: left;
   overflow: visible;
 }
 
@@ -135,7 +132,6 @@ h1 {
   height: 100%;
   margin: 0;
   padding: 0;
-  grid-area: right;
 }
 @media (max-width: 600px) {
   h1 {

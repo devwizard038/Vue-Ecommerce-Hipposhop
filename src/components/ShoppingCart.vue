@@ -1,46 +1,44 @@
 <template>
-  <div class="container">
-    <div class="cartContainer">
-      <div class="topContainer">
-        <h1>Your Cart</h1>
-        <button @click="closeCart()">X</button>
+  <div class="shopContainer">
+    <div class="header">
+      <h1>Your Cart</h1>
+      <button @click="closeCart()">X</button>
+    </div>
+    <div class="itemContainer">
+      <div class="contentContainer" v-if="this.cart.length > 0">
+        <div class="itemList" v-for="item in cart" :key="item.id">
+          <img
+              v-if="item.image === null"
+              src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
+              alt="{{ item.name }}"
+          />
+          <img
+              v-else
+              :src="item.image"
+              :alt="item.name"
+          />
+          <p class="title">{{ item.title }}</p>
+          <p class="price">{{ item.price }}$</p>
+          <input
+              type="number"
+              min="1"
+              :value="item.quantity"
+              @input="event => modifyItem(event.target.value, item)"
+          >
+          <p class="price">{{ item.unit }}</p>
+          <a @click="deleteCartItem(item)">&#9747;</a>
+        </div>
       </div>
-      <div class="itemContainer" v-if="this.cart.length > 0">
-        <div class="itemBox">
-          <div class="itemList" v-for="item in cart" :key="item.id">
-            <img
-                v-if="item.image === null"
-                src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
-                alt="{{ item.name }}"
-            />
-            <img
-                v-else
-                :src="item.image"
-                :alt="item.name"
-            />
-            <p class="title">{{ item.title }}</p>
-            <p class="price">{{ item.price }}$</p>
-            <input
-                type="number"
-                min="1"
-                :value="item.quantity"
-                @input="event => modifyItem(event.target.value, item)"
-            >
-            <p class="price">{{ item.unit }}</p>
-            <a @click="deleteCartItem(item)">&#9747;</a>
-          </div>
-        </div>
+      <div class="checkOutContainer" v-if="this.cart.length > 0">
         <p>+ Shipping: 1.99$</p>
-        <div class="checkOutContainer">
-          <h2>Total : {{ this.totalPrice + this.shipping }} $</h2>
-          <button class="outBtn">Check Out</button>
-        </div>
+        <h2>Total : {{ this.totalPrice + this.shipping }} $</h2>
+        <button class="outBtn">Check Out</button>
       </div>
       <div class="empty" v-else>
         <h2>Your cart is empty !</h2>
       </div>
-
     </div>
+
   </div>
 </template>
 
@@ -115,29 +113,33 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-.container {
+.shopContainer {
   position: absolute;
-  display: flex;
-  width: 100%;
+  right: 0;
+  display: grid;
+  grid-template:
+      "header" 80px
+      "content" auto
+      /auto;
+  width: 50vw;
   height: 100%;
-  z-index: 1000;
+  background-color: white;
 }
 
-h1{
-  font-size: 1.5rem;
-}
-
-.topContainer {
+.header {
   background-color: #2d2d2d;
+  grid-area: header;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   margin-bottom: 2rem;
-  height: 3.5rem;
+  height: 100%;
+  width: 100%;
+
 }
 
-.topContainer button {
+.header button {
   position: absolute;
   right: 0;
   margin-right: 0.4rem;
@@ -147,8 +149,7 @@ h1{
   cursor: pointer;
 }
 
-.topContainer button:hover {
-
+.header button:hover {
   background-color: red;
   color: white;
   border: 2px red solid;
@@ -164,34 +165,35 @@ h1 {
 
 h2 {
   font-family: 'Kanit', sans-serif;
-
-}
-
-.cartContainer {
-  position: fixed;
-  z-index: 999;
-  width: 50vw;
-  height: 100vh;
-  margin: 0 0;
-  background-color: white;
-  right: 0;
-  border: 1px solid #2d2d2d;
 }
 
 .itemContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  grid-area: content;
+  display: grid;
+  grid-template:
+      "items" auto
+      "footer" 200px
+      /auto;
   font-family: 'Roboto', sans-serif;
+  overflow: hidden;
 }
 
-.itemBox {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: auto;
+.contentContainer{
+  grid-area: items;
+  width: 100%;
+  height: auto;
+  min-height: 7rem;
+  max-height: 30rem;
+  overflow: auto;
+
+}
+
+.checkOutContainer{
+  grid-area: footer;
+  height: 100%;
+  width: 100%;
 }
 
 .itemList {

@@ -1,36 +1,44 @@
 <template>
   <div class="product-container">
     <div class="product-details">
-      <div class="image">
-        <img :src="data.image" :alt="data.title"/>
+      <div class="closeModal">
         <p @click="closeModal()">&#9747;</p>
       </div>
-      <div class="details">
-        <h2>{{ data.title }}</h2>
-        <p>Pret:{{ data.price }}/{{ data.unit }}</p>
-        <p>Cantitate:
-          <input
-              class="cell"
-              type="number"
-              min="0"
-              v-model.number="quantity"/></p>
-        <button @click="addToCart(data,this.quantity)">
-          ADD TO CART
-        </button>
+      <div class="image">
+        <img :src="data.image" :alt="data.title"/>
       </div>
-      <div class="description">
-        <h3>Despre produs</h3>
-        <p>i.e., "from the outset," referring to an inquiry or investigation. Ab
-          initio mundi means "from the begzzinning of the world." In literature,
-          it refers to a story told from the beginning rather than in medias res
-          ('from the middle'). In science, it refers to the first principles. In
-          other contexts, it often refers to beginner or training courses. In
-          law, it refers to a thing being true from its beginning or from the
-          instant of the act, rather than from when the court declared it so.
-          Likewise, an annulment is a judicial declaration of the invalidity or
-          nullity of a marriage ab initio: the so-called marriage was "no thing"
-          (Latin: nullius, from which the word "nullity" derives) and never
-          existed, except perhaps in name only.</p>
+      <div class="modalDetailsContainer">
+        <div class="title">
+          <h2>{{ data.title }}</h2>
+        </div>
+        <div class="pricingContainer">
+          <div class="pricingQty">
+          <p>Pret:{{ data.price }}/{{ data.unit }}</p>
+          <p>Cantitate:
+            <input
+                class="cell"
+                type="number"
+                min="0"
+                v-model.number="quantity"/></p>
+          </div>
+          <button @click="addToCart(data,this.quantity)">
+            ADD TO CART
+          </button>
+        </div>
+        <div class="description">
+          <h3>Despre produs</h3>
+          <p>i.e., "from the outset," referring to an inquiry or investigation. Ab
+            initio mundi means "from the begzzinning of the world." In literature,
+            it refers to a story told from the beginning rather than in medias res
+            ('from the middle'). In science, it refers to the first principles. In
+            other contexts, it often refers to beginner or training courses. In
+            law, it refers to a thing being true from its beginning or from the
+            instant of the act, rather than from when the court declared it so.
+            Likewise, an annulment is a judicial declaration of the invalidity or
+            nullity of a marriage ab initio: the so-called marriage was "no thing"
+            (Latin: nullius, from which the word "nullity" derives) and never
+            existed, except perhaps in name only.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -56,10 +64,11 @@ export default {
       this.$emit('closeModal');
     },
     addToCart(item, quantity) {
-      if(quantity > 0){
-      this.loadSelected(item);
-      this.$emit('addToCart', item, quantity);
-      this.quantity = 0;}
+      if (quantity > 0) {
+        this.loadSelected(item);
+        this.$emit('addToCart', item, quantity);
+        this.quantity = 0;
+      }
     }
   }
 }
@@ -68,113 +77,171 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 .product-container {
-  padding-left: 0.5rem;
   position: absolute;
-  z-index: 999;
-  background-color: white;
-  word-spacing: 0.1rem;
-  padding-block: 0.4rem;
-  overflow: auto;
-  overflow-y: auto;
-  height: 50vh;
-  max-width: 45vw;
-  width: auto;
+  height: 100vh;
+  width: 100vw;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
   flex-direction: column;
-  margin-left: 2rem;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.76);
+  top: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.product-details {
+  width: 50vw;
+  height: auto;
+  max-height: 80vh;
+  background-color: white;
+  border-radius: 10px;
+  padding: 1rem;
+  display: grid;
+  grid-template:
+      "closeButton" 65px
+      "productImage" auto
+      "content" auto
+      /auto;
+  overflow: auto;
+}
+
+.product-details::-webkit-scrollbar {
+  width: 12px;
+}
+
+.product-details::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+.product-details::-webkit-scrollbar-thumb {
+  background-color: rgb(16, 191, 255);
+  border-radius: 100px;
+}
+
+
+.closeModal {
+  width: 100%;
+  grid-area: closeButton;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.closeModal p {
+  margin-right: 1rem;
+  padding: 0.2rem;
+  color: white;
+  background-color: #2095E1FF;
+  cursor: pointer;
+}
+
+.closeModal p:hover {
+  background-color: #0e3756;
+}
+
+.image {
+  grid-area: productImage;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .image img {
   width: auto;
   height: auto;
-  max-height: 8rem;
+  max-height: 15rem;
 }
 
-.image p {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 0.08rem;
-  margin-right: 1rem;
-  border: 2px solid red;
-  color: black;
+.modalDetailsContainer{
+  display: grid;
+  grid-template:
+      "title" 60px
+      "pricing" 140px
+      "description" auto
+      /auto;
+}
+
+.title{
+  width: 100%;
+  height: 100%;
+  grid-area: title;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pricingContainer{
+  grid-area: pricing;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.pricingContainer button {
+  background-color: #2095E1FF;
+  padding: 0.6rem;
+  font-size: 1rem;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 0.7rem;
+  border: none;
+  text-decoration: none;
+}
+
+.pricingContainer button:hover {
+  background-color: rgb(7, 72, 96);
   cursor: pointer;
 }
 
-.image p:hover {
-  background-color: red;
-  color: white;
-}
 
-.product-container::-webkit-scrollbar {
-  width: 16px;
-}
-
-.product-container::-webkit-scrollbar-track {
-  background-color: #e4e4e4;
-  border-radius: 100px;
-}
-
-.product-container::-webkit-scrollbar-thumb {
-  background-color: #d4aa70;
-  border-radius: 100px;
-}
-
-
-.details {
+.pricingQty{
   display: flex;
-  flex-direction: column;
+  width: 40%;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.details p {
-  align-self: flex-start;
-  flex-direction: row;
-}
-
-.details input {
-  border: 1px solid black;
+.pricingQty input{
+  padding: 0.2rem;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+  width: 2.5rem;
   border-radius: 6px;
+  border: 1px solid black;
 }
 
-.details button {
-  align-self: center;
-  border: none;
-  background-color: rgb(255, 92, 16);
-  color: white;
-  /* font-weight: bold; */
-  padding: 1rem;
-  border-radius: 5px;
-  font-family: 'Roboto', sans-serif;
+.pricingQty input:hover{
+  border: 2px solid #2095E1FF;
 }
 
-.details button:hover {
-  background-color: rgb(194, 63, 2);;
-}
-
-.details button {
-  align-self: center;
-  border: none;
-  background-color: rgb(255, 92, 16);
-  color: white;
-  /* font-weight: bold; */
-  padding: 1rem;
-  border-radius: 5px;
-  font-family: 'Roboto', sans-serif;
-
+.pricingQty input:focus{
+  border: 2px solid #2095E1FF;
 }
 
 .description {
+  grid-area: description;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.description p {
-  align-self: flex-start;
-  flex-direction: row;
+.description h3{
+  text-align: center;
 }
+
+
 
 </style>

@@ -116,7 +116,7 @@ html, body {
   height: 100%;
   width: 100%;
 }
-
+/*Vue JS Default #app div properties overwritten*/
 #app {
   height: 100%;
   width: 100%;
@@ -144,9 +144,9 @@ html, body {
   padding: 0;
   display: grid;
   grid-template:
-    "header" 50px
+    "header" 80px
     "content" auto
-    / auto;
+    / 100%;
 }
 
 
@@ -156,30 +156,35 @@ html, body {
   align-items: center;
   background-color: #2d2d2d;
   color: white;
-  height: 3.5rem;
+  height: 100%;
   grid-area: header;
 }
 
 .brand-title {
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   margin: .5rem;
 }
 
 .navbar-links ul {
+  height: 100%;
   margin: 0;
   padding: 0;
   display: flex;
 }
 
 .navbar-links li {
+  height: 100%;
   list-style: none;
 }
 
 .navbar-links li a {
+  height: 100%;
+  font-size: 1.5rem;
   text-decoration: none;
   color: white;
-  padding: 1rem;
+  padding: 1.4rem;
   display: block;
+  cursor:pointer;
 }
 
 .navbar-links li:hover {

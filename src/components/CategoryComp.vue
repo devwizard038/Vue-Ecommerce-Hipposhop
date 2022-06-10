@@ -86,7 +86,21 @@ export default {
   height: 100vh;
   width: 100%;
   grid-area: content;
-  overflow: auto;
+  overflow:auto;
+}
+
+.categoriesContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.categoriesContainer::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+.categoriesContainer::-webkit-scrollbar-thumb {
+  background-color: rgb(16, 191, 255);
+  border-radius: 100px;
 }
 
 h3 {
