@@ -77,7 +77,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .btn-load {
 
   background-color: rgb(69, 172, 69);

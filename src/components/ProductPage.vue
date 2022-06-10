@@ -1,35 +1,38 @@
 <template>
-  <h3>Products</h3>
-  <hr/>
-  <!-- Display: Selected category bred crumb -->
-  <div class="bread-crumb">
-    <span v-for="item in breadcrumb" @click="emitNode(item)" :key="item.id">
-			>> {{ item.name ? item.name : item.title }}
-		</span>
-  </div>
-
-  <ProductDetailComp
-      v-if="showModal"
-      @closeModal="closeModal"
-      @addToCart="addToCart"
-      :data="data"
-  />
-
-  <div class="product-box">
-    <div class="product">
-      <ProductComp
-          :showModal="this.showModal"
-          @toggleModal="toggleModal"
-          @addToCart="addToCart"
-          v-for="product in products"
-          :key="product.id"
-          :name="product.title"
-          :price="product.price"
-          :image="product.image"
-          :unit="product.unit"
-          :product="product"
-      />
+  <div class="productPageContainer">
+    <div class="header">
+      <h3>Products</h3>
+      <hr/>
     </div>
+
+    <div class="productContainer">
+      <!-- Display: Selected category bred crumb -->
+      <div class="bread-crumb">
+        <span v-for="item in breadcrumb" @click="emitNode(item)" :key="item.id">
+          >> {{ item.name ? item.name : item.title }}
+        </span>
+      </div>
+      <div class="product">
+        <ProductComp
+            :showModal="this.showModal"
+            @toggleModal="toggleModal"
+            @addToCart="addToCart"
+            v-for="product in products"
+            :key="product.id"
+            :name="product.title"
+            :price="product.price"
+            :image="product.image"
+            :unit="product.unit"
+            :product="product"
+        />
+      </div>
+    </div>
+    <ProductDetailComp
+        v-if="showModal"
+        @closeModal="closeModal"
+        @addToCart="addToCart"
+        :data="data"
+    />
   </div>
 </template>
 
@@ -160,7 +163,6 @@ export default {
      * Sort: Display selected category clicked on BreadCrumb element.
      * */
     emitNode(value) {
-      console.log(value)
       this.loadId(value.id);
       this.loadCategory(value);
     }
@@ -169,18 +171,50 @@ export default {
 </script>
 
 <style scoped>
-h3 {
-  text-align: center;
-  font-size: 1.5rem;
+.productPageContainer {
+  width: 100%;
+  height: 100%;
   margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template:
+      "header" 50px
+      "content" auto
+      / auto;
 }
 
-li {
-  padding-top: 0.3rem;
+.header {
+  grid-area: header;
+  height: 100%;
+  width: 100%;
 }
 
-.product-box {
-  margin-left: 2rem;
+.productContainer{
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  grid-area: content;
+  display: grid;
+  grid-template:
+      "breadCrumb" 20px
+      "content" auto
+      / auto;
+}
+
+.bread-crumb {
+  display: flex;
+  flex-direction: row;
+  padding-left: 30px;
+  grid-area: breadCrumb;
+}
+
+.bread-crumb span {
+  cursor: pointer;
+}
+
+.bread-crumb span:hover {
+  color: #2095E1FF;
 }
 
 .product {
@@ -190,8 +224,9 @@ li {
   flex-direction: column;
   align-items: flex-start;
   overflow-y: auto;
-  height: 50vh;
+  height: 100vh;
   width: 100%;
+  grid-area: content;
 }
 
 .product::-webkit-scrollbar {
@@ -208,18 +243,14 @@ li {
   border-radius: 100px;
 }
 
-.bread-crumb {
-  display: flex;
-  flex-direction: row;
-  padding-left: 30px;
+h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 0;
 }
 
-.bread-crumb span {
-  cursor: pointer;
-}
-
-.bread-crumb span:hover {
-  color: #2095E1FF;
+li {
+  padding-top: 0.3rem;
 }
 
 @media (max-width: 600px) {

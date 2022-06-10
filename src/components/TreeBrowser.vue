@@ -73,7 +73,7 @@ export default {
 <style scoped>
 .node {
   text-align: left;
-  font-size: 1.1rem;
+  font-size: 1.6rem;
   cursor: pointer;
   margin-left: 40px;
   padding-bottom: 0.3rem;

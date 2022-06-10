@@ -1,4 +1,5 @@
 <template>
+  <!--  Cart -->
   <transition
       mode="in-out"
       enter-active-class="animate__animated animate__fadeInRight"
@@ -8,7 +9,7 @@
       <ShoppingCart @closeCart="closeCart"/>
     </div>
   </transition>
-  <div id="app">
+  <div class="appContainer">
     <nav class="navbar">
       <div class="brand-title">ShopCart.io</div>
       <div class="toggle-button" @click="toggleMobile">
@@ -109,7 +110,18 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-body { margin: 0 !important; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+}
+
 .popup {
   position: absolute;
   top: 4rem;
@@ -123,15 +135,20 @@ body { margin: 0 !important; }
   text-transform: uppercase;
 }
 
-#app {
+.appContainer {
   font-family: 'Poppins', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   align-items: center;
-  color: #2c3e50;
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
+  display: grid;
+  grid-template:
+    "header" 50px
+    "content" auto
+    / auto;
 }
+
 
 .navbar {
   display: flex;
@@ -140,6 +157,7 @@ body { margin: 0 !important; }
   background-color: #2d2d2d;
   color: white;
   height: 3.5rem;
+  grid-area: header;
 }
 
 .brand-title {

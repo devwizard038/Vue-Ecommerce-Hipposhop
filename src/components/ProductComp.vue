@@ -1,6 +1,6 @@
 <template>
   <!-- Formatting for each product card -->
-  <div>
+  <div class="cardContainer">
     <div class="card">
       <img
           v-if="image === null"
@@ -12,7 +12,7 @@
         <p class="productName" @click="toggleModal()">{{ name }}</p>
       </div>
         <p class="title"><b>Preț:</b> {{ price }} / {{ unit }}</p>
-        <p><b>Cantitate:</b><input class="cell" type="number" min="0" v-model.number="quantity"/></p>
+        <p><b>Cantitate:</b><input class="inputCell" type="number" min="0" v-model.number="quantity"/></p>
       <button class="addToCart" @click="addToCart(product,this.quantity)">Add to cart</button>
     </div>
   </div>
@@ -47,30 +47,38 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.cardContainer{
+  width: 100%;
+  /* !! Height needs tweaking !! (auto ? 100% ?)*/
+  height: auto;
+
+}
+
+
 .card {
   display: flex;
   flex-direction: row;
-  min-height: 7rem;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background: #dedede;
-  border: 0.2rem solid white;
+  min-height: 7rem;
+  margin-top: 0.2rem;
+  margin-right: 0.2rem;
   padding: 0.5rem;
   font-family: 'Poppins', sans-serif;
   flex-wrap: wrap;
-  font-size: 1rem;
+  font-size: 1.2rem;
   min-font-size: 0rem;
   border-radius: 0.7rem;
 }
 
 .card p {
-  position: relative;
   display: flex;
-  width: 8rem;
+  /*?? Optimal width for p ???*/
+  width: 15ch;
   justify-content: flex-start;
   align-items: flex-start;
-  padding-left: 1rem;
 }
 
 .card:hover {
@@ -82,7 +90,7 @@ img {
   height: 6rem;
 }
 
-.cell {
+.inputCell {
   align-items: center;
   width: 2rem;
   border: none;

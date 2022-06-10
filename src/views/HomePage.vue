@@ -1,18 +1,22 @@
 <template>
-  <h1>Home Page</h1>
-  <section class="tabel">
-    <!-- Display: Category bread crumb -->
-    <div>
-      <CategoryComp @selected="getSelectedCategory"
-                    @breadCrumb="getBreadCrumb"/>
+  <div class="homeContainer">
+    <div class="header">
+      <h1>Home Page</h1>
     </div>
-    <!-- Display: Products -->
-    <div>
-      <ProductPage
-          :categoryId="categoryId"
-      />
+    <div class="table">
+      <!-- Display: Category List-->
+      <div class="left">
+        <CategoryComp @selected="getSelectedCategory"
+                      @breadCrumb="getBreadCrumb"/>
+      </div>
+      <!-- Display: Products -->
+      <div class="right">
+        <ProductPage
+            :categoryId="categoryId"
+        />
+      </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -76,30 +80,65 @@ export default {
     getBreadCrumb(list) {
       this.breadCrumb = list;
     },
-    breadCrumbSelect(item) {
-      this.categoryId = Number(item.id);
-      let index = this.breadCrumb.indexOf(item)
-      this.breadCrumb = this.breadCrumb.slice(0, index + 1)
-    }
   }
 
 }
 </script>
 
 <style scoped>
-h1{
-  text-align: center;
-}
-.tabel {
-  margin-right: 1rem;
-  margin-left: 1rem;
-  display: flex;
-  justify-content: center;
-  /*align-items: center;*/
+.homeContainer{
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template:
+      "header" 80px
+      "content" auto
+      / auto;
 }
 
-@media(max-width: 600px){
-  h1{
+.header{
+  width: 100%;
+  height: 100%;
+  grid-area: header;
+}
+
+h1 {
+  text-align: center;
+}
+
+.table {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  grid-area: content;
+  display: grid;
+  grid-template:
+      "left right" auto
+      / auto;
+}
+
+.table .left{
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  grid-area: left;
+  overflow: visible;
+}
+
+.table .right{
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  grid-area: right;
+}
+@media (max-width: 600px) {
+  h1 {
     font-size: 1.85rem;
   }
 }

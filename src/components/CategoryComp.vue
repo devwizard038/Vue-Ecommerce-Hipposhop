@@ -1,11 +1,16 @@
 <template>
-  <h3>Categories</h3>
-  <hr />
-  <!-- Category data organised in a tree -->
-  <TreeBrowser
-      :node="categoryTree"
-  >
-  </TreeBrowser>
+  <div class="categoryPageContainer">
+    <div class="header">
+      <h3>Categories</h3>
+      <hr/>
+    </div>
+    <div class="categoriesContainer">
+      <!-- Category data organised in a tree -->
+      <TreeBrowser
+          :node="categoryTree"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -41,7 +46,7 @@ export default {
       loadCategories: "category/loadCategories",
     }),
     mapCategory(categories, currentNode) {
-      if(categories){
+      if (categories) {
         categories.forEach(category => {
           if (currentNode.id === category.parent_id) {
             let child = new Category({
@@ -61,7 +66,30 @@ export default {
 </script>
 
 <style scoped>
-h3{
+.categoryPageContainer {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template:
+      "header" 50px
+      "content" auto
+      / auto;
+}
+
+.header {
+  width: 100%;
+  height: 100%;
+  grid-area: header;
+}
+
+.categoriesContainer {
+  height: 100vh;
+  width: 100%;
+  grid-area: content;
+  overflow: auto;
+}
+
+h3 {
   text-align: center;
   font-size: 1.5rem;
   padding-bottom: 0;
@@ -74,8 +102,6 @@ ul {
   flex-direction: column;
   align-items: flex-start;
   font-weight: bold;
-  /*padding-right: 3rem;*/
-  /*padding-top: 2rem;*/
   padding-bottom: 2rem;
 }
 
@@ -84,10 +110,8 @@ a {
   cursor: pointer;
 }
 
-
-
-@media(max-width: 600px){
-  h3{
+@media (max-width: 600px) {
+  h3 {
     font-size: 1rem;
   }
 }
