@@ -1,26 +1,34 @@
 <template>
-  <h1>Admin Page</h1>
-  <hr/>
-  <button @click="saveList" class="btn-load">Load Product List</button>
-  <div v-if="table != null" class="tabel">
-    <table>
-      <tr>
-        <th>Id</th>
-        <th>Title</th>
-        <th>Price</th>
-      </tr>
-      <!-- Loop and display table -->
-      <tr v-for="n in table" :key="n">
-        <td>{{ n.id }}</td>
-        <td>{{ n.title }}</td>
-        <td>{{ n.price }}</td>
-      </tr>
-    </table>
+  <div class="adminContainer">
+    <div class="title">
+      <h1>Admin Page</h1>
+      <hr/>
+    </div>
+    <div class="adminTableContainer">
+      <div class="adminTable" v-if="table != null">
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Title</th>
+          <th>Price</th>
+        </tr>
+        <!-- Loop and display table -->
+        <tr v-for="n in table" :key="n">
+          <td>{{ n.id }}</td>
+          <td>{{ n.title }}</td>
+          <td>{{ n.price }}</td>
+        </tr>
+      </table>
+      </div>
+      <h2 v-else>No data in localStorage</h2>
+    </div>
+    <div class="buttons">
+      <!-- Clear LocalStorage initiator -->
+      <button v-if="table != null" @click="clearList" class="btn-clear">Clear list
+      </button>
+      <button @click="saveList" class="btn-load">Load Product List</button>
+    </div>
   </div>
-  <h2 v-else>No data in localStorage</h2>
-  <!-- Clear LocalStorage initiator -->
-  <button v-if="table != null" @click="clearList" class="btn-clear">Clear list
-  </button>
 </template>
 
 <script>
@@ -78,8 +86,53 @@ export default {
 </script>
 
 <style scoped>
-.btn-load {
+.adminContainer{
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template:
+        "header" 70px
+        "table" 30rem
+        "buttons" 90px
+        /auto;
+}
 
+.title{
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  grid-area: header;
+}
+
+.adminTableContainer{
+  grid-area: table;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.adminTable{
+  overflow: auto;
+  width: 80%;
+}
+
+.buttons{
+  grid-area: buttons;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.btn-load {
   background-color: rgb(69, 172, 69);
   font-weight: bold;
   font-size: 0.8rem;
@@ -87,7 +140,7 @@ export default {
   color: white;
   border: rgb(69, 172, 69);
   border-radius: 0.8rem;
-  margin-right: 1rem;
+  margin-left: 1rem;
 }
 
 .btn-load:hover {
@@ -103,22 +156,11 @@ export default {
   color: white;
   border: rgb(69, 172, 69);
   border-radius: 0.8rem;
-  margin-right: 1rem;
-  margin-top: 1rem;
 }
 
 .btn-clear:hover {
   background-color: rgb(240, 53, 53);
   cursor: pointer;
-}
-
-.tabel {
-  display: inline-block;
-  text-align: center;
-  padding-top: 1rem;
-  overflow-y: auto;
-  height: 50vh;
-  width: 90vw;
 }
 
 table {

@@ -11,8 +11,8 @@
       <div class="containerProduct">
         <p class="productName" @click="toggleModal()">{{ name }}</p>
       </div>
-        <p class="title"><b>Preț:</b> {{ price }} / {{ unit }}</p>
-        <p><b>Cantitate:</b><input class="inputCell" type="number" min="0" v-model.number="quantity"/></p>
+      <p class="title"><b>Preț:</b>&nbsp; {{ price }} / {{ unit }}</p>
+      <p><b>Cantitate:</b> &nbsp;<input class="inputCell" type="number" min="0" v-model.number="quantity"/></p>
       <button class="addToCart" @click="addToCart(product,this.quantity)">Add to cart</button>
     </div>
   </div>
@@ -38,19 +38,19 @@ export default {
       this.$emit("toggleModal", this.product);
     },
     addToCart(item, quantity) {
-      if(quantity > 0){
-      this.loadSelected(item)
-      this.$emit('addToCart', item, quantity);
-      this.quantity = 0;}
+      if (quantity > 0) {
+        this.loadSelected(item)
+        this.$emit('addToCart', item, quantity);
+        this.quantity = 0;
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-.cardContainer{
+.cardContainer {
   width: 100%;
-  /* !! Height needs tweaking !! (auto ? 100% ?)*/
   height: auto;
 
 }
@@ -75,8 +75,7 @@ export default {
 
 .card p {
   display: flex;
-  /*?? Optimal width for p ???*/
-  width: 15ch;
+  width: 20ch;
   justify-content: flex-start;
   align-items: flex-start;
 }
@@ -86,40 +85,43 @@ export default {
 }
 
 img {
-  width: 8rem;
-  height: 6rem;
+  width: 10rem;
+  height: 7rem;
+  border-radius: 4px;
+  box-shadow: 4px 2px 2px gray;
 }
 
 .inputCell {
   align-items: center;
-  width: 2rem;
+  width: 3rem;
+  /*height: 2rem;*/
   border: none;
   font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
   padding-left: 5px;
   margin-left: 2px;
   border-radius: 6px;
 }
 
-.cell:hover {
+.inputCell:hover {
   border: 2px solid #2095E1FF;
 }
 
-.productName{
-  /*margin-top: 30%;*/
+.productName {
   font-size: 1.15rem;
   min-font-size: 0;
   font-weight: bold;
 }
 
 .productName:hover {
-  font-weight: bold;
   color: #2095E1FF;
   cursor: pointer;
 }
-.addToCart{
+
+.addToCart {
   background-color: rgb(16, 191, 255);
   padding: 0.6rem;
-  font-size: 0.7rem;
+  font-size: 1rem;
   color: white;
   text-transform: uppercase;
   font-weight: bold;
@@ -128,25 +130,33 @@ img {
   text-decoration: none;
 }
 
-.addToCart:hover{
+.addToCart:hover {
   background-color: rgb(7, 72, 96);
   cursor: pointer;
 }
-@media(max-width: 700px){
-  .card{
+
+@media (max-width: 700px) {
+  .card {
     flex-direction: column;
     min-height: 0rem;
   }
-  .productName{
-    font-size: 0.9rem;
+
+  .productName {
+    max-font-size: 0.9rem;
+    min-font-size: 0rem;
+
   }
-  .addToCart{
-    font-size: 0.5rem;
+
+  .addToCart {
+    max-font-size: 0.5rem;
+    min-font-size: 0rem;
   }
-  .card p{
+
+  .card p {
     font-size: 0.7rem;
   }
-  .cell{
+
+  .inputCell {
     font-size: 0.68rem;
     height: 0.6rem;
     width: 2rem;

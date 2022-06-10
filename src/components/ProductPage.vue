@@ -220,13 +220,13 @@ export default {
 .product {
   word-spacing: 0.1rem;
   padding-block: 0.4rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  overflow-y: auto;
-  height: 100vh;
+  overflow: auto;
+  height: 85vh;
   width: 100%;
+  box-sizing: content-box;
   grid-area: content;
+  top: 0;
+  bottom: 0;
 }
 
 .product::-webkit-scrollbar {

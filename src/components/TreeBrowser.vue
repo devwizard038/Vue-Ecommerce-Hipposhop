@@ -15,7 +15,6 @@
 			</span>
       <a @click="emitNode(node)">{{ node.name }}</a>
     </div>
-
     <div v-if="expanded || node.id === 0">
       <TreeBrowser
           v-for="item in node.children"
@@ -92,8 +91,10 @@ export default {
 .selected {
   background-color: #efefef;
 }
-@media(max-width: 600px){
-  .node{
+
+@media (max-width: 600px) {
+  .node {
     font-size: 0.8rem;
-}}
+  }
+}
 </style>
