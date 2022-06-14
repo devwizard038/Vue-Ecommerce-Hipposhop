@@ -34,6 +34,7 @@ export default {
 
 <style>
 .pop-message {
+  top: 0;
   display: flex;
   padding-top: 50px;
   position: absolute;
@@ -59,6 +60,7 @@ export default {
   border-radius: 5px;
   font-size: 18px;
   text-align: center;
+  top: 40%;
 }
 
 .press-yes {
@@ -72,6 +74,8 @@ export default {
   border: #efefef 1px solid;
   border-radius: 5px;
   margin: 1rem 0.5rem 0.5rem;
+  cursor: pointer;
+  border: none;
 }
 
 .press-yes:hover {
@@ -100,6 +104,9 @@ export default {
   border: #efefef 1px solid;
   border-radius: 5px;
   margin: 1rem 0.5rem 0.5rem;
+  cursor: pointer;
+  border: none;
+
 }
 
 .press-no:hover {

@@ -28,13 +28,12 @@
             />
             <p class="title">{{ item.title }}</p>
             <p class="price">{{ item.price }}$</p>
-            <input
+            <p class="price"> <input
                 type="number"
                 min="1"
                 :value="item.quantity"
                 @input="event => modifyItem(event.target.value, item)"
-            >
-            <p class="price">{{ item.unit }}</p>
+            >{{ item.unit }}</p>
             <a @click="deleteClick(item)">&#9747;</a>
           </div>
 
@@ -158,6 +157,7 @@ export default {
   width: 50vw;
   height: 100%;
   background-color: white;
+  overflow: hidden;
 }
 
 .header {
@@ -210,7 +210,7 @@ h2 {
       "items" auto
       "footer" 200px
       /auto;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
   overflow: hidden;
 }
 
@@ -221,35 +221,72 @@ h2 {
   min-height: 7rem;
   max-height: 30rem;
   overflow: auto;
-
 }
+
+.contentContainer::-webkit-scrollbar {
+  width: 10px;
+}
+
+.contentContainer::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+.contentContainer::-webkit-scrollbar-thumb {
+  background-color: rgb(16, 191, 255);
+  border-radius: 100px;
+}
+
 
 .checkOutContainer{
   grid-area: footer;
   height: 100%;
   width: 100%;
 }
+.checkOutContainer p{
+  border: 2px black solid;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #2d2d2d;
+  margin-bottom: 1rem;
+}
+
+.checkOutContainer h2{
+  /*font-size: 3rem;*/
+}
 
 .messageBox{
-
-  /*display: flex;*/
-  /*position: relative;*/
-  /*flex-direction: row;*/
-  /*width: inherit;*/
+ height: 100%;
 }
 
 .itemList {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  background: #dedede;
+  max-height: 10rem;
+  margin: 0.5rem;
+  padding: 0.4rem;
+  font-family: 'Poppins', sans-serif;
   flex-wrap: wrap;
-  background-color: #bbbbbb;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  border-radius: 8px;
-  margin-bottom: 0.7rem;
-  width: inherit;
+  font-size: 1.1rem;
+  min-font-size: 0rem;
+  border-radius: 0.7rem;
+}
+
+.itemList input {
+  align-items: center;
+  width: 1rem;
+  /*height: 2rem;*/
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  padding-left: 5px;
+  margin-left: 2px;
+  border-radius: 6px;
 }
 
 .itemList input {
@@ -257,10 +294,9 @@ h2 {
 }
 
 .itemList img {
-  height: 20%;
-  width: 20%;
-  padding-right: 2rem;
-  padding-left: 1rem;
+  height: auto;
+  width: auto;
+  max-width: 10rem;
 }
 
 .itemList a {
@@ -287,8 +323,13 @@ h2 {
 }
 
 .itemList .title {
+  width: 30ch;
   position: relative;
-  left: 0;
+  font-weight: bold;
+}
+
+.itemList .price{
+  font-weight: bold;
 }
 
 .checkOutContainer {
@@ -299,21 +340,20 @@ h2 {
 }
 
 .outBtn {
-  background-color: rgb(173, 58, 12);
-  font-family: 'Roboto', sans-serif;
-  border: none;
+  background-color: rgb(16, 191, 255);
+  padding: 0.6rem;
   font-size: 1rem;
-  padding-top: 0.3rem;
-  padding-bottom: 0.3rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
   color: white;
-  border-radius: 4px;
-  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 0.7rem;
+  border: none;
+  text-decoration: none;
 }
 
 .outBtn:hover {
-  background-color: rgb(219, 115, 74);
+  background-color: rgb(7, 72, 96);
+  cursor: pointer;
 }
 
 .empty {

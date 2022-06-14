@@ -1,14 +1,8 @@
 <template>
-  <!--  Cart -->
-  <transition
-      mode="in-out"
-      enter-active-class="animate__animated animate__fadeInRight"
-      leave-active-class="animate__animated animate__fadeOutRight"
-  >
+  <!-- Shopping Cart -->
     <div v-if="this.showCart === true">
       <ShoppingCart @closeCart="closeCart"/>
     </div>
-  </transition>
   <div class="appContainer">
     <nav class="navbar">
       <div class="brand-title">ShopCart.io</div>
