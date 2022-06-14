@@ -6,27 +6,38 @@
     </div>
     <div class="itemContainer">
       <div class="contentContainer" v-if="this.cart.length > 0">
-        <div class="itemList" v-for="item in cart" :key="item.id">
-          <img
-              v-if="item.image === null"
-              src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
-              alt="{{ item.name }}"
-          />
-          <img
-              v-else
-              :src="item.image"
-              :alt="item.name"
-          />
-          <p class="title">{{ item.title }}</p>
-          <p class="price">{{ item.price }}$</p>
-          <input
-              type="number"
-              min="1"
-              :value="item.quantity"
-              @input="event => modifyItem(event.target.value, item)"
-          >
-          <p class="price">{{ item.unit }}</p>
-          <a @click="deleteCartItem(item)">&#9747;</a>
+        <div  v-for="item in cart" :key="item.id">
+          <div class="messageBox">
+            <ShopCartMessageComp
+                v-if="item.showMessage === true"
+                :itemName="item.title"
+                :deleteConfirm="deleteConfirm"
+                :itemToDelete="item"
+            />
+          </div>
+          <div class="itemList">
+            <img
+                v-if="item.image === null"
+                src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
+                alt="{{ item.name }}"
+            />
+            <img
+                v-else
+                :src="item.image"
+                :alt="item.name"
+            />
+            <p class="title">{{ item.title }}</p>
+            <p class="price">{{ item.price }}$</p>
+            <input
+                type="number"
+                min="1"
+                :value="item.quantity"
+                @input="event => modifyItem(event.target.value, item)"
+            >
+            <p class="price">{{ item.unit }}</p>
+            <a @click="deleteClick(item)">&#9747;</a>
+          </div>
+
         </div>
       </div>
       <div class="checkOutContainer" v-if="this.cart.length > 0">
@@ -44,9 +55,11 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import ShopCartMessageComp from "@/components/ShopCartMessageComp"
 
 export default {
   name: "ShoppingCartComponent",
+  components: {ShopCartMessageComp},
   emits: ['closeCart'],
 
   data() {
@@ -54,6 +67,9 @@ export default {
       cart: [],
       totalPrice: 0,
       shipping: 1.99,
+      //showMessage: false,
+      deleteItem: false,
+      itemToDelete: [],
     }
   },
   methods: {
@@ -61,6 +77,24 @@ export default {
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
     }),
+    deleteClick(item) {
+      item.showMessage = true
+      this.itemToDelete = item
+    },
+    deleteConfirm(deleteItem) {
+      let item = this.itemToDelete
+      console.log(item)
+
+      if(deleteItem === true) {
+        this.deleteCartItem(item)
+        deleteItem = false
+        console.log(true)
+      } else {
+        item.showMessage = false
+        console.log(false)
+      }
+
+    },
     closeCart() {
       this.$emit('closeCart')
     },
@@ -194,6 +228,14 @@ h2 {
   grid-area: footer;
   height: 100%;
   width: 100%;
+}
+
+.messageBox{
+
+  /*display: flex;*/
+  /*position: relative;*/
+  /*flex-direction: row;*/
+  /*width: inherit;*/
 }
 
 .itemList {

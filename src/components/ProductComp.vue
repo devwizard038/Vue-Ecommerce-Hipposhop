@@ -39,6 +39,7 @@ export default {
     },
     addToCart(item, quantity) {
       if (quantity > 0) {
+        item.showMessage = false
         this.loadSelected(item)
         this.$emit('addToCart', item, quantity);
         this.quantity = 0;

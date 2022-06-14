@@ -2,59 +2,33 @@
   <div class="pop-message">
     <div class="message">
       <div>
-        Ești sigur că vrei să ștergi produsul din coș?
+        Ești sigur că vrei să ștergi din coș
+        <br>{{ itemName }}?
       </div>
       <div>
-        <button
-            class="press-yes"
-            @click="confirm = 2; buttonPress()"
-        >
-          Da
-        </button>
-        <button
-            class="press-no"
-            @click="confirm = 1; buttonPress()"
-        >
-          Nu
-        </button>
+        <button class="press-yes" @click="deleteConfirm(true)">Da</button>
+        <button class="press-no"  @click="deleteConfirm(false)">Nu</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
 
 export default {
+  name: "ShopCartMessageComp",
+  props: {
+    itemName: {
+      type: String,
+      default: () => "",
+    },
+    deleteConfirm: Function
+  },
   data() {
     return {
       confirm: 0,
-      showMessage: true,
     }
   },
-  computed: {
-    ...mapGetters({
-      getMessageState: "message/getMessage",
-    }),
-  },
-  methods: {
-    ...mapActions({
-      loadMessageState: "message/loadMessage"
-    }),
-    buttonPress() {
-      if (this.confirm === 1) {
-        console.log(this.getMessageState)
-        this.loadMessageState()
-        console.log(this.getMessageState)
-
-      } else if (this.confirm === 2) {
-        console.log(this.getMessageState)
-        this.loadMessageState()
-        console.log(this.getMessageState)
-
-      }
-    }
-  }
 }
 </script>
 
@@ -84,7 +58,7 @@ export default {
   font-family: 'Poppins', sans-serif;
   border-radius: 5px;
   font-size: 18px;
-
+  text-align: center;
 }
 
 .press-yes {
