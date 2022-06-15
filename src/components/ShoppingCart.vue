@@ -5,8 +5,8 @@
       <button @click="closeCart()">X</button>
     </div>
     <div class="itemContainer">
-      <div class="contentContainer" v-if="this.cart.length > 0">
-        <div  v-for="item in cart" :key="item.id">
+      <div class="contentContainer" v-if="this.computedCart.length > 0">
+        <div  v-for="item in this.computedCart" :key="item.id">
           <div class="messageBox">
             <ShopCartMessageComp
                 v-if="item.showMessage === true"
@@ -32,16 +32,16 @@
                 type="number"
                 min="1"
                 :value="item.quantity"
-                @input="event => modifyItem(event.target.value, item)"
+                @input="event => this.modifyCart({data:item, quantity:Number(event.target.value)})"
             >{{ item.unit }}</p>
             <a @click="deleteClick(item)">&#9747;</a>
           </div>
 
         </div>
       </div>
-      <div class="checkOutContainer" v-if="this.cart.length > 0">
+      <div class="checkOutContainer" v-if="this.computedCart.length > 0">
         <p>+ Shipping: 1.99$</p>
-        <h2>Total : {{ this.totalPrice + this.shipping }} $</h2>
+        <h2>Total : {{ this.getCartPrice + this.shipping }} $</h2>
         <button class="outBtn">Check Out</button>
       </div>
       <div class="empty" v-else>
@@ -63,10 +63,8 @@ export default {
 
   data() {
     return {
-      cart: [],
       totalPrice: 0,
       shipping: 1.99,
-      //showMessage: false,
       deleteItem: false,
       itemToDelete: [],
     }
@@ -75,68 +73,44 @@ export default {
     ...mapActions({
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
+      deleteCartItem: "cart/deleteCartItem",
+      modifyCart:"cart/modifyCart"
     }),
+    /**
+     * deleteClick + deleteConfirm -> Confirmation message for deleting an item from cart.
+     * @param{Object} item
+     */
     deleteClick(item) {
       item.showMessage = true
       this.itemToDelete = item
     },
     deleteConfirm(deleteItem) {
       let item = this.itemToDelete
-      console.log(item)
-
       if(deleteItem === true) {
         this.deleteCartItem(item)
         deleteItem = false
-        console.log(true)
       } else {
         item.showMessage = false
-        console.log(false)
       }
-
     },
     closeCart() {
       this.$emit('closeCart')
     },
-    totalPriceDisplay() {
-      this.totalPrice = 0;
-      for (let item in this.cart) {
-        this.totalPrice = this.totalPrice + (this.cart[item].quantity *
-            this.cart[item].price);
-      }
-      return this.totalPrice;
-    },
-    deleteCartItem(item) {
-      let cartOld = this.getCart;
-      let newCart = cartOld.filter(n => n.id !== item.id);
-      this.updateCart(newCart);
-      this.loadCart();
-      this.cart = this.getCart;
-      this.totalPrice = 0;
-      this.totalPriceDisplay();
-    },
-    modifyItem(value, item) {
-      let cartOld = this.getCart
-      for (let i = 0; i < cartOld.length; i++) {
-        if (cartOld[i].id === item.id) {
-          cartOld[i].quantity = value;
-          this.updateCart(cartOld);
-          this.loadCart();
-          this.cart = this.getCart;
-          this.totalPrice = 0;
-          this.totalPriceDisplay();
-        }
-      }
-    }
   },
   computed: {
     ...mapGetters({
       getCart: "cart/getCart",
-    })
+      getCartPrice:"cart/getCartPrice",
+    }),
+    /**
+     * @returns {Object} - Shopping Cart from localStorage
+     */
+    computedCart(){
+      return this.getCart
+    }
   },
   mounted() {
     this.loadCart();
-    this.cart = this.getCart;
-    this.totalPriceDisplay();
   }
 }
 
@@ -192,8 +166,6 @@ export default {
 h1 {
   color: white;
   display: flex;
-  /* align-items: center;
-  justify-content: center; */
   font-family: 'Kanit', sans-serif;
 }
 

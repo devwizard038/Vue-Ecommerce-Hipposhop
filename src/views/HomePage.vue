@@ -117,6 +117,7 @@ h1 {
   grid-area: content;
   display: grid;
   grid-template-columns: 25% 75%;
+  /*grid-template-rows:100%;*/
 }
 
 .table .left{

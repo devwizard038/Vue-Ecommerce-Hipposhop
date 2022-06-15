@@ -110,12 +110,6 @@ html, body {
   height: 100%;
   width: 100%;
 }
-/*Vue JS Default #app div properties overwritten*/
-#app {
-  height: 100%;
-  width: 100%;
-}
-
 .popup {
   position: absolute;
   top: 4rem;

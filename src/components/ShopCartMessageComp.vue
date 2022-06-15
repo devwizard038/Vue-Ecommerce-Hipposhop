@@ -71,7 +71,6 @@ export default {
   text-decoration: none;
   display: inline-block;
   font-size: 14px;
-  border: #efefef 1px solid;
   border-radius: 5px;
   margin: 1rem 0.5rem 0.5rem;
   cursor: pointer;
@@ -101,7 +100,6 @@ export default {
   text-decoration: none;
   display: inline-block;
   font-size: 14px;
-  border: #efefef 1px solid;
   border-radius: 5px;
   margin: 1rem 0.5rem 0.5rem;
   cursor: pointer;
