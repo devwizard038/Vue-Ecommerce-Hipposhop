@@ -11,13 +11,17 @@
         <span v-for="item in breadcrumb" @click="emitNode(item)" :key="item.id">
           >> {{ item.name ? item.name : item.title }}
         </span>
-        <select class="sortList" @change="this.sortProducts($event.target.value)">
-          <option value=0>Default</option>
-          <option value=1>Pret Ascendent</option>
-          <option value=2>Pret Descendent</option>
-          <option value=3>A-Z</option>
-          <option value=4>Z-A</option>
-        </select>
+        <div class="filterList">
+          <input class="searchList" type="text" placeholder="Search.." @input="this.searchProduct($event.target.value)">
+          <select class="sortList" @change="this.sortProducts($event.target.value)">
+            <option value=0>Default</option>
+            <option value=1>Pret Ascendent</option>
+            <option value=2>Pret Descendent</option>
+            <option value=3>A-Z</option>
+            <option value=4>Z-A</option>
+          </select>
+        </div>
+
       </div>
       <div class="product">
         <ProductComp
@@ -106,6 +110,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      searchProduct:"products/searchProduct",
       sortProducts: "products/sortProducts",
       loadDetails: "productDetail/loadDetails",
       loadProducts: "products/loadProducts",
@@ -205,7 +210,7 @@ export default {
   grid-area: content;
   display: grid;
   grid-template:
-      "breadCrumb" 20px
+      "breadCrumb" 30px
       "content" auto
       / auto;
 }
@@ -225,7 +230,15 @@ export default {
   color: #2095E1FF;
 }
 
-.sortList{
+.searchList{
+  margin-left: auto;
+  /*margin-right: 2rem;*/
+}
+.filterList .sortList{
+  margin-left: 1rem;
+}
+
+.filterList{
   margin-left: auto;
   margin-right: 2rem;
 }

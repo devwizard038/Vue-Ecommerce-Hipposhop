@@ -8,6 +8,7 @@ export default {
     state() {
         return {
             productList: [],
+            searchedProduct:[],
         };
     },
     getters: {
@@ -53,6 +54,12 @@ export default {
                 localStorage.removeItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`);
             commit("setProducts", data);
         },
+        /**
+         * Sort filter for selected option in select sortList HTML element
+         * @param commit
+         * @param state
+         * @param param{String}
+         */
         sortProducts({commit,state},param) {
             if (param == 1) {
                 let local = state.productList;
@@ -100,6 +107,31 @@ export default {
                 let local = JSON.parse(
                     localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
                 commit("setProducts", local);
+            }
+        },
+        /**
+         * Search product function in product list.
+         *  - only matches ENTIRE words, not letters or numbers in them !
+         *  - TO FIX: ! Only matches one word ! It returns empty state for multiple word !!
+         * @param commit
+         * @param searched {String}
+         */
+        searchProduct({commit},searched){
+            if(searched == "") {
+                let local = JSON.parse(
+                    localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+                commit("setProducts",local);
+            } else {
+                let found = [];
+                let text = JSON.parse(
+                    localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+                let newSearched = new RegExp(`\\b${searched}\\b`,'i');
+                text.forEach(item => {
+                    if(item.title.match(newSearched) != null){
+                        found.push(item);
+                    }
+                });
+                commit("setProducts",found);
             }
         }
     },

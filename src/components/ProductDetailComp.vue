@@ -93,7 +93,6 @@ export default {
         let variantList = this.getProducts.filter(item=>
             item.Attributes!=null  && item.Attributes.size === this.getDetails.Attributes.size && item.Attributes.name === this.getDetails.Attributes.name
         )
-        console.log(variantList)
         return variantList
       }else return null
     },
@@ -106,7 +105,6 @@ export default {
         let variantList = this.getProducts.filter(item=>
             item.Attributes!=null  && item.Attributes.type === this.getDetails.Attributes.type && item.Attributes.name === this.getDetails.Attributes.name
         )
-        console.log(variantList)
         return variantList
       }else return null
     },
