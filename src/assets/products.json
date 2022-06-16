@@ -5,6 +5,7 @@
      "price": 28,
      "unit": "buc",
      "category_id": "1,11",
+      "variants_id": "1,2,3",
      "image": "https:\/\/storage0.dms.mpinteractiv.ro\/media\/1\/1481\/10387\/20161490\/1\/8constructii.jpg"
     },
     {
@@ -13,7 +14,7 @@
      "price": 15,
      "unit": "buc",
      "category_id": "1,11,16",
-     "image": "https:\/\/storage0.dms.mpinteractiv.ro\/media\/1\/1481\/10387\/20161490\/1\/8constructii.jpg"
+     "image": "https:\/\/storage0.dms.mpinteractiv.ro\/media\/1\/1481\/10387\/20161490\/1\/8constructii.jpg",
     },
     {
      "id": 3,

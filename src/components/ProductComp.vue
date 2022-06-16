@@ -20,7 +20,7 @@
 
 <script>
 
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   props: ["image", "name", "price", "unit", "product", "showModal"],
@@ -30,11 +30,19 @@ export default {
       quantity: 0,
     };
   },
+  computed:{
+    ...mapGetters({
+      getDetails:"productDetail/getDetails"
+    })
+  },
   methods: {
     ...mapActions({
+      loadDetails:"productDetail/loadDetails",
       loadSelected: "selectedcateg/loadSelected"
     }),
     toggleModal() {
+      this.loadDetails(this.product);
+      console.log(this.getDetails);
       this.$emit("toggleModal", this.product);
     },
     addToCart(item, quantity) {

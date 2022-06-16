@@ -5,15 +5,15 @@
         <p @click="closeModal()">&#9747;</p>
       </div>
       <div class="image">
-        <img :src="data.image" :alt="data.title"/>
+        <img :src="this.getDetails.image" :alt="this.getDetails.title"/>
       </div>
       <div class="modalDetailsContainer">
         <div class="title">
-          <h2>{{ data.title }}</h2>
+          <h2>{{ this.getDetails.title }}</h2>
         </div>
         <div class="pricingContainer">
           <div class="pricingQty">
-          <p>Pret:{{ data.price }}/{{ data.unit }}</p>
+          <p>Pret:{{ this.getDetails.price }}/{{ this.getDetails.unit }}</p>
           <p>Cantitate:
             <input
                 class="cell"
@@ -21,7 +21,13 @@
                 min="0"
                 v-model.number="quantity"/></p>
           </div>
-          <button @click="addToCart(data,this.quantity)">
+          <div class="variantsContainer" v-if="this.getDetails.Attributes">
+            <p style="text-align: center">Tip</p>
+            <button v-for="items in variantsTypeList" @click="loadDetails(items)" :class="items.id !=this.getDetails.id ?'variantsBtn':'selected'" :key="items.Attributes.name">{{items.Attributes.type}}</button>
+            <p style="text-align: center">Marime</p>
+            <button v-for="items in variantsSizeList" @click="loadDetails(items)" :class="items.id !=this.getDetails.id ?'variantsBtn':'selected'" :key="items.Attributes.name">{{items.Attributes.size}}</button>
+          </div>
+          <button class="addBtn" @click="addToCart(this.getDetails,this.quantity)">
             ADD TO CART
           </button>
         </div>
@@ -46,10 +52,10 @@
 
 <script>
 
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
-  props: ['data'],
+  // props: ['data'],
   emits: ['closeModal', 'addToCart'],
   data() {
     return {
@@ -58,6 +64,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      loadDetails:"productDetail/loadDetails",
       loadSelected: "selectedcateg/loadSelected"
     }),
     closeModal() {
@@ -71,6 +78,38 @@ export default {
         this.quantity = 0;
       }
     }
+  },
+  computed: {
+    ...mapGetters({
+      getProducts:"products/getProducts",
+      getDetails:"productDetail/getDetails"
+    }),
+    /**
+     * Filter TYPE for same SIZE objects
+     * @returns {Object}
+     */
+    variantsTypeList(){
+      if(this.getDetails.Attributes){
+        let variantList = this.getProducts.filter(item=>
+            item.Attributes!=null  && item.Attributes.size === this.getDetails.Attributes.size && item.Attributes.name === this.getDetails.Attributes.name
+        )
+        console.log(variantList)
+        return variantList
+      }else return null
+    },
+    /**
+     * Filter SIZE for same TYPE objects
+     * @returns {Object}
+     */
+    variantsSizeList(){
+      if(this.getDetails.Attributes){
+        let variantList = this.getProducts.filter(item=>
+            item.Attributes!=null  && item.Attributes.type === this.getDetails.Attributes.type && item.Attributes.name === this.getDetails.Attributes.name
+        )
+        console.log(variantList)
+        return variantList
+      }else return null
+    },
   }
 }
 </script>
@@ -94,6 +133,27 @@ export default {
   right: 0;
   margin-left: auto;
   margin-right: auto;
+}
+.selected{
+  color: black;
+  border: 2px black solid;
+  background-color: gray;
+  padding: 0.5rem;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+  margin: 0.2rem;
+  pointer-events: none;
+}
+
+.variantsBtn{
+  color: black;
+  border: 2px black solid;
+  background-color: white;
+  padding: 0.5rem;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+  margin: 0.2rem;
+  cursor: pointer;
 }
 
 .product-details {
@@ -162,10 +222,11 @@ export default {
 }
 
 .modalDetailsContainer{
+  grid-area: content;
   display: grid;
   grid-template:
       "title" 60px
-      "pricing" 140px
+      "pricing" auto
       "description" auto
       /auto;
 }
@@ -189,7 +250,7 @@ export default {
   flex-direction: column;
 }
 
-.pricingContainer button {
+.pricingContainer .addBtn {
   background-color: #2095E1FF;
   padding: 0.6rem;
   font-size: 1rem;
@@ -201,7 +262,7 @@ export default {
   text-decoration: none;
 }
 
-.pricingContainer button:hover {
+.pricingContainer .addBtn:hover {
   background-color: rgb(7, 72, 96);
   cursor: pointer;
 }

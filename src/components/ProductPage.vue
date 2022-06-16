@@ -11,6 +11,13 @@
         <span v-for="item in breadcrumb" @click="emitNode(item)" :key="item.id">
           >> {{ item.name ? item.name : item.title }}
         </span>
+        <select class="sortList" @change="this.sortProducts($event.target.value)">
+          <option value=0>Default</option>
+          <option value=1>Pret Ascendent</option>
+          <option value=2>Pret Descendent</option>
+          <option value=3>A-Z</option>
+          <option value=4>Z-A</option>
+        </select>
       </div>
       <div class="product">
         <ProductComp
@@ -31,7 +38,6 @@
         v-if="showModal"
         @closeModal="closeModal"
         @addToCart="addToCart"
-        :data="data"
     />
   </div>
 </template>
@@ -100,6 +106,8 @@ export default {
   },
   methods: {
     ...mapActions({
+      sortProducts: "products/sortProducts",
+      loadDetails: "productDetail/loadDetails",
       loadProducts: "products/loadProducts",
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
@@ -114,7 +122,7 @@ export default {
       if (item !== undefined) {
         this.showModal = !this.showModal;
         this.breadcrumb.push(item);
-        this.data = item;
+        // this.data = item;
         if (this.showModal === true)
           this.$emit('showModal', this.showModal);
       }
@@ -215,6 +223,11 @@ export default {
 
 .bread-crumb span:hover {
   color: #2095E1FF;
+}
+
+.sortList{
+  margin-left: auto;
+  margin-right: 2rem;
 }
 
 .product {

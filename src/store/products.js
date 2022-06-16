@@ -1,7 +1,7 @@
 // noinspection JSVoidFunctionReturnValueUsed
 
 import {SHOP_KEY, TABLES} from "@/const";
-import jsonProducts from "@/assets/products.json";
+import jsonProducts from "@/assets/products (4).json";
 
 export default {
     namespaced: true,
@@ -26,10 +26,26 @@ export default {
                 localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
             commit("setProducts", data);
         },
+        /**
+         * Process data and save to localStorage
+         * @param commit
+         */
         saveProducts({commit}) {
-            let data =
-                localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`,
-                    JSON.stringify(jsonProducts));
+            let data = jsonProducts;
+            if(data != undefined) {
+                data.forEach(item => {
+                    let obj={};
+                    if (item.Attributes != null) {
+                        let attr = item.Attributes.split(',');
+                        attr.forEach(n => {
+                            let tup = n.split(':');
+                            obj[tup[0]] = tup[1];
+                        });
+                        item.Attributes = obj;
+                    }
+                });
+            }
+            localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`,JSON.stringify(data));
             commit("setProducts", data);
         },
         deleteProducts({commit}) {
@@ -37,5 +53,54 @@ export default {
                 localStorage.removeItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`);
             commit("setProducts", data);
         },
+        sortProducts({commit,state},param) {
+            if (param == 1) {
+                let local = state.productList;
+                local.sort((a, b) => {
+                    return a.price - b.price;
+                });
+                commit("setProducts", local);
+            } else if (param == 2) {
+                let local = state.productList;
+                local.sort((a, b) => {
+                    return b.price - a.price;
+                });
+                commit("setProducts", local);
+            } else if (param == 3) {
+                let local = state.productList;
+                local.sort((a, b) => {
+                    let fa = a.title.toLowerCase(),
+                        fb = b.title.toLowerCase();
+
+                    if (fa < fb) {
+                        return -1;
+                    }
+                    if (fa > fb) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                commit("setProducts", local);
+            } else if (param == 4) {
+                let local = state.productList;
+                local.sort((a, b) => {
+                    let fa = a.title.toLowerCase(),
+                        fb = b.title.toLowerCase();
+
+                    if (fa < fb) {
+                        return 1;
+                    }
+                    if (fa > fb) {
+                        return -1;
+                    }
+                    return 0;
+                });
+                commit("setProducts", local);
+            } else{
+                let local = JSON.parse(
+                    localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+                commit("setProducts", local);
+            }
+        }
     },
 };

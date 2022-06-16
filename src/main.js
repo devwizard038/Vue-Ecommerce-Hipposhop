@@ -7,6 +7,7 @@ import products from "@/store/products";
 import category from "@/store/category";
 import cart from "@/store/cart"
 import selectedcateg from "@/store/selectedcateg";
+import productDetail from "@/store/productDetail";
 
 
 // Create a new store instance.
@@ -15,7 +16,8 @@ const store = createStore({
 		products,
 		category,
 		cart,
-		selectedcateg
+		selectedcateg,
+		productDetail
 	}
 });
 
