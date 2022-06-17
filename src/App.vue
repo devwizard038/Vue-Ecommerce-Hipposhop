@@ -31,8 +31,12 @@
         enter-active-class="animate__animated animate__fadeInDown"
         leave-active-class="animate__animated animate__fadeOutUp"
     >
-      <p class="popup" v-if="this.selected != null"><b>Ati adaugat in cos:</b>
-        {{ this.selected.quantity }}/{{ this.selected.unit }} de "{{ this.selected.title }}"</p>
+      <p
+          class="popup"
+          v-if="this.selected != null"
+      ><b>Ati adaugat in cos:</b>
+        {{ this.selected.quantity }}/{{ this.selected.unit }} de "{{ this.selected.title }}"
+      </p>
     </transition>
     <router-view/>
   </div>
@@ -58,9 +62,9 @@ export default {
       getCartCount: "cart/getCartCount",
       getSelected: "selectedcateg/getSelected"
     }),
-    /*
+    /**
     * Display count of products in the cart
-    * */
+    */
     cartItems() {
       this.loadCart()
       return this.getCartCount
@@ -121,6 +125,7 @@ html, body {
   font-size: 0.9rem;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  z-index: 10000000;
 }
 
 .appContainer {

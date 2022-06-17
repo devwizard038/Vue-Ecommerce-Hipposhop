@@ -4,9 +4,11 @@ export const TABLES = {
 	PRODUCTS: "products",
 	CATEGORIES: "categories",
 	CART: "cart"
-}
+};
 
 export const FILTERS = {
 	PRICE_ASC: 1,
-	PRICE_DESC: 2
-}
+	PRICE_DESC: 2,
+	A_Z: 3,
+	Z_A:4,
+};

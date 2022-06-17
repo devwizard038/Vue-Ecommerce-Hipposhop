@@ -12,13 +12,18 @@
           >> {{ item.name ? item.name : item.title }}
         </span>
         <div class="filterList">
-          <input class="searchList" type="text" placeholder="Search.." @input="this.searchProduct($event.target.value)">
+          <input
+              class="searchList"
+              type="text"
+              placeholder="Search.."
+              @input="this.searchProduct($event.target.value)"
+          >
           <select class="sortList" @change="this.sortProducts($event.target.value)">
             <option value=0>Default</option>
             <option :value="sortPriceAsc">Pret Ascendent</option>
-            <option value=2>Pret Descendent</option>
-            <option value=3>A-Z</option>
-            <option value=4>Z-A</option>
+            <option :value="sortPriceDesc">Pret Descendent</option>
+            <option :value="sortAlphAsc">A-Z</option>
+            <option :value="sortAlphDesc">Z-A</option>
           </select>
         </div>
 
@@ -58,7 +63,11 @@ export default {
     return {
       showModal: false,
       category: '',
-			sortPriceAsc: FILTERS.PRICE_ASC
+			sortPriceAsc: FILTERS.PRICE_ASC,
+      sortPriceDesc: FILTERS.PRICE_DESC,
+      sortAlphAsc: FILTERS.A_Z,
+      sortAlphDesc: FILTERS.Z_A
+
     }
   },
   components: {
@@ -122,9 +131,9 @@ export default {
       loadId: "selectedcateg/loadId",
       loadCategory: "selectedcateg/loadCategory",
     }),
-    /*
+    /**
     * Open details page and add item name to breadCrumb
-    * */
+    */
     toggleModal(item) {
       if (item !== undefined) {
         this.showModal = !this.showModal;
@@ -140,9 +149,9 @@ export default {
         this.breadcrumb.pop();
       }
     },
-    /*
+    /**
     * @button: addToCart function
-    * */
+    */
     addToCart(item) {
 
 			/**

@@ -79,14 +79,14 @@ export default {
                         return b.price - a.price;
                     });
                     break;
-                case 3:
+                case FILTERS.A_Z:
                     state.productList.sort((a, b) => {
                         let fa = a.title.toLowerCase(),
                             fb = b.title.toLowerCase();
                         return fa < fb ? -1 : fa > fb ? 1 : 0;
                     });
                     break;
-                case 4:
+                case FILTERS.Z_A:
                     state.productList.sort((a, b) => {
                         let fa = a.title.toLowerCase(),
                             fb = b.title.toLowerCase();

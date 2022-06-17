@@ -14,12 +14,21 @@
         <div class="pricingContainer">
           <div class="pricingQty">
             <p>Pret: {{ this.getDetails.price }}/{{ this.getDetails.unit }}</p>
-            <p>Cantitate:
-              <input
-								class="cell"
-								type="number"
-								min="0"
-								v-model.number="quantity"/></p>
+            <div class="qtyContainer">
+              <p>Cantitate:
+                <input
+                  class="cell"
+                  type="number"
+                  min="0"
+                  v-model.number="quantity"/></p>
+                <transition
+                    mode="in-out"
+                    enter-active-class="animate__animated animate__fadeIn"
+                    leave-active-class="animate__animated animate__fadeOut"
+                >
+                  <p v-if="this.validQuantity" class="invalidQty">Selectati o cantitate !</p>
+                </transition>
+            </div>
           </div>
           <div class="variantsContainer" v-if="this.getDetails.Attributes">
             <p style="text-align: center">Tip</p>
@@ -68,11 +77,12 @@
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-  // props: ['data'],
   emits: ['closeModal', 'addToCart'],
   data() {
     return {
-      quantity: 0
+      quantity: 0,
+      validQuantity: false,
+
     }
   },
   methods: {
@@ -88,7 +98,11 @@ export default {
         item.showMessage = false;
         this.loadSelected(item);
         this.quantity = 0;
+        this.validQuantity = false
 				this.$emit('addToCart', item, quantity);
+      } else {
+        this.validQuantity = true;
+        setTimeout(()=>{this.validQuantity = false}, 4000)
       }
     }
   },
@@ -119,7 +133,9 @@ export default {
     variantsSizeList() {
       if (this.getDetails.Attributes) {
         let variantList = this.getProducts.filter(item =>
-            item.Attributes != null && item.Attributes.type === this.getDetails.Attributes.type && item.Attributes.name === this.getDetails.Attributes.name
+            item.Attributes != null
+            && item.Attributes.type === this.getDetails.Attributes.type
+            && item.Attributes.name === this.getDetails.Attributes.name
         )
         return variantList
       } else return null
@@ -132,6 +148,19 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.qtyContainer{
+  position: relative;
+}
+
+.qtyContainer .invalidQty{
+  width: 20ch;
+  position: absolute;
+  font-size: 1rem;
+  color: red;
+  top: 2rem;
+  --animate-duration: 0.4s;
+}
 
 .product-container {
   position: absolute;
