@@ -209,17 +209,18 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .productPageContainer {
+  grid-area: rightContent;
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
   display: grid;
   grid-template:
-      "header" 50px
-      "content" auto
-      / auto;
+      "header" 3%
+      "content" 97%
+      / 100%;
 }
 
 .header {
@@ -236,15 +237,18 @@ export default {
   grid-area: content;
   display: grid;
   grid-template:
-      "breadCrumb" 30px
-      "content" auto
-      / auto;
+      "breadCrumb" 7%
+      "content" 93%
+      / 100%;
 }
 
 .bread-crumb {
+  height: 100%;
+  width: 100%;
   display: flex;
-  flex-direction: row;
-  padding-left: 30px;
+  /*flex-direction: row;*/
+  align-items: center;
+  justify-content: center;
   grid-area: breadCrumb;
 }
 
@@ -271,14 +275,11 @@ export default {
 
 .product {
   word-spacing: 0.1rem;
-  padding-block: 0.4rem;
   overflow: auto;
-  height: 85vh;
+  height: 100%;
   width: 100%;
   box-sizing: content-box;
   grid-area: content;
-  top: 0;
-  bottom: 0;
 }
 
 .product::-webkit-scrollbar {

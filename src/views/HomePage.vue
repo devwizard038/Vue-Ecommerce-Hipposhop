@@ -85,7 +85,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .homeContainer{
   height: 100%;
   width: 100%;
@@ -94,8 +94,8 @@ export default {
   overflow: hidden;
   display: grid;
   grid-template:
-      "header" 80px
-      "content" auto
+      "header" 7%
+      "content" 93%
       / 100%;
 }
 
@@ -116,8 +116,7 @@ h1 {
   height: 100%;
   grid-area: content;
   display: grid;
-  grid-template-columns: 25% 75%;
-  /*grid-template-rows:100%;*/
+  grid-template:"left right" 100%/ 25% 75%
 }
 
 .table .left{
@@ -126,6 +125,7 @@ h1 {
   margin: 0;
   padding: 0;
   overflow: visible;
+  grid-area: left;
 }
 
 .table .right{
@@ -133,6 +133,8 @@ h1 {
   height: 100%;
   margin: 0;
   padding: 0;
+  grid-area: right;
+  grid-template: "rightContent" 100%/100%;
 }
 @media (max-width: 600px) {
   h1 {

@@ -137,8 +137,8 @@ html, body {
   padding: 0;
   display: grid;
   grid-template:
-    "header" 80px
-    "content" auto
+    "header" 9%
+    "content" 91%
     / 100%;
 }
 
