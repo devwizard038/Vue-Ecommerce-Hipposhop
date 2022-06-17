@@ -13,7 +13,7 @@
       </div>
       <p class="title"><b>Preț:</b>&nbsp; {{ price }} / {{ unit }}</p>
       <p><b>Cantitate:</b> &nbsp;<input class="inputCell" type="number" min="0" v-model.number="quantity"/></p>
-      <button class="addToCart" @click="addToCart(product,this.quantity)">Add to cart</button>
+      <button class="addToCart" @click="addToCart(product)">Add to cart</button>
     </div>
   </div>
 </template>
@@ -45,12 +45,13 @@ export default {
       console.log(this.getDetails);
       this.$emit("toggleModal", this.product);
     },
-    addToCart(item, quantity) {
-      if (quantity > 0) {
-        item.showMessage = false
-        this.loadSelected(item)
-        this.$emit('addToCart', item, quantity);
-        this.quantity = 0;
+    addToCart(item) {
+      if (this.quantity > 0) {
+        item.showMessage = false;
+				item.quantity = this.quantity;
+				this.quantity = 0;
+        this.loadSelected(item);
+				this.$emit('addToCart', item);
       }
     },
   },

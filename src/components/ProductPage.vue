@@ -15,7 +15,7 @@
           <input class="searchList" type="text" placeholder="Search.." @input="this.searchProduct($event.target.value)">
           <select class="sortList" @change="this.sortProducts($event.target.value)">
             <option value=0>Default</option>
-            <option value=1>Pret Ascendent</option>
+            <option :value="sortPriceAsc">Pret Ascendent</option>
             <option value=2>Pret Descendent</option>
             <option value=3>A-Z</option>
             <option value=4>Z-A</option>
@@ -50,6 +50,7 @@
 import ProductComp from "./ProductComp.vue";
 import ProductDetailComp from "@/components/ProductDetailComp.vue";
 import {mapActions, mapGetters} from "vuex";
+import {FILTERS} from "@/const";
 
 export default {
 
@@ -57,6 +58,7 @@ export default {
     return {
       showModal: false,
       category: '',
+			sortPriceAsc: FILTERS.PRICE_ASC
     }
   },
   components: {
@@ -141,36 +143,51 @@ export default {
     /*
     * @button: addToCart function
     * */
-    addToCart(item, quantity) {
-      item.quantity = quantity;
-      let localCart = [];
-      this.loadCart();
-      localCart = this.getCart;
-      /**
+    addToCart(item) {
+
+			/**
        * Catch error: if local storage cart is empty
        */
-      if (localCart === null && quantity > 0) {
-        localCart = [];
-        localCart.push(item);
-        this.updateCart(localCart);
-        quantity = 0;
-        return;
-      }
-      if (quantity === 0) {
-        return;
-      } else if (localCart.filter((product) => product.id === item.id).length
-          !== 0
-      ) {
-        localCart.filter(
-            (product) => product.id === item.id)[0].quantity =
-            Number(localCart.filter((product) => product.id === item.id)[0]
-                .quantity) + quantity;
-        this.updateCart(localCart)
-      } else {
-        localCart.push(item);
-        this.updateCart(localCart);
-      }
-      quantity = 0;
+			if (item.quantity) {
+
+				this.loadCart();
+				let localCart = this.getCart;
+
+				if (localCart === null) {
+					localCart = [item];
+				} else {
+					let currentProduct = localCart.find(product => product.id === item.id);
+					if (currentProduct) {
+						currentProduct.quantity += item.quantity;
+					} else {
+						localCart.push(item);
+					}
+				}
+
+				this.updateCart(localCart);
+			}
+
+      // if (localCart === null && item.quantity > 0) {
+      //   localCart = [];
+      //   localCart.push(item);
+      //   this.updateCart(localCart);
+      //   item.quantity = 0;
+      //   return;
+      // }
+      // if (item.quantity === 0) {
+      //   return;
+      // } else if (localCart.filter((product) => product.id === item.id).length
+      //     !== 0
+      // ) {
+      //   localCart.filter(
+      //       (product) => product.id === item.id)[0].quantity =
+      //       Number(localCart.filter((product) => product.id === item.id)[0]
+      //           .quantity) + item.quantity;
+      //   this.updateCart(localCart)
+      // } else {
+      //   localCart.push(item);
+      //   this.updateCart(localCart);
+      // }
     },
     /**
      * Sort: Display selected category clicked on BreadCrumb element.

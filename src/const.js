@@ -5,3 +5,8 @@ export const TABLES = {
 	CATEGORIES: "categories",
 	CART: "cart"
 }
+
+export const FILTERS = {
+	PRICE_ASC: 1,
+	PRICE_DESC: 2
+}

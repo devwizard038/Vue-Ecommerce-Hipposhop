@@ -7,7 +7,7 @@
     <div class="categoriesContainer">
       <!-- Category data organised in a tree -->
       <TreeBrowser
-          :node="categoryTree"
+				:node="categoryTree"
       />
     </div>
   </div>

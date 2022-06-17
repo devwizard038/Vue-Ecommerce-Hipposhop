@@ -1,6 +1,6 @@
 // noinspection JSVoidFunctionReturnValueUsed
 
-import {SHOP_KEY, TABLES} from "@/const";
+import {FILTERS, SHOP_KEY, TABLES} from "@/const";
 import jsonProducts from "@/assets/products (4).json";
 
 export default {
@@ -32,16 +32,22 @@ export default {
          * @param commit
          */
         saveProducts({commit}) {
-            let data = jsonProducts;
-            if (data != undefined) {
+            let data = JSON.parse(JSON.stringify(jsonProducts));
+            if (data) {
                 data.forEach(item => {
                     let obj = {};
                     if (item.Attributes != null) {
-                        let attr = item.Attributes.split(',');
-                        attr.forEach(n => {
-                            let tup = n.split(':');
-                            obj[tup[0]] = tup[1];
-                        });
+                        // let attr = item.Attributes.split(',');
+                        // attr.forEach(n => {
+                        //     let tup = n.split(':');
+                        //     obj[tup[0]] = tup[1];
+                        // });
+                        // item.Attributes = obj;
+
+                        let attributes = item.Attributes.matchAll(/(?<name>[a-z]+):(?<value>[^,:]*)/g);
+                        for (let attr of attributes) {
+                            obj[attr.groups.name] = attr.groups.value;
+                        }
                         item.Attributes = obj;
                     }
                 });
@@ -60,62 +66,48 @@ export default {
          * @param state
          * @param param{String}
          */
-        sortProducts({commit, state}, param) {
-            if (param == 1) {
-                let local = state.productList;
-                local.sort((a, b) => {
-                    return a.price - b.price;
-                });
-                commit("setProducts", local);
-            } else if (param == 2) {
-                let local = state.productList;
-                local.sort((a, b) => {
-                    return b.price - a.price;
-                });
-                commit("setProducts", local);
-            } else if (param == 3) {
-                let local = state.productList;
-                local.sort((a, b) => {
-                    let fa = a.title.toLowerCase(),
-                        fb = b.title.toLowerCase();
+        sortProducts({ state }, param) {
 
-                    if (fa < fb) {
-                        return -1;
-                    }
-                    if (fa > fb) {
-                        return 1;
-                    }
-                    return 0;
-                });
-                commit("setProducts", local);
-            } else if (param == 4) {
-                let local = state.productList;
-                local.sort((a, b) => {
-                    let fa = a.title.toLowerCase(),
-                        fb = b.title.toLowerCase();
+            switch (Number(param)) {
+                case FILTERS.PRICE_ASC:
+                    state.productList.sort((a, b) => {
+                        return a.price - b.price;
+                    });
+                    break;
+                case FILTERS.PRICE_DESC:
+                    state.productList.sort((a, b) => {
+                        return b.price - a.price;
+                    });
+                    break;
+                case 3:
+                    state.productList.sort((a, b) => {
+                        let fa = a.title.toLowerCase(),
+                            fb = b.title.toLowerCase();
+                        return fa < fb ? -1 : fa > fb ? 1 : 0;
+                    });
+                    break;
+                case 4:
+                    state.productList.sort((a, b) => {
+                        let fa = a.title.toLowerCase(),
+                            fb = b.title.toLowerCase();
+                        return fa < fb ? 1 : fa > fb ? -1 : 0;
+                    });
+                    break;
+                default:
+                    state.productList = JSON.parse(
+                        localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+                    break;
 
-                    if (fa < fb) {
-                        return 1;
-                    }
-                    if (fa > fb) {
-                        return -1;
-                    }
-                    return 0;
-                });
-                commit("setProducts", local);
-            } else {
-                let local = JSON.parse(
-                    localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-                commit("setProducts", local);
             }
+
         },
         /**
          * Search product function in product list.
          * @param commit
          * @param searched {String}
          */
-        searchProduct({commit}, searched) {
-            if (searched == "") {
+        searchProduct({ commit }, searched) {
+            if (!searched) {
                 let local = JSON.parse(
                     localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
                 commit("setProducts", local);

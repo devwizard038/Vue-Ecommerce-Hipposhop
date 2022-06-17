@@ -13,26 +13,29 @@
         </div>
         <div class="pricingContainer">
           <div class="pricingQty">
-            <p>Pret:{{ this.getDetails.price }}/{{ this.getDetails.unit }}</p>
+            <p>Pret: {{ this.getDetails.price }}/{{ this.getDetails.unit }}</p>
             <p>Cantitate:
               <input
-                  class="cell"
-                  type="number"
-                  min="0"
-                  v-model.number="quantity"/></p>
+								class="cell"
+								type="number"
+								min="0"
+								v-model.number="quantity"/></p>
           </div>
           <div class="variantsContainer" v-if="this.getDetails.Attributes">
             <p style="text-align: center">Tip</p>
             <div>
-              <button v-for="items in variantsTypeList" @click="loadDetails(items)"
-                      :class="items.id !=this.getDetails.id ?'variantsBtn':'selected'" :key="items.Attributes.name">
+              <button
+								v-for="items in variantsTypeList"
+								@click="loadDetails(items)"
+								:class="items.id != this.getDetails.id ? 'variantsBtn' : 'selected'" :key="items.Attributes.name"
+							>
                 {{ items.Attributes.type }}
               </button>
             </div>
             <p style="text-align: center">Marime</p>
             <div>
               <button v-for="items in variantsSizeList" @click="loadDetails(items)"
-                      :class="items.id !=this.getDetails.id ?'variantsBtn':'selected'" :key="items.Attributes.name">
+								:class="items.id !=this.getDetails.id ? 'variantsBtn' : 'selected'" :key="items.Attributes.name">
                 {{ items.Attributes.size }}
               </button>
             </div>
@@ -82,10 +85,10 @@ export default {
     },
     addToCart(item, quantity) {
       if (quantity > 0) {
-        item.showMessage = false
+        item.showMessage = false;
         this.loadSelected(item);
-        this.$emit('addToCart', item, quantity);
         this.quantity = 0;
+				this.$emit('addToCart', item, quantity);
       }
     }
   },
@@ -100,11 +103,14 @@ export default {
      */
     variantsTypeList() {
       if (this.getDetails.Attributes) {
-        let variantList = this.getProducts.filter(item =>
-            item.Attributes != null && item.Attributes.size === this.getDetails.Attributes.size && item.Attributes.name === this.getDetails.Attributes.name
-        )
-        return variantList
-      } else return null
+        return this.getProducts.filter(item =>
+					item.Attributes != null
+					&& item.Attributes.size === this.getDetails.Attributes.size
+					&& item.Attributes.name === this.getDetails.Attributes.name
+        );
+      }
+
+			return null;
     },
     /**
      * Filter SIZE for same TYPE objects

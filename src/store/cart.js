@@ -49,9 +49,11 @@ export default {
      * @param state
      * @param data {Object}
      */
-    deleteCartItem({commit,state},data){
-      let newCart = localStorage.setItem(`${SHOP_KEY}-${TABLES.CART}`,
-          JSON.stringify(state.cartList.filter(n=> n.id != data.id)));
+    deleteCartItem({ commit, state }, data) {
+      let newCart = localStorage.setItem(
+        `${SHOP_KEY}-${TABLES.CART}`,
+        JSON.stringify(state.cartList.filter(n => n.id !== data.id))
+      );
       commit("setCart", newCart);
     },
     /**
@@ -61,7 +63,7 @@ export default {
      * @param data {Object} - selected product
      * @param quantity {Integer} - selected quantity in ShopCart product component input
      */
-    modifyCart({commit, state},{data, quantity}) {
+    modifyCart({commit, state}, { data, quantity}) {
       let oldCart = state.cartList;
       oldCart.forEach(item => {
         if (item.id === data.id) {
