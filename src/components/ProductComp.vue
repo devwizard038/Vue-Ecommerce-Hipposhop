@@ -30,14 +30,14 @@ export default {
       quantity: 0,
     };
   },
-  computed:{
+  computed: {
     ...mapGetters({
-      getDetails:"productDetail/getDetails"
+      getDetails: "productDetail/getDetails"
     })
   },
   methods: {
     ...mapActions({
-      loadDetails:"productDetail/loadDetails",
+      loadDetails: "productDetail/loadDetails",
       loadSelected: "selectedcateg/loadSelected"
     }),
     toggleModal() {

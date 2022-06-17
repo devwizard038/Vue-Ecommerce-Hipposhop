@@ -13,19 +13,29 @@
         </div>
         <div class="pricingContainer">
           <div class="pricingQty">
-          <p>Pret:{{ this.getDetails.price }}/{{ this.getDetails.unit }}</p>
-          <p>Cantitate:
-            <input
-                class="cell"
-                type="number"
-                min="0"
-                v-model.number="quantity"/></p>
+            <p>Pret:{{ this.getDetails.price }}/{{ this.getDetails.unit }}</p>
+            <p>Cantitate:
+              <input
+                  class="cell"
+                  type="number"
+                  min="0"
+                  v-model.number="quantity"/></p>
           </div>
           <div class="variantsContainer" v-if="this.getDetails.Attributes">
             <p style="text-align: center">Tip</p>
-            <button v-for="items in variantsTypeList" @click="loadDetails(items)" :class="items.id !=this.getDetails.id ?'variantsBtn':'selected'" :key="items.Attributes.name">{{items.Attributes.type}}</button>
+            <div>
+              <button v-for="items in variantsTypeList" @click="loadDetails(items)"
+                      :class="items.id !=this.getDetails.id ?'variantsBtn':'selected'" :key="items.Attributes.name">
+                {{ items.Attributes.type }}
+              </button>
+            </div>
             <p style="text-align: center">Marime</p>
-            <button v-for="items in variantsSizeList" @click="loadDetails(items)" :class="items.id !=this.getDetails.id ?'variantsBtn':'selected'" :key="items.Attributes.name">{{items.Attributes.size}}</button>
+            <div>
+              <button v-for="items in variantsSizeList" @click="loadDetails(items)"
+                      :class="items.id !=this.getDetails.id ?'variantsBtn':'selected'" :key="items.Attributes.name">
+                {{ items.Attributes.size }}
+              </button>
+            </div>
           </div>
           <button class="addBtn" @click="addToCart(this.getDetails,this.quantity)">
             ADD TO CART
@@ -64,7 +74,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      loadDetails:"productDetail/loadDetails",
+      loadDetails: "productDetail/loadDetails",
       loadSelected: "selectedcateg/loadSelected"
     }),
     closeModal() {
@@ -81,32 +91,32 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getProducts:"products/getProducts",
-      getDetails:"productDetail/getDetails"
+      getProducts: "products/getProducts",
+      getDetails: "productDetail/getDetails"
     }),
     /**
      * Filter TYPE for same SIZE objects
      * @returns {Object}
      */
-    variantsTypeList(){
-      if(this.getDetails.Attributes){
-        let variantList = this.getProducts.filter(item=>
-            item.Attributes!=null  && item.Attributes.size === this.getDetails.Attributes.size && item.Attributes.name === this.getDetails.Attributes.name
+    variantsTypeList() {
+      if (this.getDetails.Attributes) {
+        let variantList = this.getProducts.filter(item =>
+            item.Attributes != null && item.Attributes.size === this.getDetails.Attributes.size && item.Attributes.name === this.getDetails.Attributes.name
         )
         return variantList
-      }else return null
+      } else return null
     },
     /**
      * Filter SIZE for same TYPE objects
      * @returns {Object}
      */
-    variantsSizeList(){
-      if(this.getDetails.Attributes){
-        let variantList = this.getProducts.filter(item=>
-            item.Attributes!=null  && item.Attributes.type === this.getDetails.Attributes.type && item.Attributes.name === this.getDetails.Attributes.name
+    variantsSizeList() {
+      if (this.getDetails.Attributes) {
+        let variantList = this.getProducts.filter(item =>
+            item.Attributes != null && item.Attributes.type === this.getDetails.Attributes.type && item.Attributes.name === this.getDetails.Attributes.name
         )
         return variantList
-      }else return null
+      } else return null
     },
   }
 }
@@ -132,7 +142,15 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-.selected{
+
+.variantsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.selected {
   color: black;
   border: 2px black solid;
   background-color: gray;
@@ -143,7 +161,7 @@ export default {
   pointer-events: none;
 }
 
-.variantsBtn{
+.variantsBtn {
   color: black;
   border: 2px black solid;
   background-color: white;
@@ -219,7 +237,7 @@ export default {
   max-height: 15rem;
 }
 
-.modalDetailsContainer{
+.modalDetailsContainer {
   grid-area: content;
   display: grid;
   grid-template:
@@ -229,7 +247,7 @@ export default {
       /auto;
 }
 
-.title{
+.title {
   width: 100%;
   height: 100%;
   grid-area: title;
@@ -238,7 +256,7 @@ export default {
   justify-content: center;
 }
 
-.pricingContainer{
+.pricingContainer {
   grid-area: pricing;
   width: 100%;
   height: 100%;
@@ -266,14 +284,14 @@ export default {
 }
 
 
-.pricingQty{
+.pricingQty {
   display: flex;
   width: 40%;
   justify-content: space-between;
   align-items: center;
 }
 
-.pricingQty input{
+.pricingQty input {
   padding: 0.2rem;
   font-weight: bold;
   font-family: 'Poppins', sans-serif;
@@ -282,11 +300,11 @@ export default {
   border: 1px solid black;
 }
 
-.pricingQty input:hover{
+.pricingQty input:hover {
   border: 2px solid #2095E1FF;
 }
 
-.pricingQty input:focus{
+.pricingQty input:focus {
   border: 2px solid #2095E1FF;
 }
 
@@ -298,10 +316,9 @@ export default {
   flex-direction: column;
 }
 
-.description h3{
+.description h3 {
   text-align: center;
 }
-
 
 
 </style>

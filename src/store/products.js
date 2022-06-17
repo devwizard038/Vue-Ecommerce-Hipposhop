@@ -8,7 +8,7 @@ export default {
     state() {
         return {
             productList: [],
-            searchedProduct:[],
+            searchedProduct: [],
         };
     },
     getters: {
@@ -33,9 +33,9 @@ export default {
          */
         saveProducts({commit}) {
             let data = jsonProducts;
-            if(data != undefined) {
+            if (data != undefined) {
                 data.forEach(item => {
-                    let obj={};
+                    let obj = {};
                     if (item.Attributes != null) {
                         let attr = item.Attributes.split(',');
                         attr.forEach(n => {
@@ -46,7 +46,7 @@ export default {
                     }
                 });
             }
-            localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`,JSON.stringify(data));
+            localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(data));
             commit("setProducts", data);
         },
         deleteProducts({commit}) {
@@ -60,7 +60,7 @@ export default {
          * @param state
          * @param param{String}
          */
-        sortProducts({commit,state},param) {
+        sortProducts({commit, state}, param) {
             if (param == 1) {
                 let local = state.productList;
                 local.sort((a, b) => {
@@ -103,7 +103,7 @@ export default {
                     return 0;
                 });
                 commit("setProducts", local);
-            } else{
+            } else {
                 let local = JSON.parse(
                     localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
                 commit("setProducts", local);
@@ -111,27 +111,20 @@ export default {
         },
         /**
          * Search product function in product list.
-         *  - only matches ENTIRE words, not letters or numbers in them !
-         *  - TO FIX: ! Only matches one word ! It returns empty state for multiple word !!
          * @param commit
          * @param searched {String}
          */
-        searchProduct({commit},searched){
-            if(searched == "") {
+        searchProduct({commit}, searched) {
+            if (searched == "") {
                 let local = JSON.parse(
                     localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-                commit("setProducts",local);
+                commit("setProducts", local);
             } else {
-                let found = [];
                 let text = JSON.parse(
                     localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-                let newSearched = new RegExp(`\\b${searched}\\b`,'i');
-                text.forEach(item => {
-                    if(item.title.match(newSearched) != null){
-                        found.push(item);
-                    }
-                });
-                commit("setProducts",found);
+                let found = text.filter((item) => item.title.toLowerCase().includes(searched.toLowerCase()));
+
+                commit("setProducts", found);
             }
         }
     },
