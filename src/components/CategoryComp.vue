@@ -1,6 +1,6 @@
 <template>
   <div class="categoryPageContainer">
-    <div class="header">
+    <div class="headerCategory">
       <h3>Categories</h3>
       <hr/>
     </div>
@@ -67,25 +67,26 @@ export default {
 
 <style scoped>
 .categoryPageContainer {
+  grid-area: leftContent;
   height: 100%;
   width: 100%;
   display: grid;
   grid-template:
-      "header" 50px
-      "content" auto
-      / auto;
+      "headerCategory" 8%
+      "contentCategory" 92%
+      / 100%;
 }
 
-.header {
+.headerCategory {
   width: 100%;
   height: 100%;
-  grid-area: header;
+  grid-area: headerCategory;
 }
 
 .categoriesContainer {
-  height: 100vh;
+  height: 100%;
   width: 100%;
-  grid-area: content;
+  grid-area: contentCategory;
   overflow:auto;
 }
 

@@ -121,11 +121,12 @@ h1 {
 
 .table .left{
   width: 100%;
-  height: auto;
+  height: 100%;
   margin: 0;
   padding: 0;
   overflow: visible;
   grid-area: left;
+  grid-template: "leftContent" 100%/100%;
 }
 
 .table .right{

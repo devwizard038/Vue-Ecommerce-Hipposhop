@@ -121,13 +121,14 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 .shopContainer {
+  z-index: 1000;
   position: absolute;
   right: 0;
   display: grid;
   grid-template:
-      "header" 80px
-      "content" auto
-      /auto;
+      "headerShopCart" 9%
+      "contentShopCart" 91%
+      /100%;
   width: 50vw;
   height: 100%;
   background-color: white;
@@ -136,7 +137,7 @@ export default {
 
 .header {
   background-color: #2d2d2d;
-  grid-area: header;
+  grid-area: headerShopCart;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -176,12 +177,12 @@ h2 {
 .itemContainer {
   width: 100%;
   height: 100%;
-  grid-area: content;
+  grid-area: contentShopCart;
   display: grid;
   grid-template:
       "items" auto
       "footer" 200px
-      /auto;
+      /100%;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
 }
@@ -189,7 +190,7 @@ h2 {
 .contentContainer{
   grid-area: items;
   width: 100%;
-  height: auto;
+  height: 100%;
   min-height: 7rem;
   max-height: 30rem;
   overflow: auto;
@@ -291,7 +292,7 @@ h2 {
 
 .itemList p {
   padding-right: 2rem;
-  max-width: 10ch;
+  max-width: 20ch;
 }
 
 .itemList .title {

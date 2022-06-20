@@ -119,10 +119,6 @@ export default {
   align-items: flex-start;
 }
 
-.card:hover {
-  border: 2px solid #2095E1FF;
-}
-
 img {
   width: 10rem;
   height: 7rem;

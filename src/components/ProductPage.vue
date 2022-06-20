@@ -1,13 +1,13 @@
 <template>
   <div class="productPageContainer">
-    <div class="header">
+    <div class="headerTitle">
       <h3>Products</h3>
       <hr/>
     </div>
 
     <div class="productContainer">
       <!-- Display: Selected category bred crumb -->
-      <div class="bread-crumb">
+      <div class="breadCrumb">
         <span v-for="item in breadcrumb" @click="emitNode(item)" :key="item.id">
           >> {{ item.name ? item.name : item.title }}
         </span>
@@ -218,13 +218,13 @@ export default {
   padding: 0;
   display: grid;
   grid-template:
-      "header" 3%
-      "content" 97%
+      "headerTitle" 5%
+      "content" 95%
       / 100%;
 }
 
-.header {
-  grid-area: header;
+.headerTitle {
+  grid-area: headerTitle;
   height: 100%;
   width: 100%;
 }
@@ -237,12 +237,12 @@ export default {
   grid-area: content;
   display: grid;
   grid-template:
-      "breadCrumb" 7%
-      "content" 93%
+      "breadCrumb" 4%
+      "content" 96%
       / 100%;
 }
 
-.bread-crumb {
+.breadCrumb {
   height: 100%;
   width: 100%;
   display: flex;
