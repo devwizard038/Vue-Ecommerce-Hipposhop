@@ -28,19 +28,28 @@
         </div>
 
       </div>
-      <div class="product">
-        <ProductComp
-            :showModal="this.showModal"
-            @toggleModal="toggleModal"
-            @addToCart="addToCart"
-            v-for="product in products"
-            :key="product.id"
-            :name="product.title"
-            :price="product.price"
-            :image="product.image"
-            :unit="product.unit"
-            :product="product"
-        />
+      <div
+				class="product"
+				ref="productsList"
+			>
+				<div
+					v-for="product in products"
+					:key="product.id"
+					:ref="'productsDetails' + product.id"
+					:data-id="product.id"
+					:data-img="product.image"
+				>
+					<ProductComp
+						:showModal="this.showModal"
+						@toggleModal="toggleModal"
+						@addToCart="addToCart"
+						:name="product.title"
+						:price="product.price"
+						:image="productImage(product.id)"
+						:unit="product.unit"
+						:product="product"
+					/>
+				</div>
       </div>
     </div>
     <ProductDetailComp
@@ -58,7 +67,7 @@ import {mapActions, mapGetters} from "vuex";
 import {FILTERS} from "@/const";
 
 export default {
-
+	name: "ProductsComponent",
   data() {
     return {
       showModal: false,
@@ -66,8 +75,9 @@ export default {
 			sortPriceAsc: FILTERS.PRICE_ASC,
       sortPriceDesc: FILTERS.PRICE_DESC,
       sortAlphAsc: FILTERS.A_Z,
-      sortAlphDesc: FILTERS.Z_A
-
+      sortAlphDesc: FILTERS.Z_A,
+			intersectionObserver: null,
+			images: []
     }
   },
   components: {
@@ -84,7 +94,6 @@ export default {
       default: () => [],
     },
   },
-  name: "ProductsComponent",
   emits: ["showModal"],
   computed: {
     ...mapGetters({
@@ -118,8 +127,30 @@ export default {
   mounted() {
     // Mounts LocalStorage list
     this.loadProducts();
+
+		let callback = (entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						this.images[entry.target.dataset.id] = entry.target.dataset.img;
+					}
+				});
+		};
+
+		this.intersectionObserver = new IntersectionObserver(callback, {
+			root: this.$refs.productsList,
+			threshold: 1,
+		});
+
   },
-  methods: {
+	updated() {
+		Object.entries(this.$refs).forEach(item => {
+			let target = item.at(1);
+			if (Array.isArray(target) && target.length) {
+				this.intersectionObserver.observe(target.at(0));
+			}
+		})
+	},
+	methods: {
     ...mapActions({
       searchProduct:"products/searchProduct",
       sortProducts: "products/sortProducts",
@@ -131,6 +162,9 @@ export default {
       loadId: "selectedcateg/loadId",
       loadCategory: "selectedcateg/loadCategory",
     }),
+		productImage(id) {
+			return this.images[id] ? this.images[id] : null;
+		},
     /**
     * Open details page and add item name to breadCrumb
     */
