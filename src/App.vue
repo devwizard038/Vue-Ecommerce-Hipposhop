@@ -3,6 +3,9 @@
   <div v-if="this.showCart === true">
     <ShoppingCart @closeCart="closeCart"/>
   </div>
+  <div v-if="this.showLogin === true">
+    <LoginModalComp @closeLogin="closeLogin"/>
+  </div>
   <div class="appContainer">
     <nav class="navbar">
       <div class="brand-title">ShopCart.io</div>
@@ -22,6 +25,8 @@
           <li>
             <router-link to="/admin">AdminPage</router-link>
           </li>
+          <li class="loginIcon"><a @click="openLogin">👤</a></li>
+
           <li><a @click="openCart">&#x1F6D2;({{ this.cartItems }})</a></li>
         </ul>
       </div>
@@ -45,19 +50,22 @@
 
 <script>
 import ShoppingCart from "@/components/ShoppingCartComp.vue";
+import LoginModalComp from "@/components/LoginModalComp"
 import {mapActions, mapGetters} from "vuex";
 
 
 export default {
   name: 'App',
   components: {
-    ShoppingCart
+    ShoppingCart,
+    LoginModalComp
   },
   data() {
     return {
       showCart: false,
       selected: null,
       active: false,
+      showLogin: false,
     }
   },
   computed: {
@@ -98,11 +106,16 @@ export default {
     closeCart() {
       this.showCart = false;
     },
+    closeLogin(){
+      this.showLogin = false;
+    },
     openCart() {
       this.showCart = true;
     },
+    openLogin(){
+      this.showLogin = true;
+    },
     toggleMobile() {
-      console.log(this.active)
       this.active = !this.active
     }
   },
@@ -117,7 +130,6 @@ html, body {
   height: 100%;
   width: 100%;
 }
-
 .popup {
   position: absolute;
   top: 4rem;
