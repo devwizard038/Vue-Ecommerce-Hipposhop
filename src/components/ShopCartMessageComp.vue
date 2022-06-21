@@ -6,8 +6,18 @@
         <br>{{ itemName }}?
       </div>
       <div>
-        <button class="press-yes" @click="deleteConfirm(true)">Da</button>
-        <button class="press-no"  @click="deleteConfirm(false)">Nu</button>
+        <button
+          class="press-yes"
+          @click="deleteConfirm(true)"
+        >
+          Da
+        </button>
+        <button
+          class="press-no"
+          @click="deleteConfirm(false)"
+        >
+          Nu
+        </button>
       </div>
     </div>
   </div>
@@ -104,7 +114,6 @@ export default {
   margin: 1rem 0.5rem 0.5rem;
   cursor: pointer;
   border: none;
-
 }
 
 .press-no:hover {

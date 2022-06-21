@@ -44,7 +44,8 @@
               <button
                 v-for="items in variantsTypeList"
                 @click="loadDetails(items)"
-                :class="items.id !== this.getDetails.id ? 'variantsBtn' : 'selected'"
+                :class="items.id !== this.getDetails.id
+                ? 'variantsBtn' : 'selected'"
                 :key="items.Attributes.name"
               >
                 {{ items.Attributes.type }}
@@ -55,7 +56,8 @@
               <button
                 v-for="items in variantsSizeList"
                 @click="loadDetails(items)"
-                :class="items.id !== this.getDetails.id ? 'variantsBtn' : 'selected'"
+                :class="items.id !== this.getDetails.id
+                ? 'variantsBtn' : 'selected'"
                 :key="items.Attributes.name">
                 {{ items.Attributes.size }}
               </button>
@@ -164,9 +166,9 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import "../assets/css/fontKanit.css";
+@import "../assets/css/fontRoboto.css";
+@import "../assets/css/fontPoppins.css";
 
 .qtyContainer {
   position: relative;

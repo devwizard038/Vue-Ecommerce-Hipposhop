@@ -5,41 +5,52 @@
       <button @click="closeCart()">X</button>
     </div>
     <div class="itemContainer">
-      <div class="contentContainer" v-if="this.computedCart.length > 0">
-        <div  v-for="item in this.computedCart" :key="item.id">
+      <div
+        class="contentContainer"
+        v-if="this.computedCart.length > 0"
+      >
+        <div
+          v-for="item in this.computedCart"
+          :key="item.id"
+        >
           <div class="messageBox">
             <ShopCartMessageComp
-                v-if="item.showMessage === true"
-                :itemName="item.title"
-                :deleteConfirm="deleteConfirm"
-                :itemToDelete="item"
+              v-if="item.showMessage === true"
+              :itemName="item.title"
+              :deleteConfirm="deleteConfirm"
+              :itemToDelete="item"
             />
           </div>
           <div class="itemList">
             <img
-                v-if="item.image === null"
-                src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
-                alt="{{ item.name }}"
+              v-if="item.image === null"
+              src="../assets/images/no_image_available.jpg"
+              alt="{{ item.name }}"
             />
             <img
-                v-else
-                :src="item.image"
-                :alt="item.name"
+              v-else
+              :src="item.image"
+              :alt="item.name"
             />
             <p class="title">{{ item.title }}</p>
             <p class="price">{{ item.price }}$</p>
-            <p class="price"> <input
-                type="number"
-                min="1"
-                :value="item.quantity"
-                @input="event => this.modifyCart({data:item, quantity:Number(event.target.value)})"
-            >{{ item.unit }}</p>
+            <p class="price"><input
+              type="number"
+              min="1"
+              :value="item.quantity"
+              @input="event => this.modifyCart({
+              data:item, quantity:Number(event.target.value)})"
+            >
+              {{ item.unit }}
+            </p>
             <a @click="deleteClick(item)">&#9747;</a>
           </div>
-
         </div>
       </div>
-      <div class="checkOutContainer" v-if="this.computedCart.length > 0">
+      <div
+        class="checkOutContainer"
+        v-if="this.computedCart.length > 0"
+      >
         <p>+ Shipping: 1.99$</p>
         <h2>Total : {{ this.getCartPrice + this.shipping }} $</h2>
         <button class="outBtn">Check Out</button>
@@ -57,7 +68,7 @@ import {mapActions, mapGetters} from "vuex";
 import ShopCartMessageComp from "@/components/ShopCartMessageComp"
 
 export default {
-  name: "ShoppingCartComponent",
+  name: "ShoppingCartComp",
   components: {ShopCartMessageComp},
   emits: ['closeCart'],
 
@@ -69,12 +80,27 @@ export default {
       itemToDelete: [],
     }
   },
+  computed: {
+    ...mapGetters({
+      getCart: "cart/getCart",
+      getCartPrice: "cart/getCartPrice",
+    }),
+    /**
+     * @returns {Object} - Shopping Cart from localStorage
+     */
+    computedCart() {
+      return this.getCart
+    }
+  },
+  mounted() {
+    this.loadCart();
+  },
   methods: {
     ...mapActions({
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
       deleteCartItem: "cart/deleteCartItem",
-      modifyCart:"cart/modifyCart"
+      modifyCart: "cart/modifyCart"
     }),
     /**
      * deleteClick + deleteConfirm -> Confirmation message for deleting an item from cart.
@@ -86,7 +112,7 @@ export default {
     },
     deleteConfirm(deleteItem) {
       let item = this.itemToDelete
-      if(deleteItem === true) {
+      if (deleteItem === true) {
         this.deleteCartItem(item)
         deleteItem = false
       } else {
@@ -97,28 +123,12 @@ export default {
       this.$emit('closeCart')
     },
   },
-  computed: {
-    ...mapGetters({
-      getCart: "cart/getCart",
-      getCartPrice:"cart/getCartPrice",
-    }),
-    /**
-     * @returns {Object} - Shopping Cart from localStorage
-     */
-    computedCart(){
-      return this.getCart
-    }
-  },
-  mounted() {
-    this.loadCart();
-  }
 }
-
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import "../assets/css/fontKanit.css";
+@import "../assets/css/fontRoboto.css";
 
 .shopContainer {
   z-index: 1000;
@@ -187,7 +197,7 @@ h2 {
   overflow: hidden;
 }
 
-.contentContainer{
+.contentContainer {
   grid-area: items;
   width: 100%;
   height: 100%;
@@ -211,12 +221,13 @@ h2 {
 }
 
 
-.checkOutContainer{
+.checkOutContainer {
   grid-area: footer;
   height: 100%;
   width: 100%;
 }
-.checkOutContainer p{
+
+.checkOutContainer p {
   border: 2px black solid;
   padding: 0.5rem;
   border-radius: 1rem;
@@ -226,12 +237,8 @@ h2 {
   margin-bottom: 1rem;
 }
 
-.checkOutContainer h2{
-  /*font-size: 3rem;*/
-}
-
-.messageBox{
- height: 100%;
+.messageBox {
+  height: 100%;
 }
 
 .itemList {
@@ -253,7 +260,6 @@ h2 {
 .itemList input {
   align-items: center;
   width: 1rem;
-  /*height: 2rem;*/
   border: none;
   font-family: 'Poppins', sans-serif;
   font-size: 0.8rem;
@@ -301,7 +307,7 @@ h2 {
   font-weight: bold;
 }
 
-.itemList .price{
+.itemList .price {
   font-weight: bold;
 }
 

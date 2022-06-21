@@ -136,15 +136,15 @@ export default {
     let callback = (entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          this.images[entry.target.dataset.id] = entry.target.dataset.img;
+          this.images[entry.target.dataset.id]
+            = entry.target.dataset.img;
         }
       });
     };
     this.intersectionObserver = new IntersectionObserver(callback, {
       root: this.$refs.productsList,
-      threshold: 1,
+      threshold: 0,
     });
-
   },
   updated() {
     Object.entries(this.$refs).forEach(item => {
@@ -176,7 +176,6 @@ export default {
       if (item !== undefined) {
         this.showModal = !this.showModal;
         this.breadcrumb.push(item);
-        // this.data = item;
         if (this.showModal === true)
           this.$emit('showModal', this.showModal);
       }
@@ -200,7 +199,9 @@ export default {
         if (localCart === null) {
           localCart = [item];
         } else {
-          let currentProduct = localCart.find(product => product.id === item.id);
+          let currentProduct = localCart.find(
+            product => product.id === item.id
+          );
           if (currentProduct) {
             currentProduct.quantity += item.quantity;
           } else {

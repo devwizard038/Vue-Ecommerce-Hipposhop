@@ -4,7 +4,7 @@
     <div class="card">
       <img
         v-if="image === null"
-        src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
+        src="../assets/images/no_image_available.jpg"
         alt="{{ name }}"
       />
       <img
@@ -180,7 +180,6 @@ img {
 .inputCell {
   align-items: center;
   width: 3rem;
-  /*height: 2rem;*/
   border: none;
   font-family: 'Poppins', sans-serif;
   font-size: 1rem;

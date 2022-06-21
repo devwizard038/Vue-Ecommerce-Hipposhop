@@ -1,15 +1,15 @@
 <template>
   <div
-      :class="{ 'node': node.id }"
+    :class="{ 'node': node.id }"
   >
     <div
-        v-if="node.id"
-        :class="{ 'selected': isSelected }"
+      v-if="node.id"
+      :class="{ 'selected': isSelected }"
     >
 			<span
-          v-if="hasChildren"
-          @click="expanded = !expanded"
-          class="type"
+        v-if="hasChildren"
+        @click="expanded = !expanded"
+        class="type"
       >
 				{{ expanded ? '&#45;' : '&#43;' }}
 			</span>
@@ -17,12 +17,11 @@
     </div>
     <div v-if="expanded || node.id === 0">
       <TreeBrowser
-          v-for="item in node.children"
-          :key="item.id"
-          :node="item"
+        v-for="item in node.children"
+        :key="item.id"
+        :node="item"
       />
     </div>
-
   </div>
 </template>
 <script>
@@ -39,19 +38,6 @@ export default {
       expanded: false,
     }
   },
-  methods: {
-    ...mapActions({
-      loadId: "selectedcateg/loadId",
-      loadCategory: "selectedcateg/loadCategory",
-    }),
-    /*
-    * Update selected category Id in selectedcateg.js
-    * */
-    emitNode(value) {
-      this.loadId(value.id);
-      this.loadCategory(value);
-    },
-  },
   computed: {
     ...mapGetters({
       getId: "selectedcateg/getId",
@@ -65,7 +51,20 @@ export default {
       let category = this.getCategory;
       return category ? this.node.id === this.getCategory.id : false;
     }
-  }
+  },
+  methods: {
+    ...mapActions({
+      loadId: "selectedcateg/loadId",
+      loadCategory: "selectedcateg/loadCategory",
+    }),
+    /*
+    * Update selected category ID in selectedcateg.js
+    * */
+    emitNode(value) {
+      this.loadId(value.id);
+      this.loadCategory(value);
+    },
+  },
 }
 
 </script>
