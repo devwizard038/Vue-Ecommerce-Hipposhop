@@ -1,16 +1,16 @@
 [
  {
   "id": 1,
-  "title": "Placa gips carton tip A Rigips RB 12.5 x 1200 x 2600 mm",
+  "titleProduct": "Placa gips carton tip A Rigips RB 12.5 x 1200 x 2600 mm",
   "price": 36,
   "Attributes": "name:rigips,type:A,size:12.5x1200x1200",
   "unit": "buc",
   "category_id": "1,11",
-  "image": "https:\/\/storage0.dms.mpinteractiv.ro\/media\/1\/1481\/10387\/20161490\/1\/8constructii.jpg"
+  "image": "https://cdn.hornbach.ro/data/shop/D04/001/780/492/348/155/DV_8_10321017_09_4c_AT_20220607184654.jpg"
  },
  {
   "id": 2,
-  "title": "Placa gips carton tip D izolare acustica Rigips Fonic 12.5 x 1200 x 2600 mm",
+  "titleProduct": "Placa gips carton tip D izolare acustica Rigips Fonic 12.5 x 1200 x 2600 mm",
   "price": 60,
   "Attributes": "name:rigips,type:D,size:12.5x1200x1200",
   "unit": "buc",
@@ -19,16 +19,16 @@
  },
  {
   "id": 3,
-  "title": "Placa gips carton tip F protectie foc Rigips RF 12.5 x 1200 x 2600 mm",
+  "titleProduct": "Placa gips carton tip F protectie foc Rigips RF 12.5 x 1200 x 2600 mm",
   "price": 52,
   "Attributes": "name:rigips,type:F,size:12.5x1200x1200",
   "unit": "buc",
   "category_id": "1,11",
-  "image": "https:\/\/storage0.dms.mpinteractiv.ro\/media\/1\/1481\/10387\/20161490\/1\/8constructii.jpg"
+  "image": "https://cdn.hornbach.ro/data/shop/D04/001/780/492/272/521/DV_8_10206604_07_4c_AT_20220303134700.jpg"
  },
  {
   "id": 4,
-  "title": "Placa gips carton tip H protectie umiditate Rigips RBI 12.5 x 1200 x 2600 mm",
+  "titleProduct": "Placa gips carton tip H protectie umiditate Rigips RBI 12.5 x 1200 x 2600 mm",
   "price": 55,
   "Attributes": "name:rigips,type:H,size:12.5x1200x1200",
   "unit": "buc",
@@ -37,7 +37,7 @@
  },
  {
   "id": 5,
-  "title": "Placa gips carton mini tip A Rigips RB 12.5 x 600 x 2600 mm",
+  "titleProduct": "Placa gips carton mini tip A Rigips RB 12.5 x 600 x 2600 mm",
   "price": 36,
   "Attributes": "name:rigips,type:A,size:12.5x600x1200",
   "unit": "buc",
@@ -46,7 +46,7 @@
  },
  {
   "id": 6,
-  "title": "Placa gips carton mini tip D izolare acustica Rigips Fonic 12.5 x 600 x 2600 mm",
+  "titleProduct": "Placa gips carton mini tip D izolare acustica Rigips Fonic 12.5 x 600 x 2600 mm",
   "price": 60,
   "Attributes": "name:rigips,type:D,size:12.5x600x1200",
   "unit": "buc",
@@ -55,7 +55,7 @@
  },
  {
   "id": 7,
-  "title": "Placa gips carton mini tip F protectie foc Rigips RF 12.5 x 600 x 2600 mm",
+  "titleProduct": "Placa gips carton mini tip F protectie foc Rigips RF 12.5 x 600 x 2600 mm",
   "price": 52,
   "Attributes": "name:rigips,type:F,size:12.5x600x1200",
   "unit": "buc",
@@ -64,7 +64,7 @@
  },
  {
   "id": 8,
-  "title": "Placa gips carton mini tip H protectie umiditate Rigips RBI 12.5 x 600 x 2600 mm",
+  "titleProduct": "Placa gips carton mini tip H protectie umiditate Rigips RBI 12.5 x 600 x 2600 mm",
   "price": 55,
   "Attributes": "name:rigips,type:H,size:12.5x600x1200",
   "unit": "buc",
@@ -73,7 +73,7 @@
  },
  {
   "id": 9,
-  "title": "Glet CM 100",
+  "titleProduct": "Glet CM 100",
   "price": 26,
   "Attributes": null,
   "unit": "buc",
@@ -82,7 +82,7 @@
  },
  {
   "id": 10,
-  "title": "Mortar",
+  "titleProduct": "Mortar",
   "price": 29,
   "Attributes": null,
   "unit": "buc",
@@ -91,7 +91,7 @@
  },
  {
   "id": 11,
-  "title": "Șapă E 225",
+  "titleProduct": "Șapă E 225",
   "price": 20,
   "Attributes": null,
   "unit": "buc",
@@ -100,7 +100,7 @@
  },
  {
   "id": 12,
-  "title": "Adeziv poliuretanic",
+  "titleProduct": "Adeziv poliuretanic",
   "price": 27,
   "Attributes": null,
   "unit": "buc",
@@ -109,7 +109,7 @@
  },
  {
   "id": 13,
-  "title": "Mașină de găurit DHP48ZZ",
+  "titleProduct": "Mașină de găurit DHP48ZZ",
   "price": 267,
   "Attributes": null,
   "unit": "buc",
@@ -118,7 +118,7 @@
  },
  {
   "id": 14,
-  "title": "Șurubelniță cu acumulator Go 2.0",
+  "titleProduct": "Șurubelniță cu acumulator Go 2.0",
   "price": 361,
   "Attributes": null,
   "unit": "buc",
@@ -127,7 +127,7 @@
  },
  {
   "id": 15,
-  "title": "Aparat de spălat cu preiune EasyAquatak 110",
+  "titleProduct": "Aparat de spălat cu preiune EasyAquatak 110",
   "price": 318,
   "Attributes": null,
   "unit": "buc",
@@ -136,7 +136,7 @@
  },
  {
   "id": 16,
-  "title": "Incărcător + acumulator Li-Ion 18v 2.5 Ah",
+  "titleProduct": "Incărcător + acumulator Li-Ion 18v 2.5 Ah",
   "price": 214,
   "Attributes": null,
   "unit": "buc",
@@ -145,7 +145,7 @@
  },
  {
   "id": 17,
-  "title": "Nivelă cu laser STHT",
+  "titleProduct": "Nivelă cu laser STHT",
   "price": 197,
   "Attributes": null,
   "unit": "buc",
@@ -154,7 +154,7 @@
  },
  {
   "id": 18,
-  "title": "Invertor sudură",
+  "titleProduct": "Invertor sudură",
   "price": 619,
   "Attributes": null,
   "unit": "buc",
@@ -163,7 +163,7 @@
  },
  {
   "id": 19,
-  "title": "Mașină de tăiat gresie",
+  "titleProduct": "Mașină de tăiat gresie",
   "price": 399,
   "Attributes": null,
   "unit": "buc",
@@ -172,7 +172,7 @@
  },
  {
   "id": 20,
-  "title": "Mistrie trapez",
+  "titleProduct": "Mistrie trapez",
   "price": 11,
   "Attributes": null,
   "unit": "buc",
@@ -181,7 +181,7 @@
  },
  {
   "id": 21,
-  "title": "Pistol silicon",
+  "titleProduct": "Pistol silicon",
   "price": 25,
   "Attributes": null,
   "unit": "buc",
@@ -190,7 +190,7 @@
  },
  {
   "id": 22,
-  "title": "Drisca plastic",
+  "titleProduct": "Drisca plastic",
   "price": 12,
   "Attributes": null,
   "unit": "buc",
@@ -199,7 +199,7 @@
  },
  {
   "id": 23,
-  "title": "Raft metalic 189x90x30",
+  "titleProduct": "Raft metalic 189x90x30",
   "price": 194,
   "Attributes": null,
   "unit": "buc",
@@ -208,7 +208,7 @@
  },
  {
   "id": 24,
-  "title": "Priză simplă 16A",
+  "titleProduct": "Priză simplă 16A",
   "price": 8,
   "Attributes": null,
   "unit": "buc",
@@ -217,7 +217,7 @@
  },
  {
   "id": 25,
-  "title": "Priză dublă 16A",
+  "titleProduct": "Priză dublă 16A",
   "price": 10,
   "Attributes": null,
   "unit": "buc",
@@ -226,7 +226,7 @@
  },
  {
   "id": 26,
-  "title": "Înrerupător simplu 10A",
+  "titleProduct": "Înrerupător simplu 10A",
   "price": 9,
   "Attributes": null,
   "unit": "buc",
@@ -235,7 +235,7 @@
  },
  {
   "id": 27,
-  "title": "Întrerupător dublu cu indicator luminos",
+  "titleProduct": "Întrerupător dublu cu indicator luminos",
   "price": 11,
   "Attributes": null,
   "unit": "buc",
@@ -244,7 +244,7 @@
  },
  {
   "id": 28,
-  "title": "Tablou electric apartament 4 module",
+  "titleProduct": "Tablou electric apartament 4 module",
   "price": 20,
   "Attributes": null,
   "unit": "buc",
@@ -253,7 +253,7 @@
  },
  {
   "id": 29,
-  "title": "Tablou electric 24 de module",
+  "titleProduct": "Tablou electric 24 de module",
   "price": 146,
   "Attributes": null,
   "unit": "buc",
@@ -262,7 +262,7 @@
  },
  {
   "id": 30,
-  "title": "Tablou electric 12 module",
+  "titleProduct": "Tablou electric 12 module",
   "price": 41,
   "Attributes": null,
   "unit": "buc",
@@ -271,7 +271,7 @@
  },
  {
   "id": 31,
-  "title": "Conectori 10 poli 2.5 mmp",
+  "titleProduct": "Conectori 10 poli 2.5 mmp",
   "price": 5,
   "Attributes": null,
   "unit": "buc",
@@ -280,7 +280,7 @@
  },
  {
   "id": 32,
-  "title": "Conectori 10 poli 6 mmp",
+  "titleProduct": "Conectori 10 poli 6 mmp",
   "price": 7,
   "Attributes": null,
   "unit": "buc",
@@ -289,7 +289,7 @@
  },
  {
   "id": 33,
-  "title": "Copex PVC 20mm",
+  "titleProduct": "Copex PVC 20mm",
   "price": 2,
   "Attributes": null,
   "unit": "m",
@@ -298,7 +298,7 @@
  },
  {
   "id": 34,
-  "title": "Cablu electric 0.75 mmp",
+  "titleProduct": "Cablu electric 0.75 mmp",
   "price": 2,
   "Attributes": null,
   "unit": "m",
@@ -307,7 +307,7 @@
  },
  {
   "id": 35,
-  "title": "Cablu electric 1.5 mmp",
+  "titleProduct": "Cablu electric 1.5 mmp",
   "price": 4,
   "Attributes": null,
   "unit": "m",
@@ -316,7 +316,7 @@
  },
  {
   "id": 36,
-  "title": "Prelungitor cu derulare 4 prize 25m",
+  "titleProduct": "Prelungitor cu derulare 4 prize 25m",
   "price": 219,
   "Attributes": null,
   "unit": "buc",
@@ -325,7 +325,7 @@
  },
  {
   "id": 37,
-  "title": "Prelungitor 4 prize 3 m",
+  "titleProduct": "Prelungitor 4 prize 3 m",
   "price": 24,
   "Attributes": null,
   "unit": "buc",
@@ -334,7 +334,7 @@
  },
  {
   "id": 38,
-  "title": "Prelungitor 3 prize 5 m",
+  "titleProduct": "Prelungitor 3 prize 5 m",
   "price": 30,
   "Attributes": null,
   "unit": "buc",
@@ -343,7 +343,7 @@
  },
  {
   "id": 39,
-  "title": "Țeavă PP canalizare",
+  "titleProduct": "Țeavă PP canalizare",
   "price": 11,
   "Attributes": null,
   "unit": "m",
@@ -352,7 +352,7 @@
  },
  {
   "id": 40,
-  "title": "Racord flexibil 1\/2 600 mm",
+  "titleProduct": "Racord flexibil 1\/2 600 mm",
   "price": 7,
   "Attributes": null,
   "unit": "buc",
@@ -361,7 +361,7 @@
  },
  {
   "id": 41,
-  "title": "Robinet ap[ PEHD",
+  "titleProduct": "Robinet ap[ PEHD",
   "price": 11,
   "Attributes": null,
   "unit": "buc",
@@ -370,7 +370,7 @@
  },
  {
   "id": 42,
-  "title": "Robinet de trecere 1\/2",
+  "titleProduct": "Robinet de trecere 1\/2",
   "price": 7,
   "Attributes": null,
   "unit": "buc",
@@ -379,7 +379,7 @@
  },
  {
   "id": 43,
-  "title": "Țeavă apă PEHD",
+  "titleProduct": "Țeavă apă PEHD",
   "price": 2,
   "Attributes": null,
   "unit": "m",
@@ -388,7 +388,7 @@
  },
  {
   "id": 44,
-  "title": "Placaj OBS 2500x1250 mm",
+  "titleProduct": "Placaj OBS 2500x1250 mm",
   "price": 80,
   "Attributes": null,
   "unit": "buc",
@@ -397,7 +397,7 @@
  },
  {
   "id": 45,
-  "title": "Lambriu 3000x105x21 mm",
+  "titleProduct": "Lambriu 3000x105x21 mm",
   "price": 106,
   "Attributes": null,
   "unit": "buc",
@@ -406,7 +406,7 @@
  },
  {
   "id": 46,
-  "title": "Profil pin termottratat 3000x100x21",
+  "titleProduct": "Profil pin termottratat 3000x100x21",
   "price": 223,
   "Attributes": null,
   "unit": "buc",
@@ -415,7 +415,7 @@
  },
  {
   "id": 47,
-  "title": "Riglă rindeluită 2400x44x7",
+  "titleProduct": "Riglă rindeluită 2400x44x7",
   "price": 26,
   "Attributes": null,
   "unit": "buc",
@@ -424,7 +424,7 @@
  },
  {
   "id": 48,
-  "title": "Perdea voal alb",
+  "titleProduct": "Perdea voal alb",
   "price": 11,
   "Attributes": null,
   "unit": "m",
@@ -433,7 +433,7 @@
  },
  {
   "id": 49,
-  "title": "Draperie poliester dark-brown",
+  "titleProduct": "Draperie poliester dark-brown",
   "price": 31,
   "Attributes": null,
   "unit": "m",
@@ -442,7 +442,7 @@
  },
  {
   "id": 50,
-  "title": "Ramă foto 15x10",
+  "titleProduct": "Ramă foto 15x10",
   "price": 8,
   "Attributes": null,
   "unit": "buc",
@@ -451,7 +451,7 @@
  },
  {
   "id": 51,
-  "title": "Ceas perete rotund plastic negru 30 cm",
+  "titleProduct": "Ceas perete rotund plastic negru 30 cm",
   "price": 40,
   "Attributes": null,
   "unit": "buc",
@@ -460,7 +460,7 @@
  },
  {
   "id": 52,
-  "title": "Bec LED 5W 500lm 3000K E14",
+  "titleProduct": "Bec LED 5W 500lm 3000K E14",
   "price": 7,
   "Attributes": "type: LED, power: 5W, lumin: 500lm, temp: 3000K, socket: E14",
   "unit": "buc",
@@ -469,7 +469,7 @@
  },
  {
   "id": 53,
-  "title": "Bec LED 10W 1000lm 4000K E27",
+  "titleProduct": "Bec LED 10W 1000lm 4000K E27",
   "price": 22,
   "Attributes": null,
   "unit": "buc",
@@ -478,7 +478,7 @@
  },
  {
   "id": 54,
-  "title": "Plafonieră LED 50W caldă\/rece alb-mat",
+  "titleProduct": "Plafonieră LED 50W caldă\/rece alb-mat",
   "price": 429,
   "Attributes": null,
   "unit": "buc",
@@ -487,7 +487,7 @@
  },
  {
   "id": 55,
-  "title": "Plafonieră tip lustră 2xE27 crom-maro-alb",
+  "titleProduct": "Plafonieră tip lustră 2xE27 crom-maro-alb",
   "price": 90,
   "Attributes": null,
   "unit": "buc",
@@ -496,7 +496,7 @@
  },
  {
   "id": 56,
-  "title": "Suspensie 1xE14 negru-mat",
+  "titleProduct": "Suspensie 1xE14 negru-mat",
   "price": 86,
   "Attributes": null,
   "unit": "buc",
@@ -505,7 +505,7 @@
  },
  {
   "id": 57,
-  "title": "Parchet laminat 8 mm dark-oak",
+  "titleProduct": "Parchet laminat 8 mm dark-oak",
   "price": 30,
   "Attributes": null,
   "unit": "m2",
@@ -514,7 +514,7 @@
  },
  {
   "id": 58,
-  "title": "Parchet laminat 12 mm stejar",
+  "titleProduct": "Parchet laminat 12 mm stejar",
   "price": 56,
   "Attributes": null,
   "unit": "m2",
@@ -523,7 +523,7 @@
  },
  {
   "id": 59,
-  "title": "Mochetă antracit cl. 22 4 m dark-blue",
+  "titleProduct": "Mochetă antracit cl. 22 4 m dark-blue",
   "price": 21,
   "Attributes": null,
   "unit": "m2",
@@ -532,7 +532,7 @@
  },
  {
   "id": 60,
-  "title": "Silicon sanitar transparent interior 280 ml",
+  "titleProduct": "Silicon sanitar transparent interior 280 ml",
   "price": 13,
   "Attributes": null,
   "unit": "buc",
@@ -541,7 +541,7 @@
  },
  {
   "id": 61,
-  "title": "Bandă mascare tesa albă 50 mm",
+  "titleProduct": "Bandă mascare tesa albă 50 mm",
   "price": 15,
   "Attributes": null,
   "unit": "buc",
@@ -550,7 +550,7 @@
  },
  {
   "id": 62,
-  "title": "Gresie interior bej tip parchet 20x61 cm",
+  "titleProduct": "Gresie interior bej tip parchet 20x61 cm",
   "price": 42,
   "Attributes": null,
   "unit": "m2",
@@ -559,7 +559,7 @@
  },
  {
   "id": 63,
-  "title": "Gresie baie 43x43 bej",
+  "titleProduct": "Gresie baie 43x43 bej",
   "price": 59,
   "Attributes": null,
   "unit": "m2",
@@ -568,7 +568,7 @@
  },
  {
   "id": 64,
-  "title": "Fainta baie\/bucător 50 cm",
+  "titleProduct": "Fainta baie\/bucător 50 cm",
   "price": 44,
   "Attributes": null,
   "unit": "m2",
@@ -577,7 +577,7 @@
  },
  {
   "id": 65,
-  "title": "Chit de rosturi alb 2kg",
+  "titleProduct": "Chit de rosturi alb 2kg",
   "price": 13,
   "Attributes": null,
   "unit": "buc",
@@ -586,7 +586,7 @@
  },
  {
   "id": 66,
-  "title": "Dală rezidențială 400x400x50 mm gri",
+  "titleProduct": "Dală rezidențială 400x400x50 mm gri",
   "price": 11,
   "Attributes": null,
   "unit": "buc",
@@ -595,7 +595,7 @@
  },
  {
   "id": 67,
-  "title": "Placă podea cu drenaj 400x33x400 mm verde",
+  "titleProduct": "Placă podea cu drenaj 400x33x400 mm verde",
   "price": 12,
   "Attributes": null,
   "unit": "buc",
@@ -604,7 +604,7 @@
  },
  {
   "id": 68,
-  "title": "Ghiveci din plastic patrat alb 15x15x14",
+  "titleProduct": "Ghiveci din plastic patrat alb 15x15x14",
   "price": 6,
   "Attributes": null,
   "unit": "buc",
@@ -613,7 +613,7 @@
  },
  {
   "id": 69,
-  "title": "Semințe gazon universal 1kg",
+  "titleProduct": "Semințe gazon universal 1kg",
   "price": 13,
   "Attributes": null,
   "unit": "buc",
@@ -622,7 +622,7 @@
  },
  {
   "id": 70,
-  "title": "Bocanci protecție cu bombeu metalic negru",
+  "titleProduct": "Bocanci protecție cu bombeu metalic negru",
   "price": 85,
   "Attributes": null,
   "unit": "buc",
@@ -631,7 +631,7 @@
  },
  {
   "id": 71,
-  "title": "Manuși DCT negre polister",
+  "titleProduct": "Manuși DCT negre polister",
   "price": 3,
   "Attributes": null,
   "unit": "buc",
@@ -640,7 +640,7 @@
  },
  {
   "id": 72,
-  "title": "Semimască filtrantă FFP2 NR cu supapă",
+  "titleProduct": "Semimască filtrantă FFP2 NR cu supapă",
   "price": 9,
   "Attributes": null,
   "unit": "buc",
@@ -649,7 +649,7 @@
  },
  {
   "id": 73,
-  "title": "Cască antifon flastic burete poliuretanic",
+  "titleProduct": "Cască antifon flastic burete poliuretanic",
   "price": 26,
   "Attributes": null,
   "unit": "buc",
@@ -658,7 +658,7 @@
  },
  {
   "id": 74,
-  "title": "Pantalon cu pieptar bumbac albastru-negru",
+  "titleProduct": "Pantalon cu pieptar bumbac albastru-negru",
   "price": 99,
   "Attributes": null,
   "unit": "buc",
@@ -667,7 +667,7 @@
  },
  {
   "id": 75,
-  "title": "Manuși sudură DCT",
+  "titleProduct": "Manuși sudură DCT",
   "price": 40,
   "Attributes": null,
   "unit": "buc",

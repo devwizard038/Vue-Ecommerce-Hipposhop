@@ -1,6 +1,8 @@
 // noinspection JSVoidFunctionReturnValueUsed
 import {FILTERS, SHOP_KEY, TABLES} from "@/const";
 import jsonProducts from "@/assets/products (4).json";
+// import {Product} from "@/models/Product";
+import {ProductTransformer} from "@/transformers/ProductTransformer";
 
 export default {
     namespaced: true,
@@ -22,37 +24,39 @@ export default {
     },
     actions: {
         loadProducts({commit}) {
-            let data = JSON.parse(
-                localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-            commit("setProducts", data);
+            // Promise
+            let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+
+            let products = [];
+            data.forEach(item => {
+                products.push(ProductTransformer.transform(item));
+            });
+            console.log(products);
+            commit("setProducts", products);
         },
         /**
          * Process data and save to localStorage
          * @param commit
          */
         saveProducts: function ({commit}) {
-            let data = JSON.parse(JSON.stringify(jsonProducts));
-            if (data) {
-                data.forEach(item => {
-                    let obj = {};
-                    if (item.Attributes != null) {
-                        // let attr = item.Attributes.split(',');
-                        // attr.forEach(n => {
-                        //     let tup = n.split(':');
-                        //     obj[tup[0]] = tup[1];
-                        // });
-                        // item.Attributes = obj;
+            localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
+            commit("setProducts", jsonProducts);
+        },
+        /**
+         * @param commit
+         * @param getters
+         * @param {Product} product
+         */
+        saveProduct: function ({ commit, getters }, { product }) {
+            let products = getters["getProducts"] ?? [];
 
-                        let attributes = item.Attributes.matchAll(/(?<name>[a-z]+):(?<value>[^,:]*)/g);
-                        for (let attr of attributes) {
-                            obj[attr.groups.name] = attr.groups.value;
-                        }
-                        item.Attributes = obj;
-                    }
-                });
-            }
-            localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(data));
-            commit("setProducts", data);
+            commit("setProducts", []); // vuejs2
+            products = products.filter(item => item.id !== product.id); // TODO: optimize find product by id and update it
+            products.push(product);
+            commit("setProducts", products); // vuejs2
+
+            let productsObj = product.map(item => ProductTransformer.reverseTransform(item));
+            localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(productsObj));
         },
         deleteProducts({commit}) {
             let data =
