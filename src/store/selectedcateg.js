@@ -4,7 +4,7 @@ export default {
         return {
             id: 0,
             category: null,
-            selected:null
+            selected: null
         };
     },
     getters: {
@@ -35,7 +35,7 @@ export default {
          * @param commit
          * @param data
          */
-        loadId({ commit }, data) {
+        loadId({commit}, data) {
             commit("setId", data);
         },
         /**
@@ -43,7 +43,7 @@ export default {
          * @param commit
          * @param data
          */
-        loadCategory({ commit }, data) {
+        loadCategory({commit}, data) {
             commit("setCategory", data);
         },
         /**
@@ -51,7 +51,7 @@ export default {
          * @param commit
          * @param data
          */
-        loadSelected({ commit }, data) {
+        loadSelected({commit}, data) {
             commit("setSelected", data);
         }
     },

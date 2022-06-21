@@ -5,20 +5,23 @@
       <hr/>
     </div>
     <div class="adminTableContainer">
-      <div class="adminTable" v-if="table != null">
-      <table>
-        <tr>
-          <th>Id</th>
-          <th>Title</th>
-          <th>Price</th>
-        </tr>
-        <!-- Loop and display table -->
-        <tr v-for="n in table" :key="n">
-          <td>{{ n.id }}</td>
-          <td>{{ n.title }}</td>
-          <td>{{ n.price }}</td>
-        </tr>
-      </table>
+      <div class="adminTable"
+           v-if="table != null">
+        <table>
+          <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Price</th>
+          </tr>
+          <!-- Loop and display table -->
+          <tr
+            v-for="n in table"
+            :key="n">
+            <td>{{ n.id }}</td>
+            <td>{{ n.title }}</td>
+            <td>{{ n.price }}</td>
+          </tr>
+        </table>
       </div>
       <h2 v-else>No data in localStorage</h2>
     </div>
@@ -38,7 +41,6 @@ export default {
   name: 'AdminPage',
   data() {
     return {
-      // Transfrom JSON data from string to object
       table: [],
     }
   },
@@ -86,7 +88,7 @@ export default {
 </script>
 
 <style scoped>
-.adminContainer{
+.adminContainer {
   height: 100%;
   width: 100%;
   display: grid;
@@ -97,7 +99,7 @@ export default {
         /auto;
 }
 
-.title{
+.title {
   width: 100%;
   height: auto;
   display: flex;
@@ -107,7 +109,7 @@ export default {
   grid-area: header;
 }
 
-.adminTableContainer{
+.adminTableContainer {
   grid-area: table;
   display: flex;
   justify-content: center;
@@ -117,12 +119,12 @@ export default {
   height: 100%;
 }
 
-.adminTable{
+.adminTable {
   overflow: auto;
   width: 80%;
 }
 
-.buttons{
+.buttons {
   grid-area: buttons;
   height: 100%;
   width: 100%;
@@ -169,8 +171,7 @@ table {
   width: 100%;
 }
 
-td,
-th {
+td, th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;

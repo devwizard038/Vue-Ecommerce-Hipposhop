@@ -1,5 +1,4 @@
 // noinspection JSVoidFunctionReturnValueUsed
-
 import {FILTERS, SHOP_KEY, TABLES} from "@/const";
 import jsonProducts from "@/assets/products (4).json";
 
@@ -31,7 +30,7 @@ export default {
          * Process data and save to localStorage
          * @param commit
          */
-        saveProducts({commit}) {
+        saveProducts: function ({commit}) {
             let data = JSON.parse(JSON.stringify(jsonProducts));
             if (data) {
                 data.forEach(item => {
@@ -66,7 +65,7 @@ export default {
          * @param state
          * @param param{String}
          */
-        sortProducts({ state }, param) {
+        sortProducts({state}, param) {
 
             switch (Number(param)) {
                 case FILTERS.PRICE_ASC:
@@ -106,7 +105,7 @@ export default {
          * @param commit
          * @param searched {String}
          */
-        searchProduct({ commit }, searched) {
+        searchProduct({commit}, searched) {
             if (!searched) {
                 let local = JSON.parse(
                     localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));

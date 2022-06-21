@@ -1,5 +1,4 @@
 // noinspection JSVoidFunctionReturnValueUsed
-
 import { SHOP_KEY, TABLES } from "@/const";
 
 
@@ -52,7 +51,8 @@ export default {
     deleteCartItem({ commit, state }, data) {
       let newCart = localStorage.setItem(
         `${SHOP_KEY}-${TABLES.CART}`,
-        JSON.stringify(state.cartList.filter(n => n.id !== data.id))
+        JSON.stringify(
+            state.cartList.filter(n => n.id !== data.id))
       );
       commit("setCart", newCart);
     },
