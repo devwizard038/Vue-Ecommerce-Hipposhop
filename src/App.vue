@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import ShoppingCart from "@/components/ShoppingCart.vue";
+import ShoppingCart from "@/components/ShoppingCartComp.vue";
 import {mapActions, mapGetters} from "vuex";
 
 
