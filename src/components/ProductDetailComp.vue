@@ -5,7 +5,9 @@
         <p @click="closeModal()">&#9747;</p>
       </div>
       <div class="image">
-        <img :src="this.getDetails.image" :alt="this.getDetails.title"/>
+        <img
+          :src="this.getDetails.image"
+          :alt="this.getDetails.title"/>
       </div>
       <div class="modalDetailsContainer">
         <div class="title">
@@ -21,35 +23,47 @@
                   type="number"
                   min="0"
                   v-model.number="quantity"/></p>
-                <transition
-                    mode="in-out"
-                    enter-active-class="animate__animated animate__fadeIn"
-                    leave-active-class="animate__animated animate__fadeOut"
-                >
-                  <p v-if="this.validQuantity" class="invalidQty">Selectati o cantitate !</p>
-                </transition>
+              <transition
+                mode="in-out"
+                enter-active-class="animate__animated animate__fadeIn"
+                leave-active-class="animate__animated animate__fadeOut"
+              >
+                <p
+                  v-if="this.validQuantity"
+                  class="invalidQty"
+                >Selectati o cantitate !</p>
+              </transition>
             </div>
           </div>
-          <div class="variantsContainer" v-if="this.getDetails.Attributes">
+          <div
+            class="variantsContainer"
+            v-if="this.getDetails.Attributes"
+          >
             <p style="text-align: center">Tip</p>
             <div>
               <button
-								v-for="items in variantsTypeList"
-								@click="loadDetails(items)"
-								:class="items.id != this.getDetails.id ? 'variantsBtn' : 'selected'" :key="items.Attributes.name"
-							>
+                v-for="items in variantsTypeList"
+                @click="loadDetails(items)"
+                :class="items.id !== this.getDetails.id ? 'variantsBtn' : 'selected'"
+                :key="items.Attributes.name"
+              >
                 {{ items.Attributes.type }}
               </button>
             </div>
             <p style="text-align: center">Marime</p>
             <div>
-              <button v-for="items in variantsSizeList" @click="loadDetails(items)"
-								:class="items.id !=this.getDetails.id ? 'variantsBtn' : 'selected'" :key="items.Attributes.name">
+              <button
+                v-for="items in variantsSizeList"
+                @click="loadDetails(items)"
+                :class="items.id !== this.getDetails.id ? 'variantsBtn' : 'selected'"
+                :key="items.Attributes.name">
                 {{ items.Attributes.size }}
               </button>
             </div>
           </div>
-          <button class="addBtn" @click="addToCart(this.getDetails,this.quantity)">
+          <button
+            class="addBtn"
+            @click="addToCart(this.getDetails,this.quantity)">
             ADD TO CART
           </button>
         </div>
@@ -71,19 +85,57 @@
     </div>
   </div>
 </template>
-
 <script>
 
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-  emits: ['closeModal', 'addToCart'],
+  name: 'ProductDetailComponent',
+  emits: {
+    // null -> No validation needed
+    closeModal: null,
+    addToCart: null,
+  },
   data() {
     return {
       quantity: 0,
       validQuantity: false,
-
     }
+  },
+  computed: {
+    ...mapGetters({
+      getProducts: "products/getProducts",
+      getDetails: "productDetail/getDetails"
+    }),
+    /**
+     * Filter TYPE for same SIZE objects
+     * @returns {Object}
+     */
+    variantsTypeList() {
+      if (this.getDetails.Attributes) {
+        return this.getProducts.filter(item =>
+          item.Attributes != null
+          && item.Attributes.size === this.getDetails.Attributes.size
+          && item.Attributes.name === this.getDetails.Attributes.name
+        );
+      }
+
+      return null;
+    },
+    /**
+     * Filter SIZE for same TYPE objects
+     * @returns {Object}
+     */
+    variantsSizeList() {
+      if (this.getDetails.Attributes) {
+        let variantList = this.getProducts.filter(item =>
+          item.Attributes != null
+          && item.Attributes.type === this.getDetails.Attributes.type
+          && item.Attributes.name === this.getDetails.Attributes.name
+        )
+        return variantList
+      } else return null
+    },
   },
   methods: {
     ...mapActions({
@@ -99,47 +151,14 @@ export default {
         this.loadSelected(item);
         this.quantity = 0;
         this.validQuantity = false
-				this.$emit('addToCart', item, quantity);
+        this.$emit('addToCart', item, quantity);
       } else {
         this.validQuantity = true;
-        setTimeout(()=>{this.validQuantity = false}, 4000)
+        setTimeout(() => {
+          this.validQuantity = false
+        }, 4000)
       }
     }
-  },
-  computed: {
-    ...mapGetters({
-      getProducts: "products/getProducts",
-      getDetails: "productDetail/getDetails"
-    }),
-    /**
-     * Filter TYPE for same SIZE objects
-     * @returns {Object}
-     */
-    variantsTypeList() {
-      if (this.getDetails.Attributes) {
-        return this.getProducts.filter(item =>
-					item.Attributes != null
-					&& item.Attributes.size === this.getDetails.Attributes.size
-					&& item.Attributes.name === this.getDetails.Attributes.name
-        );
-      }
-
-			return null;
-    },
-    /**
-     * Filter SIZE for same TYPE objects
-     * @returns {Object}
-     */
-    variantsSizeList() {
-      if (this.getDetails.Attributes) {
-        let variantList = this.getProducts.filter(item =>
-            item.Attributes != null
-            && item.Attributes.type === this.getDetails.Attributes.type
-            && item.Attributes.name === this.getDetails.Attributes.name
-        )
-        return variantList
-      } else return null
-    },
   }
 }
 </script>
@@ -149,11 +168,11 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-.qtyContainer{
+.qtyContainer {
   position: relative;
 }
 
-.qtyContainer .invalidQty{
+.qtyContainer .invalidQty {
   width: 20ch;
   position: absolute;
   font-size: 1rem;
@@ -318,7 +337,6 @@ export default {
   cursor: pointer;
 }
 
-
 .pricingQty {
   display: flex;
   width: 40%;
@@ -354,6 +372,4 @@ export default {
 .description h3 {
   text-align: center;
 }
-
-
 </style>

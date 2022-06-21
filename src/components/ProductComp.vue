@@ -3,34 +3,49 @@
   <div class="cardContainer">
     <div class="card">
       <img
-          v-if="image === null"
-          src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
-          alt="{{ name }}"
+        v-if="image === null"
+        src="http://www.womens-southerngolfassociation.org/wp-content/uploads/2021/10/Image-Not-Available.png"
+        alt="{{ name }}"
       />
-      <img v-else :src="image" v-bind:alt="name"/>
+      <img
+        v-else
+        :src="image"
+        :alt="name"/>
       <div class="containerProduct">
-        <p class="productName" @click="toggleModal()">{{ name }}</p>
+        <p
+          class="productName"
+          @click="toggleModal()"
+        >{{ name }}</p>
       </div>
-      <p class="title"><b>Preț:</b>&nbsp; {{ price }} / {{ unit }}</p>
+      <p class="title">
+        <b>Preț:</b>&nbsp; {{ price }} / {{ unit }}
+      </p>
       <div class="qtyContainer">
         <p>
           <b>Cantitate:</b> &nbsp;
           <input
-              class="inputCell"
-              type="number"
-              min="0"
-              v-model.number="quantity"
+            class="inputCell"
+            type="number"
+            min="0"
+            v-model.number="quantity"
           />
         </p>
         <transition
-            mode="in-out"
-            enter-active-class="animate__animated animate__fadeIn"
-            leave-active-class="animate__animated animate__fadeOut"
+          mode="in-out"
+          enter-active-class="animate__animated animate__fadeIn"
+          leave-active-class="animate__animated animate__fadeOut"
         >
-          <p v-if="this.validQuantity" class="invalidQty">Selectati o cantitate !</p>
+          <p
+            v-if="this.validQuantity"
+            class="invalidQty"
+          >Selectati o cantitate !</p>
         </transition>
       </div>
-      <button class="addToCart" @click="addToCart(product)">Add to cart</button>
+      <button
+        class="addToCart"
+        @click="addToCart(product)"
+      >Add to cart
+      </button>
     </div>
   </div>
 </template>
@@ -40,12 +55,42 @@
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-  props: ["image", "name", "price", "unit", "product", "showModal"],
-  emits: ['toggleModal', 'addToCart'],
+  name: 'ProductComp',
+  props: {
+    image: {
+      type: String,
+      default: null
+    },
+    name: {
+      type: String,
+      default: 'Nume produs',
+    },
+    price: {
+      type: Number,
+      default: 0,
+    },
+    unit: {
+      type: String,
+      default: 'buc'
+    },
+    product: {
+      type: Object,
+      default: () => {
+      }
+    },
+    showModal: {
+      type: Boolean,
+      default: false,
+    }
+  },
+  emits: {
+    toggleModal: null,
+    addToCart: null,
+  },
   data() {
     return {
       quantity: 0,
-      validQuantity:false,
+      validQuantity: false,
     };
   },
   computed: {
@@ -72,16 +117,18 @@ export default {
      * @param item {Object}
      */
     addToCart(item) {
-      if ( this.quantity > 0 ) {
+      if (this.quantity > 0) {
         item.showMessage = false;
-				item.quantity = this.quantity;
-				this.quantity = 0;
+        item.quantity = this.quantity;
+        this.quantity = 0;
         this.loadSelected(item);
         this.validQuantity = false;
-				this.$emit('addToCart', item);
+        this.$emit('addToCart', item);
       } else {
         this.validQuantity = true;
-        setTimeout(()=>{this.validQuantity = false}, 4000)
+        setTimeout(() => {
+          this.validQuantity = false
+        }, 4000)
       }
 
     },
@@ -126,7 +173,7 @@ img {
   box-shadow: 4px 2px 2px gray;
 }
 
-.qtyContainer{
+.qtyContainer {
   position: relative;
 }
 
@@ -146,7 +193,7 @@ img {
   border: 2px solid #2095E1FF;
 }
 
-.qtyContainer .invalidQty{
+.qtyContainer .invalidQty {
   position: absolute;
   font-size: 1rem;
   color: red;

@@ -7,7 +7,7 @@
     <div class="categoriesContainer">
       <!-- Category data organised in a tree -->
       <TreeBrowser
-				:node="categoryTree"
+        :node="categoryTree"
       />
     </div>
   </div>
@@ -87,7 +87,7 @@ export default {
   height: 100%;
   width: 100%;
   grid-area: contentCategory;
-  overflow:auto;
+  overflow: auto;
 }
 
 .categoriesContainer::-webkit-scrollbar {

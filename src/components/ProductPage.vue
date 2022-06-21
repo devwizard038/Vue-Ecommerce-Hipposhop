@@ -4,21 +4,25 @@
       <h3>Products</h3>
       <hr/>
     </div>
-
     <div class="productContainer">
       <!-- Display: Selected category bred crumb -->
       <div class="breadCrumb">
-        <span v-for="item in breadcrumb" @click="emitNode(item)" :key="item.id">
+        <span
+          v-for="item in breadcrumb"
+          @click="emitNode(item)"
+          :key="item.id">
           >> {{ item.name ? item.name : item.title }}
         </span>
         <div class="filterList">
           <input
-              class="searchList"
-              type="text"
-              placeholder="Search.."
-              @input="this.searchProduct($event.target.value)"
+            class="searchList"
+            type="text"
+            placeholder="Search.."
+            @input="this.searchProduct($event.target.value)"
           >
-          <select class="sortList" @change="this.sortProducts($event.target.value)">
+          <select
+            class="sortList"
+            @change="this.sortProducts($event.target.value)">
             <option value=0>Default</option>
             <option :value="sortPriceAsc">Pret Ascendent</option>
             <option :value="sortPriceDesc">Pret Descendent</option>
@@ -29,33 +33,33 @@
 
       </div>
       <div
-				class="product"
-				ref="productsList"
-			>
-				<div
-					v-for="product in products"
-					:key="product.id"
-					:ref="'productsDetails' + product.id"
-					:data-id="product.id"
-					:data-img="product.image"
-				>
-					<ProductComp
-						:showModal="this.showModal"
-						@toggleModal="toggleModal"
-						@addToCart="addToCart"
-						:name="product.title"
-						:price="product.price"
-						:image="productImage(product.id)"
-						:unit="product.unit"
-						:product="product"
-					/>
-				</div>
+        class="product"
+        ref="productsList"
+      >
+        <div
+          v-for="product in products"
+          :key="product.id"
+          :ref="'productsDetails' + product.id"
+          :data-id="product.id"
+          :data-img="product.image"
+        >
+          <ProductComp
+            :showModal="this.showModal"
+            @toggleModal="toggleModal"
+            @addToCart="addToCart"
+            :name="product.title"
+            :price="product.price"
+            :image="productImage(product.id)"
+            :unit="product.unit"
+            :product="product"
+          />
+        </div>
       </div>
     </div>
     <ProductDetailComp
-        v-if="showModal"
-        @closeModal="closeModal"
-        @addToCart="addToCart"
+      v-if="showModal"
+      @closeModal="closeModal"
+      @addToCart="addToCart"
     />
   </div>
 </template>
@@ -67,19 +71,7 @@ import {mapActions, mapGetters} from "vuex";
 import {FILTERS} from "@/const";
 
 export default {
-	name: "ProductsComponent",
-  data() {
-    return {
-      showModal: false,
-      category: '',
-			sortPriceAsc: FILTERS.PRICE_ASC,
-      sortPriceDesc: FILTERS.PRICE_DESC,
-      sortAlphAsc: FILTERS.A_Z,
-      sortAlphDesc: FILTERS.Z_A,
-			intersectionObserver: null,
-			images: []
-    }
-  },
+  name: "ProductsPage",
   components: {
     ProductComp,
     ProductDetailComp
@@ -94,7 +86,21 @@ export default {
       default: () => [],
     },
   },
-  emits: ["showModal"],
+  emits: {
+    showModal: null,
+  },
+  data() {
+    return {
+      showModal: false,
+      category: '',
+      sortPriceAsc: FILTERS.PRICE_ASC,
+      sortPriceDesc: FILTERS.PRICE_DESC,
+      sortAlphAsc: FILTERS.A_Z,
+      sortAlphDesc: FILTERS.Z_A,
+      intersectionObserver: null,
+      images: []
+    }
+  },
   computed: {
     ...mapGetters({
       getProducts: "products/getProducts",
@@ -107,10 +113,10 @@ export default {
     products() {
       if (this.categoryId) {
         return this.getProducts.filter(
-            (product) =>
-                (String(product.category_id) + ",")
-                    .split(",")
-                    .includes(String(this.categoryId)) === true
+          (product) =>
+            (String(product.category_id) + ",")
+              .split(",")
+              .includes(String(this.categoryId)) === true
         );
       } else {
         return this.getProducts;
@@ -127,32 +133,30 @@ export default {
   mounted() {
     // Mounts LocalStorage list
     this.loadProducts();
-
-		let callback = (entries) => {
-				entries.forEach(entry => {
-					if (entry.isIntersecting) {
-						this.images[entry.target.dataset.id] = entry.target.dataset.img;
-					}
-				});
-		};
-
-		this.intersectionObserver = new IntersectionObserver(callback, {
-			root: this.$refs.productsList,
-			threshold: 1,
-		});
+    let callback = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.images[entry.target.dataset.id] = entry.target.dataset.img;
+        }
+      });
+    };
+    this.intersectionObserver = new IntersectionObserver(callback, {
+      root: this.$refs.productsList,
+      threshold: 1,
+    });
 
   },
-	updated() {
-		Object.entries(this.$refs).forEach(item => {
-			let target = item.at(1);
-			if (Array.isArray(target) && target.length) {
-				this.intersectionObserver.observe(target.at(0));
-			}
-		})
-	},
-	methods: {
+  updated() {
+    Object.entries(this.$refs).forEach(item => {
+      let target = item.at(1);
+      if (Array.isArray(target) && target.length) {
+        this.intersectionObserver.observe(target.at(0));
+      }
+    })
+  },
+  methods: {
     ...mapActions({
-      searchProduct:"products/searchProduct",
+      searchProduct: "products/searchProduct",
       sortProducts: "products/sortProducts",
       loadDetails: "productDetail/loadDetails",
       loadProducts: "products/loadProducts",
@@ -162,12 +166,12 @@ export default {
       loadId: "selectedcateg/loadId",
       loadCategory: "selectedcateg/loadCategory",
     }),
-		productImage(id) {
-			return this.images[id] ? this.images[id] : null;
-		},
+    productImage(id) {
+      return this.images[id] ? this.images[id] : null;
+    },
     /**
-    * Open details page and add item name to breadCrumb
-    */
+     * Open details page and add item name to breadCrumb
+     */
     toggleModal(item) {
       if (item !== undefined) {
         this.showModal = !this.showModal;
@@ -184,53 +188,27 @@ export default {
       }
     },
     /**
-    * @button: addToCart function
-    */
+     * @button: addToCart function
+     */
     addToCart(item) {
-
-			/**
+      /**
        * Catch error: if local storage cart is empty
        */
-			if (item.quantity) {
-
-				this.loadCart();
-				let localCart = this.getCart;
-
-				if (localCart === null) {
-					localCart = [item];
-				} else {
-					let currentProduct = localCart.find(product => product.id === item.id);
-					if (currentProduct) {
-						currentProduct.quantity += item.quantity;
-					} else {
-						localCart.push(item);
-					}
-				}
-
-				this.updateCart(localCart);
-			}
-
-      // if (localCart === null && item.quantity > 0) {
-      //   localCart = [];
-      //   localCart.push(item);
-      //   this.updateCart(localCart);
-      //   item.quantity = 0;
-      //   return;
-      // }
-      // if (item.quantity === 0) {
-      //   return;
-      // } else if (localCart.filter((product) => product.id === item.id).length
-      //     !== 0
-      // ) {
-      //   localCart.filter(
-      //       (product) => product.id === item.id)[0].quantity =
-      //       Number(localCart.filter((product) => product.id === item.id)[0]
-      //           .quantity) + item.quantity;
-      //   this.updateCart(localCart)
-      // } else {
-      //   localCart.push(item);
-      //   this.updateCart(localCart);
-      // }
+      if (item.quantity) {
+        this.loadCart();
+        let localCart = this.getCart;
+        if (localCart === null) {
+          localCart = [item];
+        } else {
+          let currentProduct = localCart.find(product => product.id === item.id);
+          if (currentProduct) {
+            currentProduct.quantity += item.quantity;
+          } else {
+            localCart.push(item);
+          }
+        }
+        this.updateCart(localCart);
+      }
     },
     /**
      * Sort: Display selected category clicked on BreadCrumb element.
@@ -263,7 +241,7 @@ export default {
   width: 100%;
 }
 
-.productContainer{
+.productContainer {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -280,7 +258,6 @@ export default {
   height: 100%;
   width: 100%;
   display: flex;
-  /*flex-direction: row;*/
   align-items: center;
   justify-content: center;
   grid-area: breadCrumb;
@@ -294,15 +271,15 @@ export default {
   color: #2095E1FF;
 }
 
-.searchList{
+.searchList {
   margin-left: auto;
-  /*margin-right: 2rem;*/
 }
-.filterList .sortList{
+
+.filterList .sortList {
   margin-left: 1rem;
 }
 
-.filterList{
+.filterList {
   margin-left: auto;
   margin-right: 2rem;
 }
@@ -347,10 +324,6 @@ li {
 
   .product::-webkit-scrollbar {
     width: 6px;
-  }
-
-  .product-box {
-    /*margin-left: 0.2rem;*/
   }
 }
 </style>
