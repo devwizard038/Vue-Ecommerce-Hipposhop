@@ -1,5 +1,4 @@
-
-import { createWebHistory, createRouter } from 'vue-router';
+import {createWebHistory, createRouter} from 'vue-router';
 
 import HomePage from "../views/HomePage";
 import AdminPage from "../views/AdminPage";
@@ -7,19 +6,19 @@ import AdminPage from "../views/AdminPage";
 
 const routes = [
     {
-        path:'/',
-        name:'home',
-        component:HomePage
+        path: '/',
+        name: 'home',
+        component: HomePage
     },
     {
-        path:'/admin',
-        name:'Admin',
-        component:AdminPage
+        path: '/admin',
+        name: 'Admin',
+        component: AdminPage
     }
 ];
 
 const router = createRouter({
-	history: createWebHistory(),
-	routes,
+    history: createWebHistory(),
+    routes,
 });
 export default router;

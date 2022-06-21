@@ -26,7 +26,11 @@ import {mapActions, mapGetters} from "vuex";
 
 
 export default {
-  components: {CategoryComp, ProductPage},
+  name:'HomePage',
+  components: {
+    CategoryComp,
+    ProductPage
+  },
   data() {
     return {
       categoryId: 0,
@@ -81,7 +85,6 @@ export default {
       this.breadCrumb = list;
     },
   }
-
 }
 </script>
 

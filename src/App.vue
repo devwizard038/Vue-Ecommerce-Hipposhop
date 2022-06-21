@@ -1,8 +1,8 @@
 <template>
   <!-- Shopping Cart -->
-    <div v-if="this.showCart === true">
-      <ShoppingCart @closeCart="closeCart"/>
-    </div>
+  <div v-if="this.showCart === true">
+    <ShoppingCart @closeCart="closeCart"/>
+  </div>
   <div class="appContainer">
     <nav class="navbar">
       <div class="brand-title">ShopCart.io</div>
@@ -12,8 +12,8 @@
         <span class="bar"></span>
       </div>
       <div
-          :class="{active: this.active}"
-          class="navbar-links"
+        :class="{active: this.active}"
+        class="navbar-links"
       >
         <ul>
           <li>
@@ -27,13 +27,13 @@
       </div>
     </nav>
     <transition
-        mode="in-out"
-        enter-active-class="animate__animated animate__fadeInDown"
-        leave-active-class="animate__animated animate__fadeOutUp"
+      mode="in-out"
+      enter-active-class="animate__animated animate__fadeInDown"
+      leave-active-class="animate__animated animate__fadeOutUp"
     >
       <p
-          class="popup"
-          v-if="this.selected != null"
+        class="popup"
+        v-if="this.selected != null"
       ><b>Ati adaugat in cos:</b>
         {{ this.selected.quantity }}/{{ this.selected.unit }} de "{{ this.selected.title }}"
       </p>
@@ -49,7 +49,10 @@ import {mapActions, mapGetters} from "vuex";
 
 
 export default {
-  components: {ShoppingCart},
+  name: 'App',
+  components: {
+    ShoppingCart
+  },
   data() {
     return {
       showCart: false,
@@ -63,8 +66,8 @@ export default {
       getSelected: "selectedcateg/getSelected"
     }),
     /**
-    * Display count of products in the cart
-    */
+     * Display count of products in the cart
+     */
     cartItems() {
       this.loadCart()
       return this.getCartCount
@@ -72,9 +75,6 @@ export default {
     selectedCart() {
       return this.getSelected
     }
-  },
-  mounted() {
-    this.loadCart()
   },
   watch: {
     selectedCart(nv) {
@@ -86,6 +86,9 @@ export default {
         this.selected = null
       }, 3000)
     }
+  },
+  mounted() {
+    this.loadCart()
   },
   methods: {
     ...mapActions({
@@ -114,6 +117,7 @@ html, body {
   height: 100%;
   width: 100%;
 }
+
 .popup {
   position: absolute;
   top: 4rem;
@@ -141,7 +145,6 @@ html, body {
     "content" 91%
     / 100%;
 }
-
 
 .navbar {
   display: flex;
@@ -177,7 +180,7 @@ html, body {
   color: white;
   padding: 1.4rem;
   display: block;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .navbar-links li:hover {

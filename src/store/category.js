@@ -1,5 +1,4 @@
 // noinspection JSVoidFunctionReturnValueUsed
-
 import {SHOP_KEY, TABLES} from "@/const";
 import jsonCategory from '../../src/assets/category.json';
 
