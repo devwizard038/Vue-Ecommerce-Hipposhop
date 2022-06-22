@@ -89,7 +89,6 @@ export default {
      * @returns {Object} - Shopping Cart from localStorage
      */
     computedCart() {
-      console.log(this.getCart)
       return this.getCart
     }
   },

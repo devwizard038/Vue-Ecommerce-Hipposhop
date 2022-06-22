@@ -4,7 +4,6 @@ export default {
         return {
             id: 0,
             category: null,
-            selected: null
         };
     },
     getters: {
@@ -14,9 +13,6 @@ export default {
         getCategory(state) {
             return state.category;
         },
-        getSelected(state) {
-            return state.selected;
-        },
     },
     mutations: {
         setId(state, data) {
@@ -24,9 +20,6 @@ export default {
         },
         setCategory(state, data) {
             state.category = data;
-        },
-        setSelected(state, data) {
-            state.selected = data;
         },
     },
     actions: {
@@ -46,13 +39,5 @@ export default {
         loadCategory({commit}, data) {
             commit("setCategory", data);
         },
-        /**
-         *
-         * @param commit
-         * @param data
-         */
-        loadSelected({commit}, data) {
-            commit("setSelected", data);
-        }
     },
 };

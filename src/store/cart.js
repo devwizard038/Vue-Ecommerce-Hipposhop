@@ -7,6 +7,7 @@ export default {
   state() {
     return {
       cartList: [],
+      selected: null
     };
   },
   getters: {
@@ -21,13 +22,19 @@ export default {
     },
     getCartPrice(state){
       let total=0;
-      state.cartList.forEach(item => total += item.quantity * item.price);
+      state.cartList.forEach(item => total += item.quantity * item._price);
       return total;
-    }
+    },
+    getSelected(state) {
+      return state.selected;
+    },
   },
   mutations: {
     setCart(state, data) {
       state.cartList = data;
+    },
+    setSelected(state, data) {
+      state.selected = data;
     },
   },
   actions: {
@@ -52,7 +59,7 @@ export default {
       let newCart = localStorage.setItem(
         `${SHOP_KEY}-${TABLES.CART}`,
         JSON.stringify(
-            state.cartList.filter(n => n.id !== data.id))
+            state.cartList.filter(n => n._id !== data._id))
       );
       commit("setCart", newCart);
     },
@@ -66,13 +73,21 @@ export default {
     modifyCart({commit, state}, { data, quantity}) {
       let oldCart = state.cartList;
       oldCart.forEach(item => {
-        if (item.id === data.id) {
+        if (item._id === data._id) {
           item.quantity = quantity;
         }
       });
       localStorage.setItem(`${SHOP_KEY}-${TABLES.CART}`,
           JSON.stringify(oldCart));
       commit("setCart", oldCart);
+    },
+    /**
+     *
+     * @param commit
+     * @param data
+     */
+    loadSelected({commit}, data) {
+      commit("setSelected", data);
     },
   },
 };

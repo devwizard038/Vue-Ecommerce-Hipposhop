@@ -112,6 +112,7 @@ export default {
     //  Retrieve list from LocalStorage.
     products() {
       if (this.categoryId) {
+
         return this.getProducts.filter(
           (product) =>
             (String(product.category_id) + ",")
@@ -146,6 +147,7 @@ export default {
       threshold: 0,
     });
   },
+
   updated() {
     Object.entries(this.$refs).forEach(item => {
       let target = item.at(1);
@@ -200,8 +202,9 @@ export default {
           localCart = [item];
         } else {
           let currentProduct = localCart.find(
-            product => product.id === item.id
+            product => product._id === item._id
           );
+
           if (currentProduct) {
             currentProduct.quantity += item.quantity;
           } else {

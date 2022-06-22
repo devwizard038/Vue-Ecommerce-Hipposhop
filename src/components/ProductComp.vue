@@ -101,7 +101,7 @@ export default {
   methods: {
     ...mapActions({
       loadDetails: "productDetail/loadDetails",
-      loadSelected: "selectedcateg/loadSelected"
+      loadSelected: "cart/loadSelected"
     }),
 
     /**

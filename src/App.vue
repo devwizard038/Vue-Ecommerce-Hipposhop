@@ -71,7 +71,7 @@ export default {
   computed: {
     ...mapGetters({
       getCartCount: "cart/getCartCount",
-      getSelected: "selectedcateg/getSelected"
+      getSelected: "cart/getSelected"
     }),
     /**
      * Display count of products in the cart
@@ -101,7 +101,7 @@ export default {
   methods: {
     ...mapActions({
       loadCart: "cart/loadCart",
-      loadSelected: "selectedcateg/loadSelected",
+      loadSelected: "cart/loadSelected",
     }),
     closeCart() {
       this.showCart = false;

@@ -6,8 +6,8 @@
       </div>
       <div class="image">
         <img
-          :src="this.getDetails.image"
-          :alt="this.getDetails.title"/>
+          :src="this.getDetails._image"
+          :alt="this.getDetails._title"/>
       </div>
       <div class="modalDetailsContainer">
         <div class="title">
@@ -37,7 +37,7 @@
           </div>
           <div
             class="variantsContainer"
-            v-if="this.getDetails.Attributes"
+            v-if="Object.keys(this.getDetails.Attributes).length > 0"
           >
             <p style="text-align: center">Tip</p>
             <div>
@@ -58,8 +58,8 @@
                 @click="loadDetails(items)"
                 :class="items.id !== this.getDetails.id
                 ? 'variantsBtn' : 'selected'"
-                :key="items.Attributes.name">
-                {{ items.Attributes.size }}
+                :key="items._Attributes.name">
+                {{ items._Attributes.size }}
               </button>
             </div>
           </div>
@@ -114,9 +114,9 @@ export default {
      * @returns {Object}
      */
     variantsTypeList() {
-      if (this.getDetails.Attributes) {
+      if (Object.keys(this.getDetails.Attributes).length > 0) {
         return this.getProducts.filter(item =>
-          item.Attributes != null
+          item._Attributes != null
           && item.Attributes.size === this.getDetails.Attributes.size
           && item.Attributes.name === this.getDetails.Attributes.name
         );
@@ -129,7 +129,7 @@ export default {
      * @returns {Object}
      */
     variantsSizeList() {
-      if (this.getDetails.Attributes) {
+      if (Object.keys(this.getDetails.Attributes).length > 0) {
         let variantList = this.getProducts.filter(item =>
           item.Attributes != null
           && item.Attributes.type === this.getDetails.Attributes.type
@@ -142,18 +142,19 @@ export default {
   methods: {
     ...mapActions({
       loadDetails: "productDetail/loadDetails",
-      loadSelected: "selectedcateg/loadSelected"
+      loadSelected: "cart/loadSelected"
     }),
     closeModal() {
       this.$emit('closeModal');
     },
-    addToCart(item, quantity) {
-      if (quantity > 0) {
+    addToCart(item) {
+      if (this.quantity > 0) {
         item.showMessage = false;
-        this.loadSelected(item);
+        item.quantity = this.quantity;
         this.quantity = 0;
-        this.validQuantity = false
-        this.$emit('addToCart', item, quantity);
+        this.loadSelected(item);
+        this.validQuantity = false;
+        this.$emit('addToCart', item);
       } else {
         this.validQuantity = true;
         setTimeout(() => {
