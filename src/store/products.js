@@ -28,10 +28,9 @@ export default {
             let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
 
             let products = [];
-            data.forEach(item => {
+            if (data !== null) data.forEach(item => {
                 products.push(ProductTransformer.transform(item));
             });
-            console.log(products);
             commit("setProducts", products);
         },
         /**
@@ -118,7 +117,6 @@ export default {
                 let text = JSON.parse(
                     localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
                 let found = text.filter((item) => item.title.toLowerCase().includes(searched.toLowerCase()));
-
                 commit("setProducts", found);
             }
         }

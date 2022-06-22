@@ -21,9 +21,11 @@ export class ProductTransformer {
 		return {
 			id: product.id,
 			image: product.image,
+			price: product.price,
 			title: product.title,
-			// id: product.id,
-			// id: product.id,
+			unit: product.unit,
+			attributes: product.Attributes,
+			categoryId: product.category_id,
 		};
 	}
 }
