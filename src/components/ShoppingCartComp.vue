@@ -11,29 +11,29 @@
       >
         <div
           v-for="item in this.computedCart"
-          :key="item.id"
+          :key="item._id"
         >
           <div class="messageBox">
             <ShopCartMessageComp
               v-if="item.showMessage === true"
-              :itemName="item.title"
+              :itemName="item._title"
               :deleteConfirm="deleteConfirm"
               :itemToDelete="item"
             />
           </div>
           <div class="itemList">
             <img
-              v-if="item.image === null"
+              v-if="item._image === null"
               src="../assets/images/no_image_available.jpg"
-              alt="{{ item.name }}"
+              alt="{{ item._name }}"
             />
             <img
               v-else
-              :src="item.image"
-              :alt="item.name"
+              :src="item._image"
+              :alt="item._name"
             />
-            <p class="title">{{ item.title }}</p>
-            <p class="price">{{ item.price }}$</p>
+            <p class="title">{{ item._title }}</p>
+            <p class="price">{{ item._price }}$</p>
             <p class="price"><input
               type="number"
               min="1"
@@ -41,7 +41,7 @@
               @input="event => this.modifyCart({
               data:item, quantity:Number(event.target.value)})"
             >
-              {{ item.unit }}
+              {{ item._unit }}
             </p>
             <a @click="deleteClick(item)">&#9747;</a>
           </div>
@@ -89,6 +89,7 @@ export default {
      * @returns {Object} - Shopping Cart from localStorage
      */
     computedCart() {
+      console.log(this.getCart)
       return this.getCart
     }
   },
