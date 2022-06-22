@@ -4,26 +4,37 @@
       <h1>Admin Page</h1>
       <hr/>
     </div>
+
     <div class="adminTableContainer">
-      <div class="adminTable"
-           v-if="table != null">
-        <table>
-          <tr>
-            <th>Id</th>
-            <th>Title</th>
-            <th>Price</th>
-          </tr>
-          <!-- Loop and display table -->
-          <tr
-            v-for="n in table"
-            :key="n">
-            <td>{{ n.id }}</td>
-            <td>{{ n.title }}</td>
-            <td>{{ n.price }}</td>
-          </tr>
-        </table>
-      </div>
-      <h2 v-else>No data in localStorage</h2>
+      <ag-grid-vue
+        class="ag-theme-alpine"
+        style="height: 500px; width: 100%"
+        :columnDefs="columnsDef()"
+        :rowData="rowDataData"
+        :defaultColDef="this.defaultColDef"
+        rowSelection="multiple"
+        animateRows="true"
+        @cell-value-changed="onCellValueChanged"
+      />
+<!--      <div class="adminTable"-->
+<!--           v-if="table != null">-->
+<!--        <table>-->
+<!--          <tr>-->
+<!--            <th>Id</th>-->
+<!--            <th>Title</th>-->
+<!--            <th>Price</th>-->
+<!--          </tr>-->
+<!--          &lt;!&ndash; Loop and display table &ndash;&gt;-->
+<!--          <tr-->
+<!--            v-for="n in table"-->
+<!--            :key="n">-->
+<!--            <td>{{ n.id }}</td>-->
+<!--            <td>{{ n.title }}</td>-->
+<!--            <td>{{ n.price }}</td>-->
+<!--          </tr>-->
+<!--        </table>-->
+<!--      </div>-->
+<!--      <h2 v-else>No data in localStorage</h2>-->
     </div>
     <div class="buttons">
       <!-- Clear LocalStorage initiator -->
@@ -36,41 +47,69 @@
 
 <script>
 import {mapActions, mapGetters,} from "vuex";
+import {AgGridVue} from 'ag-grid-vue3'
+import 'ag-grid-community/dist/styles/ag-grid.css'
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
 
 export default {
   name: 'AdminPage',
+  components:{
+    AgGridVue
+  },
   data() {
     return {
       table: [],
+      modified:0,
+      rowDataData:[],
+      defaultColDef:{
+        sortable:true,
+        filter:true,
+        editable:true,
+        flex: 1,
+        resizable: true,
+      }
     }
   },
   computed: {
     ...mapGetters({
       getProducts: "products/getProducts",
-    })
+      getLocalStorageList:"products/getLocalStorageList"
+    }),
+    localStorageComputed(){
+      this.loadLocal()
+      return this.getLocalStorageList;
+    }
   },
   mounted() {
+    this.loadLocal();
     this.loadProducts();
     this.table = this.getProducts;
+    this.rowDataData = this.getLocalStorageList;
   },
   methods: {
     ...mapActions({
       saveProducts: "products/saveProducts",
       loadProducts: "products/loadProducts",
       deleteProducts: "products/deleteProducts",
+      saveModifiedProducts:"products/saveModifiedProducts",
+      loadLocal:"products/loadLocal",
       saveCategories: "category/saveCategories",
       deleteCategories: "category/deleteCategories",
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
     }),
     saveList() {
+      console.log(this.rowDataData)
       // Stores data in LocalStorage
       this.saveProducts();
       this.loadProducts();
       this.saveCategories();
+      this.loadLocal()
 
       // List live update
       this.table = this.getProducts;
+      this.rowDataData = this.getLocalStorageList;
+      console.log(this.rowDataData)
     },
     clearList() {
       // Clears Product List from LocalStorage
@@ -80,7 +119,30 @@ export default {
 
       // Resets Cart List from LocalStorage
       this.updateCart([]);
-      this.table = null;
+      this.loadLocal()
+      this.table = [];
+      this.rowDataData = this.getLocalStorageList;
+    },
+    /**
+     * Create columns heads for table
+     * @returns {Array with Objects}
+     */
+    columnsDef(){
+      let locallist = this.getLocalStorageList;
+      let field=[]
+      if(locallist !== null && locallist.length > 0){
+        for (const [key] of Object.entries(locallist[0])) {
+          field.push(
+            {field:`${key}`,
+              valueParser:param => Number(param.newValue) ? Number(param.newValue) : param.newValue,
+          })
+        }
+      }
+      return field
+    },
+    onCellValueChanged(){
+      this.saveModifiedProducts(this.rowDataData)
+      this.loadProducts()
     }
   },
 }

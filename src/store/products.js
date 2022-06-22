@@ -9,6 +9,7 @@ export default {
     state() {
         return {
             productList: [],
+            localList:[],
             searchedProduct: [],
         };
     },
@@ -16,13 +17,26 @@ export default {
         getProducts(state) {
             return state.productList;
         },
+        getLocalStorageList(state){
+            return state.localList;
+        }
     },
     mutations: {
         setProducts(state, data) {
             state.productList = data;
         },
+        setLocalState(state,data){
+            state.localList = data;
+        }
     },
     actions: {
+        setState({commit},newState){
+            commit("setProducts",newState);
+        },
+        loadLocal({commit}){
+            let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+            commit("setLocalState",data);
+        },
         loadProducts({commit}) {
             // Promise
             let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
@@ -40,6 +54,13 @@ export default {
         saveProducts: function ({commit}) {
             localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
             commit("setProducts", jsonProducts);
+        },
+        saveModifiedProducts: function ({commit},newProducts) {
+            console.log(newProducts);
+            console.log(jsonProducts);
+            console.log(JSON.stringify(newProducts));
+            localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(newProducts));
+            commit("setProducts", newProducts);
         },
         /**
          * @param commit
