@@ -16,25 +16,6 @@
         animateRows="true"
         @cell-value-changed="onCellValueChanged"
       />
-<!--      <div class="adminTable"-->
-<!--           v-if="table != null">-->
-<!--        <table>-->
-<!--          <tr>-->
-<!--            <th>Id</th>-->
-<!--            <th>Title</th>-->
-<!--            <th>Price</th>-->
-<!--          </tr>-->
-<!--          &lt;!&ndash; Loop and display table &ndash;&gt;-->
-<!--          <tr-->
-<!--            v-for="n in table"-->
-<!--            :key="n">-->
-<!--            <td>{{ n.id }}</td>-->
-<!--            <td>{{ n.title }}</td>-->
-<!--            <td>{{ n.price }}</td>-->
-<!--          </tr>-->
-<!--        </table>-->
-<!--      </div>-->
-<!--      <h2 v-else>No data in localStorage</h2>-->
     </div>
     <div class="buttons">
       <!-- Clear LocalStorage initiator -->
@@ -134,8 +115,17 @@ export default {
         for (const [key] of Object.entries(locallist[0])) {
           field.push(
             {field:`${key}`,
+              wrapText: true,
+              autoHeight: true,
               valueParser:param => Number(param.newValue) ? Number(param.newValue) : param.newValue,
-          })
+              cellRenderer: (param) => {
+                if (key === 'image') {
+                  return `<image style="height: 80px; width: 100px" src=${param.data[key]} />`;
+                }
+                return param.data[key]
+              }
+            }
+          )
         }
       }
       return field
