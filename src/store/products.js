@@ -1,8 +1,9 @@
 // noinspection JSVoidFunctionReturnValueUsed
 import {FILTERS, SHOP_KEY, TABLES} from "@/const";
-import jsonProducts from "@/assets/products (4).json";
+// import jsonProducts from "@/assets/products (4).json";
 // import {Product} from "@/models/Product";
 import {ProductTransformer} from "@/transformers/ProductTransformer";
+import EvenService from "@/services/EvenService";
 
 export default {
     namespaced: true,
@@ -10,7 +11,6 @@ export default {
         return {
             productList: [],
             localList:[],
-            defaultList: [],
         };
     },
     getters: {
@@ -40,7 +40,7 @@ export default {
         loadProducts({commit}) {
             // Promise
             let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-
+            //console.log(data);
             let products = [];
             if (data !== null) data.forEach(item => {
                 products.push(ProductTransformer.transform(item));
@@ -52,13 +52,15 @@ export default {
          * @param commit
          */
         saveProducts: function ({commit}) {
-            localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
-            commit("setProducts", jsonProducts);
+            let jsonProducts = [];
+
+            EvenService.getJsonProducts().then(response => {
+                jsonProducts = response.data;
+                localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
+                commit("setProducts", jsonProducts);
+            }).catch(error => console.log(error));
         },
         saveModifiedProducts: function ({commit},newProducts) {
-            console.log(newProducts);
-            console.log(jsonProducts);
-            console.log(JSON.stringify(newProducts));
             localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(newProducts));
             commit("setProducts", newProducts);
         },

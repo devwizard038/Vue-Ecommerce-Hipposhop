@@ -79,18 +79,22 @@ export default {
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
     }),
-    saveList() {
-      console.log(this.rowDataData)
-      // Stores data in LocalStorage
-      this.saveProducts();
-      this.loadProducts();
-      this.saveCategories();
-      this.loadLocal()
+    saveList: async function() {
 
-      // List live update
-      this.table = this.getProducts;
-      this.rowDataData = this.getLocalStorageList;
-      console.log(this.rowDataData)
+      await this.saveProducts();
+      console.log(this.getProducts);
+      // Stores data in LocalStorage
+      if (!this.getProducts) this.loadProducts();
+      console.log(this.getProducts);
+      if (this.getProducts) {
+        console.log(this.getProducts);
+        this.saveCategories();
+        this.loadLocal()
+        //
+        // // List live update
+        this.table = this.getProducts;
+        this.rowDataData = this.getLocalStorageList;
+      }
     },
     clearList() {
       // Clears Product List from LocalStorage
