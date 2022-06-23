@@ -1,7 +1,5 @@
 // noinspection JSVoidFunctionReturnValueUsed
 import {FILTERS, SHOP_KEY, TABLES} from "@/const";
-// import jsonProducts from "@/assets/products (4).json";
-// import {Product} from "@/models/Product";
 import {ProductTransformer} from "@/transformers/ProductTransformer";
 import EvenService from "@/services/EvenService";
 
@@ -10,14 +8,14 @@ export default {
     state() {
         return {
             productList: [],
-            localList:[],
+            localList: [],
         };
     },
     getters: {
         getProducts(state) {
             return state.productList;
         },
-        getLocalStorageList(state){
+        getLocalStorageList(state) {
             return state.localList;
         }
     },
@@ -25,22 +23,21 @@ export default {
         setProducts(state, data) {
             state.productList = data;
         },
-        setLocalState(state,data){
+        setLocalState(state, data) {
             state.localList = data;
         }
     },
     actions: {
-        setState({commit},newState){
-            commit("setProducts",newState);
+        setState({commit}, newState) {
+            commit("setProducts", newState);
         },
-        loadLocal({commit}){
+        loadLocal({commit}) {
             let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-            commit("setLocalState",data);
+            commit("setLocalState", data);
         },
         loadProducts({commit}) {
             // Promise
             let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-            //console.log(data);
             let products = [];
             if (data !== null) data.forEach(item => {
                 products.push(ProductTransformer.transform(item));
@@ -50,17 +47,20 @@ export default {
         /**
          * Process data and save to localStorage
          * @param commit
+         * @param dispatch
          */
-        saveProducts: function ({commit}) {
+        saveProducts: function ({commit, dispatch}) {
             let jsonProducts = [];
 
             EvenService.getJsonProducts().then(response => {
                 jsonProducts = response.data;
                 localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
                 commit("setProducts", jsonProducts);
+                dispatch("loadProducts");
+                dispatch("loadLocal");
             }).catch(error => console.log(error));
         },
-        saveModifiedProducts: function ({commit},newProducts) {
+        saveModifiedProducts: function ({commit}, newProducts) {
             localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(newProducts));
             commit("setProducts", newProducts);
         },
@@ -69,8 +69,8 @@ export default {
          * @param getters
          * @param {Product} product
          */
-        saveProduct: function ({ commit, getters }, { product }) {
-            let products = getters["getProducts"] ?? [];
+        saveProduct: function ({commit, getters}, {product}) {
+            let products = getters['getProducts'] ?? [];
 
             commit("setProducts", []); // vuejs2
             products = products.filter(item => item.id !== product.id); // TODO: optimize find product by id and update it
@@ -80,10 +80,11 @@ export default {
             let productsObj = product.map(item => ProductTransformer.reverseTransform(item));
             localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(productsObj));
         },
-        deleteProducts({commit}) {
+        deleteProducts({commit, state}) {
             let data =
                 localStorage.removeItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`);
             commit("setProducts", data);
+            state.productList = [];
         },
         /**
          * Sort filter for selected option in select sortList HTML element
@@ -91,7 +92,7 @@ export default {
          * @param state
          * @param param{String}
          */
-        sortProducts({ state, dispatch }, param) {
+        sortProducts({state, dispatch}, param) {
             switch (Number(param)) {
                 case FILTERS.PRICE_ASC:
                     state.productList.sort((a, b) => {
@@ -128,7 +129,7 @@ export default {
          * @param getters
          * @param searched {String}
          */
-        searchProduct({ commit, getters }, searched) {
+        searchProduct({commit, getters}, searched) {
             if (!searched) {
                 let local = getters["getProducts"] ?? [];
                 commit("setProducts", local);

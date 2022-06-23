@@ -10,7 +10,7 @@
         class="ag-theme-alpine"
         style="height: 500px; width: 100%"
         :columnDefs="columnsDef()"
-        :rowData="rowDataData"
+        :rowData="this.getLocalStorageList"
         :defaultColDef="this.defaultColDef"
         rowSelection="multiple"
         animateRows="true"
@@ -19,7 +19,7 @@
     </div>
     <div class="buttons">
       <!-- Clear LocalStorage initiator -->
-      <button v-if="table != null" @click="clearList" class="btn-clear">Clear list
+      <button v-if="this.getProducts.length > 0" @click="clearList" class="btn-clear">Clear list
       </button>
       <button @click="saveList" class="btn-load">Load Product List</button>
     </div>
@@ -34,18 +34,16 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
 
 export default {
   name: 'AdminPage',
-  components:{
+  components: {
     AgGridVue
   },
   data() {
     return {
-      table: [],
-      modified:0,
-      rowDataData:[],
-      defaultColDef:{
-        sortable:true,
-        filter:true,
-        editable:true,
+      modified: 0,
+      defaultColDef: {
+        sortable: true,
+        filter: true,
+        editable: true,
         flex: 1,
         resizable: true,
       }
@@ -54,47 +52,29 @@ export default {
   computed: {
     ...mapGetters({
       getProducts: "products/getProducts",
-      getLocalStorageList:"products/getLocalStorageList"
+      getLocalStorageList: "products/getLocalStorageList"
     }),
-    localStorageComputed(){
-      this.loadLocal()
-      return this.getLocalStorageList;
-    }
   },
   mounted() {
     this.loadLocal();
     this.loadProducts();
-    this.table = this.getProducts;
-    this.rowDataData = this.getLocalStorageList;
   },
   methods: {
     ...mapActions({
       saveProducts: "products/saveProducts",
       loadProducts: "products/loadProducts",
       deleteProducts: "products/deleteProducts",
-      saveModifiedProducts:"products/saveModifiedProducts",
-      loadLocal:"products/loadLocal",
+      saveModifiedProducts: "products/saveModifiedProducts",
+      loadLocal: "products/loadLocal",
       saveCategories: "category/saveCategories",
       deleteCategories: "category/deleteCategories",
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
     }),
-    saveList: async function() {
-
-      await this.saveProducts();
-      console.log(this.getProducts);
-      // Stores data in LocalStorage
-      if (!this.getProducts) this.loadProducts();
-      console.log(this.getProducts);
-      if (this.getProducts) {
-        console.log(this.getProducts);
-        this.saveCategories();
-        this.loadLocal()
-        //
-        // // List live update
-        this.table = this.getProducts;
-        this.rowDataData = this.getLocalStorageList;
-      }
+    saveList() {
+      this.saveProducts();
+      this.saveCategories();
+      this.loadLocal()
     },
     clearList() {
       // Clears Product List from LocalStorage
@@ -105,26 +85,27 @@ export default {
       // Resets Cart List from LocalStorage
       this.updateCart([]);
       this.loadLocal()
-      this.table = [];
-      this.rowDataData = this.getLocalStorageList;
     },
     /**
      * Create columns heads for table
-     * @returns {Array with Objects}
+     * @returns {Array}
      */
-    columnsDef(){
+    columnsDef() {
       let locallist = this.getLocalStorageList;
-      let field=[]
-      if(locallist !== null && locallist.length > 0){
+      let field = []
+      if (locallist !== null && locallist.length > 0) {
         for (const [key] of Object.entries(locallist[0])) {
           field.push(
-            {field:`${key}`,
+            {
+              field: `${key}`,
               wrapText: true,
               autoHeight: true,
-              valueParser:param => Number(param.newValue) ? Number(param.newValue) : param.newValue,
+              valueParser: param => Number(param.newValue) ? Number(param.newValue) : param.newValue,
               cellRenderer: (param) => {
                 if (key === 'image') {
-                  return `<image style="height: 80px; width: 100px" src=${param.data[key]} />`;
+                  if (param.data[key] !== null) {
+                    return `<image style="height: 80px; width: 100px" src=${param.data[key]} />`;
+                  } else return 'NU AVEM POZA !'
                 }
                 return param.data[key]
               }
@@ -134,8 +115,9 @@ export default {
       }
       return field
     },
-    onCellValueChanged(){
-      this.saveModifiedProducts(this.rowDataData)
+    onCellValueChanged() {
+      let rowData = this.getLocalStorageList
+      this.saveModifiedProducts(rowData);
       this.loadProducts()
     }
   },
@@ -173,11 +155,6 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-}
-
-.adminTable {
-  overflow: auto;
-  width: 80%;
 }
 
 .buttons {
