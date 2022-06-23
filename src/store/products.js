@@ -10,7 +10,7 @@ export default {
         return {
             productList: [],
             localList:[],
-            searchedProduct: [],
+            defaultList: [],
         };
     },
     getters: {
@@ -89,8 +89,7 @@ export default {
          * @param state
          * @param param{String}
          */
-        sortProducts({state}, param) {
-
+        sortProducts({ state, dispatch }, param) {
             switch (Number(param)) {
                 case FILTERS.PRICE_ASC:
                     state.productList.sort((a, b) => {
@@ -117,26 +116,22 @@ export default {
                     });
                     break;
                 default:
-                    state.productList = JSON.parse(
-                        localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+                    dispatch("loadProducts");
                     break;
-
             }
-
         },
         /**
          * Search product function in product list.
          * @param commit
+         * @param getters
          * @param searched {String}
          */
-        searchProduct({commit}, searched) {
+        searchProduct({ commit, getters }, searched) {
             if (!searched) {
-                let local = JSON.parse(
-                    localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+                let local = getters["getProducts"] ?? [];
                 commit("setProducts", local);
             } else {
-                let text = JSON.parse(
-                    localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
+                let text = getters["getProducts"] ?? [];
                 let found = text.filter((item) => item.title.toLowerCase().includes(searched.toLowerCase()));
                 commit("setProducts", found);
             }
