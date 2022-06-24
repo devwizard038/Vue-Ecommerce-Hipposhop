@@ -21,7 +21,7 @@
     </div>
     <div class="buttons">
       <!-- Clear LocalStorage initiator -->
-      <button v-if="this.modified && this.getAdminList.length > 0" @click="updateServer()" class="btn-server">Update
+      <button v-if="this.modifiedObjects.length > 0" @click="updateServer()" class="btn-server">Update
         Server
       </button>
       <button v-if="this.getAdminList.length > 0" @click="clearList" class="btn-clear">Clear list
@@ -46,6 +46,7 @@ export default {
   data() {
     return {
       modified: false,
+      modifiedObjects: [],
       defaultColDef: {
         sortable: true,
         filter: true,
@@ -82,6 +83,7 @@ export default {
     },
     clearList() {
       // Clears Product List from LocalStorage
+      this.modifiedObjects=[];
       this.modified = false;
       this.deleteAdminTable();
       // this.deleteCategories();
@@ -123,14 +125,16 @@ export default {
     /**
      * Confirmed edited data changed
      */
-    onCellValueChanged() {
+    onCellValueChanged(newValue) {
+      this.modifiedObjects.push(newValue.data);
+      console.log(JSON.stringify(this.modifiedObjects))
       this.modified = true;
     },
     updateServer() {
-      EvenService.postJsonProducts(this.getAdminList)
+      EvenService.postJsonProducts(JSON.stringify(this.modifiedObjects))
         .then((response) => {
             console.log(response)
-            this.modified = false;
+            this.modifiedObjects = [];
           }
         ).catch(error => console.log(error));
     }
