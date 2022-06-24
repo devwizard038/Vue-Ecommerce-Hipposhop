@@ -51,7 +51,7 @@
             :price="product.price"
             :image="productImage(product.id)"
             :unit="product.unit"
-            :product="product"
+            :product="typeof product === 'object' ? product : {}"
           />
         </div>
       </div>
@@ -111,9 +111,7 @@ export default {
     }),
     //  Retrieve list from LocalStorage.
     products() {
-      console.log()
       if (this.categoryId) {
-
         return this.getProducts.filter(
           (product) =>
             (String(product.category_id) + ",")
@@ -133,10 +131,9 @@ export default {
     },
   },
   mounted() {
-    if(this.getProducts.length > 0) {
-      console.log(this.products);
-
-    }
+    console.log(this.products[0]);
+    // if(this.getProducts.length > 0) {
+    // }
     // Mounts LocalStorage list
     this.loadProducts();
     let callback = (entries) => {

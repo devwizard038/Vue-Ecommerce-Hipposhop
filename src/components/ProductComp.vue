@@ -75,8 +75,7 @@ export default {
     },
     product: {
       type: Object,
-      default: () => {
-      }
+      default: Object
     },
     showModal: {
       type: Boolean,
