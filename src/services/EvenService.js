@@ -10,7 +10,10 @@ const apiClient = axios.create({
 });
 
 export default {
-    getJsonProducts(){
+    getJsonProducts() {
         return apiClient.get('/products.php');
+    },
+    postJsonProducts(itemToSent) {
+        return apiClient.post('/products.php', itemToSent);
     }
 };

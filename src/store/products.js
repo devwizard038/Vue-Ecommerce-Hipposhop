@@ -8,23 +8,23 @@ export default {
     state() {
         return {
             productList: [],
-            localList: [],
+            adminList: [],
         };
     },
     getters: {
         getProducts(state) {
             return state.productList;
         },
-        getLocalStorageList(state) {
-            return state.localList;
+        getAdminList(state) {
+            return state.adminList;
         }
     },
     mutations: {
         setProducts(state, data) {
             state.productList = data;
         },
-        setLocalState(state, data) {
-            state.localList = data;
+        setAdminList(state, data) {
+            state.adminList = data;
         }
     },
     actions: {
@@ -95,6 +95,18 @@ export default {
                 localStorage.removeItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`);
             commit("setProducts", data);
             state.productList = [];
+        },
+        saveAdminTable({commit}) {
+            let jsonProducts = [];
+            EvenService.getJsonProducts()
+                .then(response => {
+                    jsonProducts = response.data.results;
+                    commit("setAdminList", jsonProducts);
+                })
+                .catch(error => console.log(error));
+        },
+        deleteAdminTable({state}) {
+            state.adminList = [];
         },
         /**
          * Sort filter for selected option in select sortList HTML element
