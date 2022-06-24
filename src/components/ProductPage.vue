@@ -47,7 +47,7 @@
             :showModal="this.showModal"
             @toggleModal="toggleModal"
             @addToCart="addToCart"
-            :name="product.titleProduct"
+            :name="product.title"
             :price="product.price"
             :image="productImage(product.id)"
             :unit="product.unit"

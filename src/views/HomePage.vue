@@ -57,9 +57,6 @@ export default {
   },
   mounted() {
     this.saveProducts();
-    if(this.getProducts.length > 0){
-      console.log(this.getProducts)
-    }
     /**
      * Catch error: for empty local storage for category and cart
      */

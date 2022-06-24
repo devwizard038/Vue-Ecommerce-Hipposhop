@@ -35,33 +35,41 @@ export default {
             let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
             commit("setLocalState", data);
         },
+        /**
+         * Admin table saved to state ( !Data not processed through transformer! )
+         * @param commit
+         */
         loadProducts({commit}) {
-            // Promise
-            let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-            let products = [];
-            if (data !== null) data.forEach(item => {
-                products.push(ProductTransformer.transform(item));
-            });
-            commit("setProducts", products);
+            let jsonProducts = [];
+            EvenService.getJsonProducts()
+                .then(response => {
+                    jsonProducts = response.data.results;
+                    commit("setProducts", jsonProducts);
+                }).catch(error => console.log(error));
         },
         /**
-         * Process data and save to state
+         * Fetch,process and save data to state
          * @param commit
          * @param dispatch
          */
         saveProducts: function ({commit}) {
+            let products = []
             let jsonProducts = [];
             EvenService.getJsonProducts()
                 .then(response => {
-                    console.log(response);
-                jsonProducts =response.data.results;
-                commit("setProducts", jsonProducts);
-                // localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
-                // dispatch("loadProducts");
-                // dispatch("loadLocal");
+                    jsonProducts = response.data.results;
+                    if (jsonProducts !== null) jsonProducts.forEach(item => {
+                        products.push(ProductTransformer.transform(item));
+                    });
+                    commit("setProducts", products);
                 })
                 .catch(error => console.log(error));
         },
+        /**
+         * TODO: Admin state optimization for modifying items in AG Grid
+         * @param commit
+         * @param newProducts
+         */
         saveModifiedProducts: function ({commit}, newProducts) {
             localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(newProducts));
             commit("setProducts", newProducts);

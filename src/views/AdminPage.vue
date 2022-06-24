@@ -54,11 +54,6 @@ export default {
       getLocalStorageList: "products/getLocalStorageList"
     }),
   },
-  mounted() {
-    this.loadLocal();
-    // this.loadProducts();
-    console.log(this.getProducts);
-  },
   methods: {
     ...mapActions({
       saveProducts: "products/saveProducts",
@@ -72,9 +67,8 @@ export default {
       updateCart: "cart/updateCart",
     }),
     saveList() {
-      this.saveProducts();
+      this.loadProducts()
       this.saveCategories();
-      // this.loadLocal()
     },
     clearList() {
       // Clears Product List from LocalStorage
@@ -94,7 +88,7 @@ export default {
       let locallist = this.getProducts;
       let field = []
       if (locallist !== null && locallist.length > 0) {
-        for (const [key] of Object.entries(locallist[0])) {
+        Object.keys(locallist[0]).forEach(key => {
           field.push(
             {
               field: `${key}`,
@@ -111,14 +105,16 @@ export default {
               }
             }
           )
-        }
+        })
       }
       return field
     },
+    /**
+     * Confirmed edited data changed
+     */
     onCellValueChanged() {
       let rowData = this.getLocalStorageList
       this.saveModifiedProducts(rowData);
-      // this.loadProducts()
     }
   },
 }
