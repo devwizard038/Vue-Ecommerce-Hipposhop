@@ -47,7 +47,7 @@
             :showModal="this.showModal"
             @toggleModal="toggleModal"
             @addToCart="addToCart"
-            :name="product.title"
+            :name="product.titleProduct"
             :price="product.price"
             :image="productImage(product.id)"
             :unit="product.unit"
@@ -111,6 +111,7 @@ export default {
     }),
     //  Retrieve list from LocalStorage.
     products() {
+      console.log()
       if (this.categoryId) {
 
         return this.getProducts.filter(
@@ -132,6 +133,10 @@ export default {
     },
   },
   mounted() {
+    if(this.getProducts.length > 0) {
+      console.log(this.products);
+
+    }
     // Mounts LocalStorage list
     this.loadProducts();
     let callback = (entries) => {

@@ -5,12 +5,12 @@
       <hr/>
     </div>
 
-    <div class="adminTableContainer">
+    <div class="adminTableContainer" v-if="this.getProducts.length > 0">
       <ag-grid-vue
         class="ag-theme-alpine"
         style="height: 500px; width: 100%"
         :columnDefs="columnsDef()"
-        :rowData="this.getLocalStorageList"
+        :rowData="this.getProducts"
         :defaultColDef="this.defaultColDef"
         rowSelection="multiple"
         animateRows="true"
@@ -39,7 +39,6 @@ export default {
   },
   data() {
     return {
-      modified: 0,
       defaultColDef: {
         sortable: true,
         filter: true,
@@ -57,7 +56,8 @@ export default {
   },
   mounted() {
     this.loadLocal();
-    this.loadProducts();
+    // this.loadProducts();
+    console.log(this.getProducts);
   },
   methods: {
     ...mapActions({
@@ -74,7 +74,7 @@ export default {
     saveList() {
       this.saveProducts();
       this.saveCategories();
-      this.loadLocal()
+      // this.loadLocal()
     },
     clearList() {
       // Clears Product List from LocalStorage
@@ -91,7 +91,7 @@ export default {
      * @returns {Array}
      */
     columnsDef() {
-      let locallist = this.getLocalStorageList;
+      let locallist = this.getProducts;
       let field = []
       if (locallist !== null && locallist.length > 0) {
         for (const [key] of Object.entries(locallist[0])) {
@@ -118,7 +118,7 @@ export default {
     onCellValueChanged() {
       let rowData = this.getLocalStorageList
       this.saveModifiedProducts(rowData);
-      this.loadProducts()
+      // this.loadProducts()
     }
   },
 }

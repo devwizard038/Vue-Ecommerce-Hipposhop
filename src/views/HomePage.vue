@@ -56,6 +56,10 @@ export default {
     }
   },
   mounted() {
+    this.saveProducts();
+    if(this.getProducts.length > 0){
+      console.log(this.getProducts)
+    }
     /**
      * Catch error: for empty local storage for category and cart
      */
@@ -69,6 +73,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      saveProducts:"products/saveProducts",
       loadProducts: "products/loadProducts",
       updateCategories: "category/updateCategories",
       loadCart: "cart/loadCart",

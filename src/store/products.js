@@ -45,20 +45,22 @@ export default {
             commit("setProducts", products);
         },
         /**
-         * Process data and save to localStorage
+         * Process data and save to state
          * @param commit
          * @param dispatch
          */
-        saveProducts: function ({commit, dispatch}) {
+        saveProducts: function ({commit}) {
             let jsonProducts = [];
-
-            EvenService.getJsonProducts().then(response => {
-                jsonProducts = response.data;
-                localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
+            EvenService.getJsonProducts()
+                .then(response => {
+                    console.log(response);
+                jsonProducts =response.data.results;
                 commit("setProducts", jsonProducts);
-                dispatch("loadProducts");
-                dispatch("loadLocal");
-            }).catch(error => console.log(error));
+                // localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(jsonProducts));
+                // dispatch("loadProducts");
+                // dispatch("loadLocal");
+                })
+                .catch(error => console.log(error));
         },
         saveModifiedProducts: function ({commit}, newProducts) {
             localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(newProducts));
@@ -69,17 +71,17 @@ export default {
          * @param getters
          * @param {Product} product
          */
-        saveProduct: function ({commit, getters}, {product}) {
-            let products = getters['getProducts'] ?? [];
-
-            commit("setProducts", []); // vuejs2
-            products = products.filter(item => item.id !== product.id); // TODO: optimize find product by id and update it
-            products.push(product);
-            commit("setProducts", products); // vuejs2
-
-            let productsObj = product.map(item => ProductTransformer.reverseTransform(item));
-            localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(productsObj));
-        },
+        // saveProduct: function ({commit, getters}, {product}) {
+        //     let products = getters['getProducts'] ?? [];
+        //
+        //     commit("setProducts", []); // vuejs2
+        //     products = products.filter(item => item.id !== product.id); // TODO: optimize find product by id and update it
+        //     products.push(product);
+        //     commit("setProducts", products); // vuejs2
+        //
+        //     let productsObj = product.map(item => ProductTransformer.reverseTransform(item));
+        //     localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(productsObj));
+        // },
         deleteProducts({commit, state}) {
             let data =
                 localStorage.removeItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`);
