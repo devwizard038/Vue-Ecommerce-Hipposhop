@@ -1,5 +1,17 @@
 <template>
   <div class="adminContainer">
+    <transition
+      mode="in-out"
+      enter-active-class="animate__animated animate__fadeInDown"
+      leave-active-class="animate__animated animate__fadeOutUp"
+    >
+      <p
+        class="popup"
+        v-if="this.responseUpdate"
+      >
+        Server updated
+      </p>
+    </transition>
     <div class="title">
       <h1>Admin Page</h1>
       <hr/>
@@ -51,7 +63,8 @@ export default {
         editable: true,
         flex: 1,
         resizable: true,
-      }
+      },
+      responseUpdate: false,
     }
   },
   computed: {
@@ -61,37 +74,48 @@ export default {
       getModifiedItemsList: "products/getModifiedItemsList"
     }),
   },
+  watch: {
+    responseUpdate() {
+      if (this.responseUpdate) {
+        setTimeout(() => {
+          this.responseUpdate = false;
+        }, 3000)
+      }
+    }
+  },
   methods: {
-    ...mapActions({
-      saveProducts: "products/saveProducts",
-      loadProducts: "products/loadProducts",
-      deleteProducts: "products/deleteProducts",
-      saveModifiedProducts: "products/saveModifiedProducts",
-      saveModifedItemsList: "products/saveModifedItemsList",
-      saveAdminTable: "products/saveAdminTable",
-      deleteAdminTable: "products/deleteAdminTable",
-      loadLocal: "products/loadLocal",
-      saveCategories: "category/saveCategories",
-      deleteCategories: "category/deleteCategories",
-      loadCart: "cart/loadCart",
-      updateCart: "cart/updateCart",
-    }),
+    ...
+      mapActions({
+        saveProducts: "products/saveProducts",
+        loadProducts: "products/loadProducts",
+        deleteProducts: "products/deleteProducts",
+        saveModifiedProducts: "products/saveModifiedProducts",
+        saveModifedItemsList: "products/saveModifedItemsList",
+        saveAdminTable: "products/saveAdminTable",
+        deleteAdminTable: "products/deleteAdminTable",
+        loadLocal: "products/loadLocal",
+        saveCategories: "category/saveCategories",
+        deleteCategories: "category/deleteCategories",
+        loadCart: "cart/loadCart",
+        updateCart: "cart/updateCart",
+      }),
     saveList() {
       this.saveAdminTable();
       this.saveCategories();
-    },
+    }
+    ,
     clearList() {
       // Clears Product List from LocalStorage
       this.deleteAdminTable();
       this.saveModifedItemsList([]);
-      console.log(this.getModifiedItemsList)
       // this.deleteCategories();
       // this.loadCart();
 
       // Resets Cart List from LocalStorage
       this.updateCart([]);
       // this.loadLocal()
-    },
+    }
+    ,
     /**
      * Create columns heads for table
      * @returns {Array}
@@ -120,7 +144,8 @@ export default {
         })
       }
       return field
-    },
+    }
+    ,
     /**
      * Confirmed edited data changed
      */
@@ -128,23 +153,38 @@ export default {
       let modifications = this.getModifiedItemsList;
       modifications.push(params.data);
       this.saveModifedItemsList(modifications);
-    },
-
+    }
+    ,
 
     updateServer() {
       EvenService.postJsonProducts(JSON.stringify(this.getModifiedItemsList))
         .then((response) => {
             this.saveModifedItemsList([]);
+            this.responseUpdate = true;
             console.log(response)
           }
         ).catch(error => console.log(error));
-    },
+    }
+    ,
   }
 }
 
 </script>
 
 <style scoped>
+.popup {
+  position: absolute;
+  top: 4rem;
+  right: 13rem;
+  background-color: rgba(23, 59, 133, 0.8);
+  color: #f8f8f8;
+  padding: 0.5rem;
+  border-radius: 0.7rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  z-index: 10000000;
+}
+
 .adminContainer {
   height: 100%;
   width: 100%;
