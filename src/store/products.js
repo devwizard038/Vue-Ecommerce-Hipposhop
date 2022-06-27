@@ -9,6 +9,7 @@ export default {
         return {
             productList: [],
             adminList: [],
+            modifiedItems:[],
         };
     },
     getters: {
@@ -17,6 +18,9 @@ export default {
         },
         getAdminList(state) {
             return state.adminList;
+        },
+        getModifiedItemsList(state) {
+            return state.modifiedItems;
         }
     },
     mutations: {
@@ -25,6 +29,9 @@ export default {
         },
         setAdminList(state, data) {
             state.adminList = data;
+        },
+        setModifiedItemsList(state, data) {
+            state.modifiedItems = data;
         }
     },
     actions: {
@@ -71,7 +78,6 @@ export default {
          * @param newProducts
          */
         saveModifiedProducts: function ({commit}, newProducts) {
-            localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(newProducts));
             commit("setProducts", newProducts);
         },
         /**
@@ -104,6 +110,9 @@ export default {
                     commit("setAdminList", jsonProducts);
                 })
                 .catch(error => console.log(error));
+        },
+        saveModifedItemsList({commit},newData){
+            commit("setModifiedItemsList", newData);
         },
         deleteAdminTable({state}) {
             state.adminList = [];

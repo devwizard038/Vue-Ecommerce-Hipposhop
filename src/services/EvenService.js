@@ -5,7 +5,7 @@ const apiClient = axios.create({
     withCredentials: false,
     headers: {
         Accept: 'applications/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/json'
     }
 });
 
@@ -15,5 +15,5 @@ export default {
     },
     postJsonProducts(itemToSent) {
         return apiClient.post('/products.php', itemToSent);
-    }
+    },
 };

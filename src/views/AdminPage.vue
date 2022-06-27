@@ -21,7 +21,7 @@
     </div>
     <div class="buttons">
       <!-- Clear LocalStorage initiator -->
-      <button v-if="this.modifiedObjects.length > 0" @click="updateServer()" class="btn-server">Update
+      <button v-if="this.getModifiedItemsList.length > 0" @click="updateServer()" class="btn-server">Update
         Server
       </button>
       <button v-if="this.getAdminList.length > 0" @click="clearList" class="btn-clear">Clear list
@@ -45,8 +45,6 @@ export default {
   },
   data() {
     return {
-      modified: false,
-      modifiedObjects: [],
       defaultColDef: {
         sortable: true,
         filter: true,
@@ -60,6 +58,7 @@ export default {
     ...mapGetters({
       getProducts: "products/getProducts",
       getAdminList: "products/getAdminList",
+      getModifiedItemsList: "products/getModifiedItemsList"
     }),
   },
   methods: {
@@ -68,6 +67,7 @@ export default {
       loadProducts: "products/loadProducts",
       deleteProducts: "products/deleteProducts",
       saveModifiedProducts: "products/saveModifiedProducts",
+      saveModifedItemsList: "products/saveModifedItemsList",
       saveAdminTable: "products/saveAdminTable",
       deleteAdminTable: "products/deleteAdminTable",
       loadLocal: "products/loadLocal",
@@ -78,14 +78,13 @@ export default {
     }),
     saveList() {
       this.saveAdminTable();
-      console.log(this.getAdminList)
       this.saveCategories();
     },
     clearList() {
       // Clears Product List from LocalStorage
-      this.modifiedObjects=[];
-      this.modified = false;
       this.deleteAdminTable();
+      this.saveModifedItemsList([]);
+      console.log(this.getModifiedItemsList)
       // this.deleteCategories();
       // this.loadCart();
 
@@ -125,20 +124,22 @@ export default {
     /**
      * Confirmed edited data changed
      */
-    onCellValueChanged(newValue) {
-      this.modifiedObjects.push(newValue.data);
-      console.log(JSON.stringify(this.modifiedObjects))
-      this.modified = true;
+    onCellValueChanged(params) {
+      let modifications = this.getModifiedItemsList;
+      modifications.push(params.data);
+      this.saveModifedItemsList(modifications);
     },
+
+
     updateServer() {
-      EvenService.postJsonProducts(JSON.stringify(this.modifiedObjects))
+      EvenService.postJsonProducts(JSON.stringify(this.getModifiedItemsList))
         .then((response) => {
+            this.saveModifedItemsList([]);
             console.log(response)
-            this.modifiedObjects = [];
           }
         ).catch(error => console.log(error));
-    }
-  },
+    },
+  }
 }
 
 </script>
