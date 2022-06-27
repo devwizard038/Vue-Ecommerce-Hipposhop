@@ -3,9 +3,9 @@
     <div class="loginComponent">
       <div class="headerLogin">
         <button @click="closeLogin()">X</button>
-        <h1>Login</h1>
+        <h1 v-if="this.getUser === '' ">Login</h1>
       </div>
-      <div class="contentLogin">
+      <div class="contentLogin" v-if="this.getUser === '' ">
         <label for="user">User</label><br/>
         <input
           :class='["inputComponent",checkEmail(email)]'
@@ -49,6 +49,15 @@
         >Login
         </button>
       </div>
+      <div class="contentLogin" v-else>
+        <h1> {{ this.getUser }} </h1>
+        <button
+          class="logOut"
+          type="submit"
+          @click="submitLogout()"
+        >Logout
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -57,6 +66,7 @@
 import validatorEmail from "@/Libraries/validatorEmail";
 import validatorPassword from "@/Libraries/validatorPassword";
 import EventService from "@/services/EvenService"
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: 'LoginModalComp',
@@ -70,16 +80,42 @@ export default {
       password: '',
       validEmail: false,
       validPass: false,
+      login: false,
     }
   },
+  computed: {
+    ...mapGetters({
+      getUser: "user/getUser",
+    })
+  },
   methods: {
+    ...mapActions({
+      loadUser: "user/loadUser",
+      loadAdmin: "user/loadAdmin",
+    }),
     closeLogin() {
       this.$emit('closeLogin');
     },
     submitLogin() {
-    EventService.getUserList().then(
-      response=> console.log(response.data.results))
-      .catch(err => console.log(err));
+      EventService.getUserList().then(
+        response => {
+          response.data.results.forEach(item => {
+            if (item.email === this.email) {
+              if (item.password === this.password) {
+                this.loadUser(this.email);
+                if (item.admin) {
+                  this.loadAdmin(true);
+                }
+              }
+            }
+          })
+        }
+      )
+        .catch(err => console.log(err));
+    },
+    submitLogout() {
+      this.loadUser('');
+      this.loadAdmin(false);
     },
     /**
      * Checks email requirements (@, .com/.co etc.)
@@ -93,7 +129,7 @@ export default {
     checkPassword(arg) {
       this.validPass = validatorPassword(arg) === 'valid';
       return validatorPassword(arg)
-    }
+    },
   }
 }
 </script>
@@ -103,7 +139,7 @@ export default {
 @import "../assets/css/fontRoboto.css";
 @import "../assets/css/fontPoppins.css";
 
-h1{
+h1 {
   font-size: 3rem;
 }
 
@@ -176,20 +212,22 @@ h1{
 .invalid {
   background-color: #f8bfbf;
 }
-.contentLogin label{
+
+.contentLogin label {
   font-size: 1.6rem;
 }
+
 .contentLogin {
   grid-area: contentLogin;
 }
 
-.contentLogin .passwordReq{
+.contentLogin .passwordReq {
   font-size: 0.8rem;
   word-spacing: 0rem;
   text-align: center;
 }
 
-.btnLogin{
+.btnLogin {
   background-color: rgb(16, 191, 255);
   padding: 0.6rem;
   padding-left: 1rem;
@@ -203,12 +241,12 @@ h1{
   text-decoration: none;
 }
 
-.btnLogin:hover{
+.btnLogin:hover {
   background-color: #0e9eb1;
   cursor: pointer;
 }
 
-.btnLoginInactive{
+.btnLoginInactive {
   background-color: rgb(54, 57, 58);
   padding: 0.6rem;
   padding-left: 1rem;
@@ -221,5 +259,24 @@ h1{
   border: none;
   text-decoration: none;
   cursor: not-allowed;
+}
+
+.logOut {
+  background-color: rgb(162, 7, 7);
+  padding: 0.6rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 1rem;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 0.7rem;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logOut:hover {
+  background-color: red;
 }
 </style>

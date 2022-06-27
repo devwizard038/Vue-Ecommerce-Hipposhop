@@ -22,10 +22,18 @@
           <li>
             <router-link to="/">Home</router-link>
           </li>
-          <li>
+          <li v-if="this.getAdmin">
             <router-link to="/admin">AdminPage</router-link>
           </li>
-          <li class="loginIcon"><a @click="openLogin">👤</a></li>
+          <li class="loginIcon">
+            <a @click="openLogin"
+               v-if="this.getUser === ''"
+            >👤</a>
+            <a
+              v-else
+              @click="openLogin"
+            >{{ this.getUser }}</a>
+          </li>
 
           <li><a @click="openCart">&#x1F6D2;({{ this.cartItems }})</a></li>
         </ul>
@@ -71,7 +79,9 @@ export default {
   computed: {
     ...mapGetters({
       getCartCount: "cart/getCartCount",
-      getSelected: "cart/getSelected"
+      getSelected: "cart/getSelected",
+      getUser: "user/getUser",
+      getAdmin:"user/getAdmin"
     }),
     /**
      * Display count of products in the cart
