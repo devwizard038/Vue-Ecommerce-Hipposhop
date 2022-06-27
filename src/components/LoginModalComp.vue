@@ -99,12 +99,15 @@ export default {
     submitLogin() {
       EventService.getUserList().then(
         response => {
+          console.log(response.data.results)
           response.data.results.forEach(item => {
-            if (item.email === this.email) {
-              if (item.password === this.password) {
-                this.loadUser(this.email);
-                if (item.admin) {
-                  this.loadAdmin(true);
+            if(item.email){
+              if (item.email === this.email) {
+                if (item.password === this.password) {
+                  this.loadUser(this.email);
+                  if (item.admin) {
+                    this.loadAdmin(true);
+                  }
                 }
               }
             }

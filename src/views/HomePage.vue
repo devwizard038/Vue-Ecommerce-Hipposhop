@@ -59,6 +59,7 @@ export default {
   },
   mounted() {
     console.log(this.getProducts.length)
+    this.saveCategories();
     this.saveProducts();
     /**
      * Catch error: for empty local storage for category and cart
@@ -77,7 +78,8 @@ export default {
       loadProducts: "products/loadProducts",
       updateCategories: "category/updateCategories",
       loadCart: "cart/loadCart",
-      updateCart: "cart/updateCart"
+      updateCart: "cart/updateCart",
+      saveCategories:"category/saveCategories"
     }),
     /**
      * Catch selected category id
