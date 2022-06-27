@@ -11,6 +11,7 @@
       </div>
       <!-- Display: Products -->
       <div class="right">
+        <div class="loader" v-if="this.getProducts.length < 1"></div>
         <ProductPage
             :categoryId="categoryId"
         />
@@ -34,6 +35,7 @@ export default {
   data() {
     return {
       categoryId: 0,
+      loading:true,
     };
   },
   computed: {
@@ -56,6 +58,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.getProducts.length)
     this.saveProducts();
     /**
      * Catch error: for empty local storage for category and cart
@@ -91,6 +94,24 @@ export default {
 </script>
 
 <style>
+
+.loader {
+  position:absolute;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
 .homeContainer{
   height: 100%;
   width: 100%;

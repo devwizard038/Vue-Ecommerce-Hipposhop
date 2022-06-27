@@ -43,7 +43,7 @@
           required
         /><br/>
         <button
-          class="btnLogin"
+          :class="[checkPassword(password) === 'valid' && checkEmail(email) === 'valid' ? 'btnLogin' : 'btnLoginInactive']"
           type="submit"
           @click="submitLogin()"
         >Login
@@ -56,6 +56,7 @@
 <script>
 import validatorEmail from "@/Libraries/validatorEmail";
 import validatorPassword from "@/Libraries/validatorPassword";
+import EventService from "@/services/EvenService"
 
 export default {
   name: 'LoginModalComp',
@@ -67,6 +68,8 @@ export default {
     return {
       email: '',
       password: '',
+      validEmail: false,
+      validPass: false,
     }
   },
   methods: {
@@ -74,7 +77,9 @@ export default {
       this.$emit('closeLogin');
     },
     submitLogin() {
-      console.log(this.email + ' ' + this.password)
+    EventService.getUserList().then(
+      response=> console.log(response.data.results))
+      .catch(err => console.log(err));
     },
     /**
      * Checks email requirements (@, .com/.co etc.)
@@ -82,15 +87,11 @@ export default {
      * @returns {String|*}
      */
     checkEmail(arg) {
-      if (validatorEmail(arg) === 'valid') {
-        console.log(arg)
-      }
+      this.validEmail = validatorEmail(arg) === 'valid';
       return validatorEmail(arg)
     },
     checkPassword(arg) {
-      if (validatorPassword(arg) === 'valid') {
-        console.log(arg)
-      }
+      this.validPass = validatorPassword(arg) === 'valid';
       return validatorPassword(arg)
     }
   }
@@ -201,8 +202,24 @@ h1{
   border: none;
   text-decoration: none;
 }
+
 .btnLogin:hover{
   background-color: #0e9eb1;
   cursor: pointer;
+}
+
+.btnLoginInactive{
+  background-color: rgb(54, 57, 58);
+  padding: 0.6rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 1rem;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 0.7rem;
+  border: none;
+  text-decoration: none;
+  cursor: not-allowed;
 }
 </style>

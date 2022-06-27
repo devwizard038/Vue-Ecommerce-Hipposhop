@@ -13,6 +13,9 @@ export default {
     getJsonProducts() {
         return apiClient.get('/products.php');
     },
+    getUserList() {
+        return apiClient.get('/users.php');
+    },
     postJsonProducts(itemToSent) {
         return apiClient.post('/products.php', itemToSent);
     },
