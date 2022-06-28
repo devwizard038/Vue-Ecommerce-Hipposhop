@@ -58,7 +58,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.getProducts.length)
     this.saveCategories();
     this.saveProducts();
     /**

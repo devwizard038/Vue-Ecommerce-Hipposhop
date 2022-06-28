@@ -27,7 +27,7 @@
           </li>
           <li class="loginIcon">
             <a @click="openLogin"
-               v-if="this.getUser === ''"
+               v-if="this.getUser === null"
             >👤</a>
             <a
               v-else
@@ -107,11 +107,13 @@ export default {
   },
   mounted() {
     this.loadCart()
+    this.loadUserLocal();
   },
   methods: {
     ...mapActions({
       loadCart: "cart/loadCart",
       loadSelected: "cart/loadSelected",
+      loadUserLocal:"user/loadUserLocal"
     }),
     closeCart() {
       this.showCart = false;

@@ -131,9 +131,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.products[0]);
-    // if(this.getProducts.length > 0) {
-    // }
     // Mounts LocalStorage list
     this.loadProducts();
     let callback = (entries) => {

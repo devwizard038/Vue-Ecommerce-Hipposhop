@@ -3,7 +3,8 @@ export const SHOP_KEY = "qwerty";
 export const TABLES = {
 	PRODUCTS: "products",
 	CATEGORIES: "categories",
-	CART: "cart"
+	CART: "cart",
+	USER: "user"
 };
 
 export const FILTERS = {

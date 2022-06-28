@@ -3,9 +3,9 @@
     <div class="loginComponent">
       <div class="headerLogin">
         <button @click="closeLogin()">X</button>
-        <h1 v-if="this.getUser === '' ">Login</h1>
+        <h1 v-if="this.getUser === null">Login</h1>
       </div>
-      <div class="contentLogin" v-if="this.getUser === '' ">
+      <div class="contentLogin" v-if="this.getUser === null ">
         <label for="user">User</label><br/>
         <input
           :class='["inputComponent",checkEmail(email)]'
@@ -92,6 +92,8 @@ export default {
     ...mapActions({
       loadUser: "user/loadUser",
       loadAdmin: "user/loadAdmin",
+      saveUserLocal:"user/saveUserLocal",
+      deleteUserLocal:"user/deleteUserLocal"
     }),
     closeLogin() {
       this.$emit('closeLogin');
@@ -101,14 +103,13 @@ export default {
         response => {
           console.log(response.data.results)
           response.data.results.forEach(item => {
-            if(item.email){
-              if (item.email === this.email) {
-                if (item.password === this.password) {
-                  this.loadUser(this.email);
-                  if (item.admin) {
-                    this.loadAdmin(true);
-                  }
-                }
+            if (item.email === this.email) {
+              if (item.password === this.password) {
+                this.loadUser(this.email);
+                if (item.admin) {
+                  this.loadAdmin(true);
+                }else this.loadAdmin(false);
+                this.saveUserLocal()
               }
             }
           })
@@ -117,8 +118,9 @@ export default {
         .catch(err => console.log(err));
     },
     submitLogout() {
-      this.loadUser('');
+      this.loadUser(null);
       this.loadAdmin(false);
+      this.deleteUserLocal();
     },
     /**
      * Checks email requirements (@, .com/.co etc.)
