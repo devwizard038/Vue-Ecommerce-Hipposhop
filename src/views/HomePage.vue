@@ -74,7 +74,6 @@ export default {
   methods: {
     ...mapActions({
       saveProducts:"products/saveProducts",
-      loadProducts: "products/loadProducts",
       updateCategories: "category/updateCategories",
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",

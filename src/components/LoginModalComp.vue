@@ -92,8 +92,8 @@ export default {
     ...mapActions({
       loadUser: "user/loadUser",
       loadAdmin: "user/loadAdmin",
-      saveUserLocal:"user/saveUserLocal",
-      deleteUserLocal:"user/deleteUserLocal"
+      saveUserLocal: "user/saveUserLocal",
+      deleteUserLocal: "user/deleteUserLocal"
     }),
     closeLogin() {
       this.$emit('closeLogin');
@@ -101,17 +101,14 @@ export default {
     submitLogin() {
       EventService.getUserList().then(
         response => {
-          console.log(response)
           let data = response.data.results
-          for(let item in data){
-            if (data[item].email === this.email) {
-              if (data[item].password === this.password) {
-                this.loadUser(this.email);
-                if (data[item].admin) {
-                  this.loadAdmin(true);
-                }else this.loadAdmin(false);
-                this.saveUserLocal()
-              }
+          for (let item in data) {
+            if (data[item].email === this.email && data[item].password === this.password) {
+              this.loadUser(this.email);
+              if (data[item].admin) {
+                this.loadAdmin(true);
+              } else this.loadAdmin(false);
+              this.saveUserLocal()
             }
           }
         }

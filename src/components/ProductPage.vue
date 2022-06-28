@@ -132,7 +132,7 @@ export default {
   },
   mounted() {
     // Mounts LocalStorage list
-    this.loadProducts();
+    // this.loadProducts();
     let callback = (entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -160,7 +160,6 @@ export default {
       searchProduct: "products/searchProduct",
       sortProducts: "products/sortProducts",
       loadDetails: "productDetail/loadDetails",
-      loadProducts: "products/loadProducts",
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
       loadCategories: "category/loadCategories",

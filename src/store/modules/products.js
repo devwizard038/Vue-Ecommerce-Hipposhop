@@ -8,6 +8,7 @@ export default {
     state() {
         return {
             productList: [],
+            unfilteredList:[],
             adminList: [],
             modifiedItems:[],
         };
@@ -21,7 +22,10 @@ export default {
         },
         getModifiedItemsList(state) {
             return state.modifiedItems;
-        }
+        },
+        getUnfilteredList(state) {
+            return state.unfilteredList;
+        },
     },
     mutations: {
         setProducts(state, data) {
@@ -32,27 +36,18 @@ export default {
         },
         setModifiedItemsList(state, data) {
             state.modifiedItems = data;
+        },
+        setUnfilteredList(state, data) {
+            state.unfilteredList = data;
         }
     },
     actions: {
-        setState({commit}, newState) {
-            commit("setProducts", newState);
+        loadUnfilteredList({commit}, data) {
+            commit("setUnfilteredList", data);
         },
         loadLocal({commit}) {
             let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
             commit("setLocalState", data);
-        },
-        /**
-         * Admin table saved to state ( !Data not processed through transformer! )
-         * @param commit
-         */
-        loadProducts({commit}) {
-            let jsonProducts = [];
-            EvenService.getJsonProducts()
-                .then(response => {
-                    jsonProducts = response.data.results;
-                    commit("setProducts", jsonProducts);
-                }).catch(error => console.log(error));
         },
         /**
          * Fetch,process and save data to state
@@ -68,6 +63,7 @@ export default {
                     if (jsonProducts !== null) jsonProducts.forEach(item => {
                         products.push(ProductTransformer.transform(item));
                     });
+                    commit("setUnfilteredList",products);
                     commit("setProducts", products);
                 })
                 .catch(error => console.log(error));
@@ -150,7 +146,7 @@ export default {
                     });
                     break;
                 default:
-                    dispatch("loadProducts");
+                    dispatch("saveProducts");
                     break;
             }
         },
@@ -162,12 +158,25 @@ export default {
          */
         searchProduct({commit, getters}, searched) {
             if (!searched) {
-                let local = getters["getProducts"] ?? [];
-                commit("setProducts", local);
+                commit("setProducts",getters["getUnfilteredList"]);
             } else {
-                let text = getters["getProducts"] ?? [];
-                let found = text.filter((item) => item.title.toLowerCase().includes(searched.toLowerCase()));
-                commit("setProducts", found);
+                let text = getters["getUnfilteredList"];
+                let found = [];
+                let search = searched.split(' ');
+                search.forEach(word =>{
+                    if(word !== ''){
+                        if(found.length > 0 ){
+                            found = found.filter((item) => item.title.toLowerCase().includes(word.toLowerCase()));
+                            commit("setProducts", found);
+                            return;
+                        }
+                        let local = text.filter((item) => item.title.toLowerCase().includes(word.toLowerCase()));
+                        if(local.length > 0){
+                            found.push(...local);
+                            commit("setProducts", found);
+                        }
+                    }
+                });
             }
         }
     },

@@ -87,7 +87,6 @@ export default {
     ...
       mapActions({
         saveProducts: "products/saveProducts",
-        loadProducts: "products/loadProducts",
         deleteProducts: "products/deleteProducts",
         saveModifiedProducts: "products/saveModifiedProducts",
         saveModifedItemsList: "products/saveModifedItemsList",
