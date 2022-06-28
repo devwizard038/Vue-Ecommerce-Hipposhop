@@ -3,6 +3,7 @@ import {SHOP_KEY, TABLES} from "@/const";
 
 export default {
     namespaced: true,
+    name:'user',
     state() {
         return {
             user: null,

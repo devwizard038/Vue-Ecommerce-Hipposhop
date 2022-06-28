@@ -101,21 +101,22 @@ export default {
     submitLogin() {
       EventService.getUserList().then(
         response => {
-          console.log(response.data.results)
-          response.data.results.forEach(item => {
-            if (item.email === this.email) {
-              if (item.password === this.password) {
+          console.log(response)
+          let data = response.data.results
+          for(let item in data){
+            if (data[item].email === this.email) {
+              if (data[item].password === this.password) {
                 this.loadUser(this.email);
-                if (item.admin) {
+                if (data[item].admin) {
                   this.loadAdmin(true);
                 }else this.loadAdmin(false);
                 this.saveUserLocal()
               }
             }
-          })
+          }
         }
       )
-        .catch(err => console.log(err));
+        .catch(err => console.log('error promisiune:' + err));
     },
     submitLogout() {
       this.loadUser(null);
