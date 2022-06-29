@@ -20,9 +20,8 @@ export default {
     actions: {
         saveCategories({commit}) {
             let jsonCategories = [];
-            EventService.getCategoryList()
+            return EventService.getCategoryList()
                 .then(response => {
-                    console.log(response)
                     jsonCategories = response.data.results;
                         commit("setCategories", jsonCategories);
                     }

@@ -1,11 +1,22 @@
+import {CategoriesService} from "@/services/CategoriesService";
+
 export class Product {
 
-	get Attributes() {
-		return this._Attributes;
+	get categories() {
+		return CategoriesService.getCategories(this._categories);
+	}
+
+	setCategories(value) {
+		this._categories = this.#parseCategories(value);
+		return this;
+	}
+
+	get attributes() {
+		return this._attributes;
 	}
 
 	setAttributes(value) {
-		this._Attributes = this.#parseAttributes(value);
+		this._attributes = this.#parseAttributes(value);
 		return this;
 	}
 
@@ -61,6 +72,10 @@ export class Product {
 	setUnit(value) {
 		this._unit = value;
 		return this;
+	}
+
+	#parseCategories(data) {
+		return data ? data.toString().split(",") : [];
 	}
 
 	#parseAttributes(attributesData) {

@@ -12,7 +12,7 @@
       <!-- Display: Products -->
       <div class="right">
         <div class="loader" v-if="this.getProducts.length < 1"></div>
-        <ProductPage
+        <ProductsListComp
             :categoryId="categoryId"
         />
       </div>
@@ -22,7 +22,7 @@
 
 <script>
 import CategoryComp from "@/components/CategoryComp.vue";
-import ProductPage from "@/components/ProductPage.vue";
+import ProductsListComp from "@/components/ProductsListComp.vue";
 import {mapActions, mapGetters} from "vuex";
 
 
@@ -30,7 +30,7 @@ export default {
   name:'HomePage',
   components: {
     CategoryComp,
-    ProductPage
+		ProductsListComp
   },
   data() {
     return {
@@ -57,7 +57,6 @@ export default {
     }
   },
   beforeMount() {
-    this.saveCategories();
     this.saveProducts();
   },
   mounted() {
@@ -74,7 +73,6 @@ export default {
       saveProducts:"products/saveProducts",
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
-      saveCategories:"category/saveCategories"
     }),
     /**
      * Catch selected category id

@@ -15,9 +15,11 @@
         <p
           class="productName"
           @click="toggleModal()"
-        >{{ name }}</p>
+        >
+					{{ name }}
+				</p>
       </div>
-      <p class="title">
+      <p>
         <b>Preț:</b>&nbsp; {{ price }} / {{ unit }}
       </p>
       <div class="qtyContainer">
@@ -103,6 +105,7 @@ export default {
      */
     toggleModal() {
       this.loadDetails(this.product);
+			console.log(this.product);
       this.$emit("toggleModal", this.product);
     },
 

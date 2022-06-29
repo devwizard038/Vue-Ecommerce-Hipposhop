@@ -71,7 +71,7 @@ import {mapActions, mapGetters} from "vuex";
 import {FILTERS} from "@/const";
 
 export default {
-  name: "ProductsPage",
+  name: "ProductsListComp",
   components: {
     ProductComp,
     ProductDetailComp
@@ -169,9 +169,9 @@ export default {
     toggleModal(item) {
       if (item !== undefined) {
         this.showModal = !this.showModal;
-        this.breadcrumb.push(item);
-        if (this.showModal === true)
-          this.$emit('showModal', this.showModal);
+        // this.breadcrumb.push(item);
+        // if (this.showModal === true)
+        //   this.$emit('showModal', this.showModal);
       }
     },
     closeModal() {

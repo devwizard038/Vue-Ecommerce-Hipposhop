@@ -6,16 +6,20 @@
       </div>
       <div class="image">
         <img
-          :src="this.getDetails._image"
-          :alt="this.getDetails._title"/>
+          :src="getDetails._image"
+          :alt="getDetails._title"
+				/>
       </div>
       <div class="modalDetailsContainer">
         <div class="title">
-          <h2>{{ this.getDetails.title }}</h2>
+          <h2>{{ getDetails.title }}
+						<br>
+						{{ getDetails.categories }}
+					</h2>
         </div>
         <div class="pricingContainer">
           <div class="pricingQty">
-            <p>Pret: {{ this.getDetails.price }}/{{ this.getDetails.unit }}</p>
+            <p>Pret: {{ getDetails.price }}/{{ getDetails.unit }}</p>
             <div class="qtyContainer">
               <p>Cantitate:
                 <input
@@ -37,18 +41,18 @@
           </div>
           <div
             class="variantsContainer"
-            v-if="Object.keys(this.getDetails.Attributes).length > 0"
+            v-if="Object.keys(getDetails.attributes).length > 0"
           >
             <p style="text-align: center">Tip</p>
             <div>
               <button
                 v-for="items in variantsTypeList"
                 @click="loadDetails(items)"
-                :class="items.id !== this.getDetails.id
+                :class="items.id !== getDetails.id
                 ? 'variantsBtn' : 'selected'"
-                :key="items.Attributes.name"
+                :key="items.attributes.name"
               >
-                {{ items.Attributes.type }}
+                {{ items.attributes.type }}
               </button>
             </div>
             <p style="text-align: center">Marime</p>
@@ -56,16 +60,16 @@
               <button
                 v-for="items in variantsSizeList"
                 @click="loadDetails(items)"
-                :class="items.id !== this.getDetails.id
+                :class="items.id !== getDetails.id
                 ? 'variantsBtn' : 'selected'"
-                :key="items._Attributes.name">
-                {{ items._Attributes.size }}
+                :key="items._attributes.name">
+                {{ items._attributes.size }}
               </button>
             </div>
           </div>
           <button
             class="addBtn"
-            @click="addToCart(this.getDetails,this.quantity)">
+            @click="addToCart(getDetails,this.quantity)">
             ADD TO CART
           </button>
         </div>
@@ -114,11 +118,11 @@ export default {
      * @returns {Object}
      */
     variantsTypeList() {
-      if (Object.keys(this.getDetails.Attributes).length > 0) {
+      if (Object.keys(this.getDetails.attributes).length > 0) {
         return this.getProducts.filter(item =>
-          item._Attributes != null
-          && item.Attributes.size === this.getDetails.Attributes.size
-          && item.Attributes.name === this.getDetails.Attributes.name
+          item._attributes != null
+          && item.attributes.size === this.getDetails.attributes.size
+          && item.attributes.name === this.getDetails.attributes.name
         );
       }
 
@@ -129,11 +133,11 @@ export default {
      * @returns {Object}
      */
     variantsSizeList() {
-      if (Object.keys(this.getDetails.Attributes).length > 0) {
+      if (Object.keys(this.getDetails.attributes).length > 0) {
         let variantList = this.getProducts.filter(item =>
-          item.Attributes != null
-          && item.Attributes.type === this.getDetails.Attributes.type
-          && item.Attributes.name === this.getDetails.Attributes.name
+          item.attributes != null
+          && item.attributes.type === this.getDetails.attributes.type
+          && item.attributes.name === this.getDetails.attributes.name
         )
         return variantList
       } else return null
@@ -309,6 +313,7 @@ export default {
   height: 100%;
   grid-area: title;
   display: flex;
+	flex-direction: column;
   align-items: center;
   justify-content: center;
 }

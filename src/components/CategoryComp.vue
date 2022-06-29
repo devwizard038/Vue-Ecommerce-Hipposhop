@@ -16,6 +16,7 @@
 <script>
 import TreeBrowser from "./TreeBrowser"
 import {Category} from "@/models/Category";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "CategoryComponent",
@@ -28,24 +29,19 @@ export default {
     };
   },
   emits: ["selected", "breadCrumb"],
-  computed: {
-    categoryListState(){
-      return this.$store.state.category.categoryList;
-    }
-  },
-  watch:{
-    /**
-     * Category list state watch for changes
-     * @param newValue
-     */
-    categoryListState(newValue){
-      if(newValue.length > 0){
-        this.categoryTree = new Category();
-        this.mapCategory(this.categoryListState, this.categoryTree);
-      }
-    }
-  },
+	mounted() {
+		this.saveCategories().then(() => {
+			this.categoryTree = new Category();
+			this.mapCategory(this.getCategories(), this.categoryTree);
+		});
+	},
   methods: {
+		...mapActions({
+			saveCategories:"category/saveCategories"
+		}),
+		...mapGetters({
+			getCategories:"category/getCategories"
+		}),
     mapCategory(categories, currentNode) {
       if (categories) {
         categories.forEach(category => {
