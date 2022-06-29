@@ -25,16 +25,20 @@
           <li v-if="this.getAdmin">
             <router-link to="/admin">AdminPage</router-link>
           </li>
-          <li class="loginIcon">
-            <a @click="openLogin"
-               v-if="this.getUser === null"
-            >👤</a>
-            <a
-              v-else
-              @click="openLogin"
-            >{{ this.getUser }}</a>
-          </li>
+          <li>
+            <a>Contul meu</a>
+            <div class="userToolTip">
+              <p>{{ this.getUser ? this.getUser : 'Momentam nu sunteti autentificat' }}</p>
+              <div class="userToolButtons" v-if="this.getUser === null">
+                <btn class="addToCart" @click="openLogin">Login</btn>
+                <btn class="signUp">Creeaza-ti cont</btn>
+              </div>
+              <div class="userToolButtons" v-else>
+                <btn class="logOut" @click="submitLogout">Logout</btn>
+              </div>
 
+            </div>
+          </li>
           <li><a @click="openCart">&#x1F6D2;({{ this.cartItems }})</a></li>
         </ul>
       </div>
@@ -81,7 +85,7 @@ export default {
       getCartCount: "cart/getCartCount",
       getSelected: "cart/getSelected",
       getUser: "user/getUser",
-      getAdmin:"user/getAdmin"
+      getAdmin: "user/getAdmin"
     }),
     /**
      * Display count of products in the cart
@@ -113,22 +117,30 @@ export default {
     ...mapActions({
       loadCart: "cart/loadCart",
       loadSelected: "cart/loadSelected",
-      loadUserLocal:"user/loadUserLocal"
+      loadUserLocal: "user/loadUserLocal",
+      loadAdmin:"user/loadAdmin",
+      deleteUserLocal:"user/deleteUserLocal",
+      loadUser:"user/loadUser",
     }),
     closeCart() {
       this.showCart = false;
     },
-    closeLogin(){
+    closeLogin() {
       this.showLogin = false;
     },
     openCart() {
       this.showCart = true;
     },
-    openLogin(){
+    openLogin() {
       this.showLogin = true;
     },
     toggleMobile() {
       this.active = !this.active
+    },
+    submitLogout() {
+      this.loadUser(null);
+      this.loadAdmin(false);
+      this.deleteUserLocal();
     }
   },
 }
@@ -142,6 +154,7 @@ html, body {
   height: 100%;
   width: 100%;
 }
+
 .popup {
   position: absolute;
   top: 4rem;
@@ -229,6 +242,82 @@ html, body {
   width: 100%;
   background-color: white;
   border-radius: 10px;
+}
+
+.userToolTip {
+  min-width: 250px;
+  visibility: hidden;
+  position: absolute;
+  z-index: 10000;
+  width: auto;
+  color: black;
+  background-color: #dedede;
+  border-radius: 6px;
+  padding: 0.8rem;
+  right: 3.5rem;
+  margin-top: 0.2rem;
+  box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.40);
+}
+
+.userToolTip p {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-links li:hover .userToolTip {
+  visibility: visible;
+}
+
+.userToolTip .userToolButtons {
+  padding-top: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.userToolTip .userToolButtons .signUp {
+  color: rgb(16, 191, 255);
+  cursor: pointer;
+}
+
+.userToolTip .userToolButtons .signUp:hover {
+  text-decoration: underline;
+
+}
+
+.logOut {
+  background-color: rgb(162, 7, 7);
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  color: white;
+  text-transform: uppercase;
+  /*font-weight: bold;*/
+  border-radius: 0.7rem;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.addToCart:hover {
+  background-color: rgb(190, 20, 20);
+  cursor: pointer;
+}
+
+.addToCart {
+  background-color: rgb(16, 191, 255);
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  color: white;
+  text-transform: uppercase;
+  /*font-weight: bold;*/
+  border-radius: 0.7rem;
+  border: none;
+  text-decoration: none;
+}
+
+.addToCart:hover {
+  background-color: rgb(7, 72, 96);
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {
