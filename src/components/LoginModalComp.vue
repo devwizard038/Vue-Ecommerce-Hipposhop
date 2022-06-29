@@ -42,6 +42,9 @@
           v-model="password"
           required
         /><br/>
+        <p
+          style="color: red"
+          v-if="this.loginError">User or password don't match!</p>
         <button
           :class="[checkPassword(password) === 'valid' && checkEmail(email) === 'valid' ? 'btnLogin' : 'btnLoginInactive']"
           type="submit"
@@ -81,6 +84,7 @@ export default {
       validEmail: false,
       validPass: false,
       login: false,
+      loginError: false,
     }
   },
   computed: {
@@ -93,7 +97,7 @@ export default {
       loadUser: "user/loadUser",
       loadAdmin: "user/loadAdmin",
       saveUserLocal: "user/saveUserLocal",
-      deleteUserLocal: "user/deleteUserLocal"
+      deleteUserLocal: "user/deleteUserLocal",
     }),
     closeLogin() {
       this.$emit('closeLogin');
@@ -102,15 +106,18 @@ export default {
       EventService.getUserList().then(
         response => {
           let data = response.data.results
-          for (let item in data) {
-            if (data[item].email === this.email && data[item].password === this.password) {
-              this.loadUser(this.email);
-              if (data[item].admin) {
-                this.loadAdmin(true);
-              } else this.loadAdmin(false);
-              this.saveUserLocal()
+          console.log(data.length)
+            for (let item in data) {
+              if (data[item].email === this.email && data[item].password === this.password) {
+                this.loginError= false
+
+                this.loadUser(this.email);
+                if (data[item].admin) {
+                  this.loadAdmin(true);
+                } else this.loadAdmin(false);
+                this.saveUserLocal()
+              } else {this.loginError = true}
             }
-          }
         }
       )
         .catch(err => console.log('error promisiune:' + err));
