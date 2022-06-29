@@ -55,7 +55,7 @@ export default {
          * @param dispatch
          */
         saveProducts: function ({commit}) {
-            let products = []
+            let products = [];
             let jsonProducts = [];
             EvenService.getJsonProducts()
                 .then(response => {
@@ -69,7 +69,6 @@ export default {
                 .catch(error => console.log(error));
         },
         /**
-         * TODO: Admin state optimization for modifying items in AG Grid
          * @param commit
          * @param newProducts
          */

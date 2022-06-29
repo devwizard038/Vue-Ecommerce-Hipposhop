@@ -42,7 +42,6 @@ export default {
     ...mapGetters({
       getId: "selectedcateg/getId",
       getProducts: "products/getProducts",
-      getCategories: "category/getCategories",
       getCart: "cart/getCart"
     }),
     products() {
@@ -57,15 +56,14 @@ export default {
       this.getSelectedCategory(newId)
     }
   },
-  mounted() {
+  beforeMount() {
     this.saveCategories();
     this.saveProducts();
+  },
+  mounted() {
     /**
      * Catch error: for empty local storage for category and cart
      */
-    if (this.getCategories === null) {
-      this.updateCategories([])
-    }
     this.loadCart()
     if (this.getCart === null) {
       this.updateCart([])
@@ -74,7 +72,6 @@ export default {
   methods: {
     ...mapActions({
       saveProducts:"products/saveProducts",
-      updateCategories: "category/updateCategories",
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
       saveCategories:"category/saveCategories"

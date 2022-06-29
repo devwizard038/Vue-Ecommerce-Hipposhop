@@ -40,7 +40,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getId: "selectedcateg/getId",
       getCategory: "selectedcateg/getCategory",
     }),
 

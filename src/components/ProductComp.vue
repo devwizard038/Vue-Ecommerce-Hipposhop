@@ -52,7 +52,7 @@
 
 <script>
 
-import {mapActions, mapGetters} from "vuex";
+import {mapActions} from "vuex";
 
 export default {
   name: 'ProductComp',
@@ -92,11 +92,6 @@ export default {
       validQuantity: false,
     };
   },
-  computed: {
-    ...mapGetters({
-      getDetails: "productDetail/getDetails"
-    })
-  },
   methods: {
     ...mapActions({
       loadDetails: "productDetail/loadDetails",
@@ -129,7 +124,6 @@ export default {
           this.validQuantity = false
         }, 4000)
       }
-
     },
   },
 };

@@ -98,7 +98,6 @@ export default {
   methods: {
     ...mapActions({
       loadCart: "cart/loadCart",
-      updateCart: "cart/updateCart",
       deleteCartItem: "cart/deleteCartItem",
       modifyCart: "cart/modifyCart"
     }),

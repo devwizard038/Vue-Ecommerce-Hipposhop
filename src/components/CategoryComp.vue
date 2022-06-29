@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
 import TreeBrowser from "./TreeBrowser"
 import {Category} from "@/models/Category";
 
@@ -25,26 +24,28 @@ export default {
   },
   data() {
     return {
-      catTree: [],
       categoryTree: [],
     };
   },
   emits: ["selected", "breadCrumb"],
   computed: {
-    ...mapGetters({
-      getCategories: "category/getCategories",
-    })
+    categoryListState(){
+      return this.$store.state.category.categoryList;
+    }
   },
-  mounted() {
-    this.loadCategories();
-    this.catTree = this.getCategories;
-    this.categoryTree = new Category();
-    this.mapCategory(this.catTree, this.categoryTree);
+  watch:{
+    /**
+     * Category list state watch for changes
+     * @param newValue
+     */
+    categoryListState(newValue){
+      if(newValue.length > 0){
+        this.categoryTree = new Category();
+        this.mapCategory(this.categoryListState, this.categoryTree);
+      }
+    }
   },
   methods: {
-    ...mapActions({
-      loadCategories: "category/loadCategories",
-    }),
     mapCategory(categories, currentNode) {
       if (categories) {
         categories.forEach(category => {
@@ -58,7 +59,7 @@ export default {
           }
         });
       } else {
-        return categories = null
+        return this.getCategories
       }
     },
   },

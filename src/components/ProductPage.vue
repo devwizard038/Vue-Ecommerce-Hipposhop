@@ -105,8 +105,6 @@ export default {
     ...mapGetters({
       getProducts: "products/getProducts",
       getCart: "cart/getCart",
-      getCategories: "category/getCategories",
-      getId: "selectedcateg/getId",
       getCategory: "selectedcateg/getCategory",
     }),
     //  Retrieve list from LocalStorage.
@@ -131,8 +129,6 @@ export default {
     },
   },
   mounted() {
-    // Mounts LocalStorage list
-    // this.loadProducts();
     let callback = (entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -159,10 +155,8 @@ export default {
     ...mapActions({
       searchProduct: "products/searchProduct",
       sortProducts: "products/sortProducts",
-      loadDetails: "productDetail/loadDetails",
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
-      loadCategories: "category/loadCategories",
       loadId: "selectedcateg/loadId",
       loadCategory: "selectedcateg/loadCategory",
     }),

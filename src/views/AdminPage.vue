@@ -69,7 +69,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getProducts: "products/getProducts",
       getAdminList: "products/getAdminList",
       getModifiedItemsList: "products/getModifiedItemsList"
     }),
@@ -86,33 +85,21 @@ export default {
   methods: {
     ...
       mapActions({
-        saveProducts: "products/saveProducts",
-        deleteProducts: "products/deleteProducts",
-        saveModifiedProducts: "products/saveModifiedProducts",
         saveModifedItemsList: "products/saveModifedItemsList",
         saveAdminTable: "products/saveAdminTable",
         deleteAdminTable: "products/deleteAdminTable",
-        loadLocal: "products/loadLocal",
-        saveCategories: "category/saveCategories",
-        deleteCategories: "category/deleteCategories",
-        loadCart: "cart/loadCart",
         updateCart: "cart/updateCart",
       }),
     saveList() {
       this.saveAdminTable();
-      this.saveCategories();
     }
     ,
     clearList() {
       // Clears Product List from LocalStorage
       this.deleteAdminTable();
       this.saveModifedItemsList([]);
-      // this.deleteCategories();
-      // this.loadCart();
-
       // Resets Cart List from LocalStorage
       this.updateCart([]);
-      // this.loadLocal()
     }
     ,
     /**
