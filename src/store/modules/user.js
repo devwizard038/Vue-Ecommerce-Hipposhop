@@ -49,7 +49,7 @@ export default {
             commit("setAdmin", adminStatus);
         },
         loadNewUser({commit}, data) {
-            commit("setAdmin", data);
+            commit("setNewUser", data);
         },
         resetNewUser({commit, getters}) {
             let data = getters["getNewUser"];

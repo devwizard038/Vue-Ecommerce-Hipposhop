@@ -106,7 +106,6 @@ export default {
       EventService.getUserList().then(
         response => {
           let data = response.data.results
-          console.log(data.length)
             for (let item in data) {
               if (data[item].email === this.email && data[item].password === this.password) {
                 this.loginError= false

@@ -166,8 +166,7 @@ export default {
           newUser.name = this.userName;
           newUser.email = this.email;
           newUser.password = this.passwordCheck;
-          this.loadNewUser(newUser)
-          console.log("[" + JSON.stringify(this.getNewUser) + "]");
+          this.loadNewUser(newUser);
         }
       )
         .then(() => {
@@ -179,8 +178,6 @@ export default {
             )
         })
         .catch(err => console.warn('error promisiune:' + err));
-
-      console.log("[" + JSON.stringify(this.getNewUser) + "]");
     },
     /**
      * Checks email requirements (@, .com/.co etc.)
