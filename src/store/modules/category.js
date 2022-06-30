@@ -1,4 +1,4 @@
-import EventService from "@/services/EvenService";
+import EventService from "@/Libraries/ServerEvents";
 
 export default {
     namespaced: true,

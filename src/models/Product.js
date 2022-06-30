@@ -90,4 +90,18 @@ export class Product {
 
 		return obj;
 	}
+
+	toObject(){
+		let pojo = {
+			id: this.id,
+			image: this.image,
+			price: this.price,
+			title: this.title,
+			unit: this.unit,
+			attributes: this.attributes,
+			categoryId: this.category_id,
+			quantity: this.quantity
+		};
+		return pojo;
+	}
 }

@@ -11,29 +11,29 @@
       >
         <div
           v-for="item in this.computedCart"
-          :key="item._id"
+          :key="item.id"
         >
           <div class="messageBox">
             <ShopCartMessageComp
               v-if="item.showMessage === true"
-              :itemName="item._title"
+              :itemName="item.title"
               :deleteConfirm="deleteConfirm"
               :itemToDelete="item"
             />
           </div>
           <div class="itemList">
             <img
-              v-if="item._image === null"
+              v-if="item.image === null"
               src="../assets/images/no_image_available.jpg"
-              alt="{{ item._name }}"
+              alt="{{ item.name }}"
             />
             <img
               v-else
-              :src="item._image"
-              :alt="item._name"
+              :src="item.image"
+              :alt="item.name"
             />
-            <p class="title">{{ item._title }}</p>
-            <p class="price">{{ item._price }}$</p>
+            <p class="title">{{ item.title }}</p>
+            <p class="price">{{ item.price }}$</p>
             <p class="price"><input
               type="number"
               min="1"
@@ -41,7 +41,7 @@
               @input="event => this.modifyCart({
               data:item, quantity:Number(event.target.value)})"
             >
-              {{ item._unit }}
+              {{ item.unit }}
             </p>
             <a @click="deleteClick(item)">&#9747;</a>
           </div>

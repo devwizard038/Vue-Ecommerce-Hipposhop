@@ -105,7 +105,6 @@ export default {
      */
     toggleModal() {
       this.loadDetails(this.product);
-			console.log(this.product);
       this.$emit("toggleModal", this.product);
     },
 

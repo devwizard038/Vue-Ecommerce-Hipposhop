@@ -1,7 +1,7 @@
 // noinspection JSVoidFunctionReturnValueUsed
 import {FILTERS, SHOP_KEY, TABLES} from "@/const";
 import {ProductTransformer} from "@/transformers/ProductTransformer";
-import EvenService from "@/services/EvenService";
+import EvenService from "@/Libraries/ServerEvents";
 
 export default {
     namespaced: true,
@@ -65,7 +65,6 @@ export default {
                     });
                     commit("setUnfilteredList",products);
                     commit("setProducts", products);
-                    console.log(products);
                 })
                 .catch(error => console.log(error));
         },

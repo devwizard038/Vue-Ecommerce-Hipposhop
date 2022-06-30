@@ -68,7 +68,7 @@
 <script>
 import validatorEmail from "@/Libraries/validatorEmail";
 import validatorPassword from "@/Libraries/validatorPassword";
-import EventService from "@/services/EvenService"
+import EventService from "@/Libraries/ServerEvents"
 import {mapActions, mapGetters} from "vuex";
 
 export default {

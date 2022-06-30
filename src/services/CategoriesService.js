@@ -13,12 +13,10 @@ class CategoriesService {
 						.find(category => Number(category.id) === Number(prop))
 						.name;
 				}
-
 				return target[prop];
 			}
 		});
 	}
-
 	getCategories(data) {
 		return data.map(categoryId => {
 			return this.categoriesList[categoryId];

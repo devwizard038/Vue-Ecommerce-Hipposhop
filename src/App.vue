@@ -30,11 +30,11 @@
             <div class="userToolTip">
               <p>{{ this.getUser ? this.getUser : 'Momentam nu sunteti autentificat' }}</p>
               <div class="userToolButtons" v-if="this.getUser === null">
-                <btn class="addToCart" @click="openLogin">Login</btn>
-                <btn class="signUp">Creeaza-ti cont</btn>
+                <button class="addToCart" @click="openLogin">Login</button>
+                <button class="signUp">Creeaza-ti cont</button>
               </div>
               <div class="userToolButtons" v-else>
-                <btn class="logOut" @click="submitLogout">Logout</btn>
+                <button class="logOut" @click="submitLogout">Logout</button>
               </div>
 
             </div>

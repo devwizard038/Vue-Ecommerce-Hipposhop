@@ -194,13 +194,13 @@ export default {
           localCart = [item];
         } else {
           let currentProduct = localCart.find(
-            product => product._id === item._id
+            product => product.id === item.id
           );
 
           if (currentProduct) {
             currentProduct.quantity += item.quantity;
           } else {
-            localCart.push(item);
+            localCart.push(item.toObject());
           }
         }
         this.updateCart(localCart);

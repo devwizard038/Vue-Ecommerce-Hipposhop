@@ -22,7 +22,7 @@ export default {
     },
     getCartPrice(state){
       let total=0;
-      state.cartList.forEach(item => total += item.quantity * item._price);
+      state.cartList.forEach(item => total += item.quantity * item.price);
       return total;
     },
     getSelected(state) {
@@ -59,7 +59,7 @@ export default {
       let newCart = localStorage.setItem(
         `${SHOP_KEY}-${TABLES.CART}`,
         JSON.stringify(
-            state.cartList.filter(n => n._id !== data._id))
+            state.cartList.filter(n => n.id !== data.id))
       );
       commit("setCart", newCart);
     },
@@ -73,7 +73,7 @@ export default {
     modifyCart({commit, state}, { data, quantity}) {
       let oldCart = state.cartList;
       oldCart.forEach(item => {
-        if (item._id === data._id) {
+        if (item.id === data.id) {
           item.quantity = quantity;
         }
       });
