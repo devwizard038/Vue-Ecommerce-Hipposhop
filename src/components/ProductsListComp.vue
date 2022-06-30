@@ -1,35 +1,34 @@
 <template>
   <div class="productPageContainer">
-    <div class="headerTitle">
-      <h3>Products</h3>
-      <hr/>
-    </div>
     <div class="productContainer">
       <!-- Display: Selected category bred crumb -->
       <div class="breadCrumb">
-        <span
-          v-for="item in breadcrumb"
-          @click="emitNode(item)"
-          :key="item.id">
-          >> {{ item.name ? item.name : item.title }}
-        </span>
-        <div class="filterList">
-          <input
-            class="searchList"
-            type="text"
-            placeholder="Search.."
-            @input="this.searchProduct($event.target.value)"
-          >
-          <select
-            class="sortList"
-            @change="this.sortProducts($event.target.value)">
-            <option value=0>Default</option>
-            <option :value="sortPriceAsc">Pret Ascendent</option>
-            <option :value="sortPriceDesc">Pret Descendent</option>
-            <option :value="sortAlphAsc">A-Z</option>
-            <option :value="sortAlphDesc">Z-A</option>
-          </select>
-        </div>
+        <div class="links">
+					<span
+						v-for="item in breadcrumb"
+						@click="emitNode(item)"
+						:key="item.id">
+						> {{ item.name ? item.name : item.title }}
+					</span>
+				</div>
+
+				<div class="filterList">
+					<input
+						class="searchList"
+						type="text"
+						placeholder="Rechercher un produit..."
+						@input="this.searchProduct($event.target.value)"
+					>
+					<select
+						class="sortList"
+						@change="this.sortProducts($event.target.value)">
+						<option value=0>Défaut</option>
+						<option :value="sortPriceAsc">Prix croissants</option>
+						<option :value="sortPriceDesc">Prix décroissants</option>
+						<option :value="sortAlphAsc">Nom croissant</option>
+						<option :value="sortAlphDesc">Nom décroissant</option>
+					</select>
+				</div>
 
       </div>
       <div
@@ -69,6 +68,7 @@ import ProductComp from "./ProductComp.vue";
 import ProductDetailComp from "@/components/ProductDetailComp.vue";
 import {mapActions, mapGetters} from "vuex";
 import {FILTERS} from "@/const";
+import {Category} from "@/models/Category";
 
 export default {
   name: "ProductsListComp",
@@ -124,8 +124,15 @@ export default {
      * Loads selected category and returns path to parent
      */
     breadcrumb() {
-      let category = this.getCategory;
-      return category ? category.path() : [];
+			let category = this.getCategory;
+			let path = (category ? category.path() : []);
+
+			if (!category || (category && category.id)) {
+				let home = new Category({id: 0, name: "Accueil"});
+				path.unshift(home);
+			}
+			console.log(path);
+      return path;
     },
   },
   mounted() {
@@ -169,9 +176,6 @@ export default {
     toggleModal(item) {
       if (item !== undefined) {
         this.showModal = !this.showModal;
-        // this.breadcrumb.push(item);
-        // if (this.showModal === true)
-        //   this.$emit('showModal', this.showModal);
       }
     },
     closeModal() {
@@ -210,6 +214,7 @@ export default {
      * Sort: Display selected category clicked on BreadCrumb element.
      * */
     emitNode(value) {
+			console.log(value);
       this.loadId(value.id);
       this.loadCategory(value);
     }
@@ -226,53 +231,57 @@ export default {
   padding: 0;
   display: grid;
   grid-template:
-      "headerTitle" 5%
-      "content" 95%
+      "content" 100%
       / 100%;
-}
-
-.headerTitle {
-  grid-area: headerTitle;
-  height: 100%;
-  width: 100%;
 }
 
 .productContainer {
   height: 100%;
   width: 100%;
-  margin: 0;
-  padding: 0;
   grid-area: content;
   display: grid;
   grid-template:
-      "breadCrumb" 4%
-      "content" 96%
+      "breadCrumb" 50px
+      "content" auto
       / 100%;
 }
 
 .breadCrumb {
   height: 100%;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   grid-area: breadCrumb;
+	padding-left: 10px;
+	background-image: linear-gradient(to right, #ffffff, #efefef);
 }
 
-.bread-crumb span {
+.breadCrumb .links {
+	height: 100%;
+	padding-right: 10px;
+	display: flex;
+	align-items: center;
+}
+
+.breadCrumb span {
+	margin-left: 10px;
   cursor: pointer;
 }
 
-.bread-crumb span:hover {
+.breadCrumb span:hover {
   color: #2095E1FF;
 }
 
-.searchList {
-  margin-left: auto;
+.filterList .searchList {
+	width: 220px;
+	padding: 7px;
+	border-radius: 50px;
 }
 
 .filterList .sortList {
-  margin-left: 1rem;
+  margin-left: 10px;
+	border-radius: 50px;
+	padding: 2px;
 }
 
 .filterList {
@@ -281,12 +290,11 @@ export default {
 }
 
 .product {
-  word-spacing: 0.1rem;
   overflow: auto;
   height: 100%;
-  width: 100%;
   box-sizing: content-box;
   grid-area: content;
+	padding-left: 20px;
 }
 
 .product::-webkit-scrollbar {

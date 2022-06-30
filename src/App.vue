@@ -8,7 +8,7 @@
   </div>
   <div class="appContainer">
     <nav class="navbar">
-      <div class="brand-title">ShopCart.io</div>
+      <div class="brand-title">Cegedim Shopping Center</div>
       <div class="toggle-button" @click="toggleMobile">
         <span class="bar"></span>
         <span class="bar"></span>
@@ -20,18 +20,18 @@
       >
         <ul>
           <li>
-            <router-link to="/">Home</router-link>
+            <router-link to="/">Accueil</router-link>
           </li>
           <li v-if="this.getAdmin">
-            <router-link to="/admin">AdminPage</router-link>
+            <router-link to="/admin">Administration</router-link>
           </li>
           <li>
-            <a>Contul meu</a>
+            <a>Mon compte</a>
             <div class="userToolTip">
-              <p>{{ this.getUser ? this.getUser : 'Momentam nu sunteti autentificat' }}</p>
+              <p>{{ this.getUser ? this.getUser : 'Vous devez authentifier pour accéder votre compte' }}</p>
               <div class="userToolButtons" v-if="this.getUser === null">
-                <button class="addToCart" @click="openLogin">Login</button>
-                <button class="signUp">Creeaza-ti cont</button>
+                <button class="addToCart" @click="openLogin">Se connecter</button>
+                <button class="signUp">Créer un compte</button>
               </div>
               <div class="userToolButtons" v-else>
                 <button class="logOut" @click="submitLogout">Logout</button>
@@ -194,28 +194,31 @@ html, body {
 }
 
 .brand-title {
-  font-size: 2.5rem;
-  margin: .5rem;
+  font-size: 30px;
+  margin-left: 20px;
+}
+
+.navbar-links {
+	height: 100%;
 }
 
 .navbar-links ul {
-  height: 100%;
   margin: 0;
   padding: 0;
   display: flex;
+	height: 100%;
+	align-items: stretch;
 }
 
 .navbar-links li {
-  height: 100%;
   list-style: none;
+	vertical-align: center;
 }
 
 .navbar-links li a {
-  height: 100%;
-  font-size: 1.5rem;
   text-decoration: none;
   color: white;
-  padding: 1.4rem;
+  padding: 22px;
   display: block;
   cursor: pointer;
 }

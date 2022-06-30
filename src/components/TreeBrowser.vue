@@ -6,14 +6,17 @@
       v-if="node.id"
       :class="{ 'selected': isSelected }"
     >
-			<span
-        v-if="hasChildren"
-        @click="expanded = !expanded"
-        class="type"
-      >
-				{{ expanded ? '&#45;' : '&#43;' }}
-			</span>
-      <a @click="emitNode(node)">{{ node.name }}</a>
+      <a @click="emitNode(node);">
+				<div
+					style="display: inline-block;"
+					v-if="hasChildren"
+					:class="{ 'expanded': expanded }"
+				>
+					&gt;
+
+				</div>
+				{{ node.name }}
+			</a>
     </div>
     <div v-if="expanded || node.id === 0">
       <TreeBrowser
@@ -60,6 +63,7 @@ export default {
     * Update selected category ID in selectedcateg.js
     * */
     emitNode(value) {
+			this.expanded = !this.expanded;
       this.loadId(value.id);
       this.loadCategory(value);
     },
@@ -70,24 +74,35 @@ export default {
 <style scoped>
 .node {
   text-align: left;
-  font-size: 1.6rem;
   cursor: pointer;
-  margin-left: 40px;
-  padding-bottom: 0.3rem;
-  margin-right: 1rem;
+  margin-left: 30px;
+	color: #6c6c6c;
+}
+
+.node a {
+	padding: 10px;
+	display: block;
+	transition: 0.3s;
+}
+
+.node a:hover, .selected {
+	background-image: linear-gradient(to right, #efefef, #ffffff);
+	color: #000;
 }
 
 .type {
   font-size: 1.4rem;
   color: grey;
+	transition: 0.5s;
 }
 
-.type:hover {
-  color: orange;
-}
-
-.selected {
-  background-color: #efefef;
+.expanded {
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	transform: rotate(90deg);
+	transition: 0.7s;
 }
 
 @media (max-width: 600px) {

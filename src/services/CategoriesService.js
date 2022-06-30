@@ -26,6 +26,6 @@ class CategoriesService {
 
 
 let instance = new CategoriesService();
-// Object.freeze(instance);
+Object.freeze(instance);
 
 export { instance as CategoriesService };

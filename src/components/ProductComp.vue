@@ -2,52 +2,54 @@
   <!-- Formatting for each product card -->
   <div class="cardContainer">
     <div class="card">
-      <img
-        v-if="image === null"
-        src="../assets/images/no_image_available.jpg"
-        alt="{{ name }}"
-      />
-      <img
-        v-else
-        :src="image"
-        :alt="name"/>
-      <div class="containerProduct">
-        <p
-          class="productName"
-          @click="toggleModal()"
-        >
-					{{ name }}
-				</p>
-      </div>
-      <p>
-        <b>Preț:</b>&nbsp; {{ price }} / {{ unit }}
-      </p>
-      <div class="qtyContainer">
-        <p>
-          <b>Cantitate:</b> &nbsp;
-          <input
-            class="inputCell"
-            type="number"
-            min="0"
-            v-model.number="quantity"
-          />
-        </p>
-        <transition
-          mode="in-out"
-          enter-active-class="animate__animated animate__fadeIn"
-          leave-active-class="animate__animated animate__fadeOut"
-        >
-          <p
-            v-if="this.validQuantity"
-            class="invalidQty"
-          >Selectati o cantitate !</p>
-        </transition>
-      </div>
-      <button
-        class="addToCart"
-        @click="addToCart(product)"
-      >Add to cart
-      </button>
+      <div class="containerImage">
+				<img
+					v-if="image === null"
+					src="../assets/images/no_image_available.jpg"
+					alt="{{ name }}"
+				/>
+				<img
+					v-else
+					:src="image"
+					:alt="name"
+				/>
+			</div>
+			<div class="productItem">
+				<div class="containerProduct" @click="toggleModal()">
+					<div class="productName">
+						{{ name }}
+					</div>
+					<div>
+					<b>Prix:</b>&nbsp; {{ price }} / {{ unit }}
+					</div>
+				</div>
+				<div class="qtyContainer">
+					<p>
+						<b>Quantité:</b> &nbsp;
+						<input
+							class="inputCell"
+							type="number"
+							min="0"
+							v-model.number="quantity"
+						/>
+
+					</p>
+					<span
+						v-if="this.validQuantity"
+						class="invalidQty"
+					>
+							Sélectionner une quantité !
+						</span>
+				</div>
+				<div class="addToCartContainer">
+					<button
+						class="addToCart"
+						@click="addToCart(product)"
+					>
+						Ajouter au panier
+					</button>
+				</div>
+			</div>
     </div>
   </div>
 </template>
@@ -112,7 +114,8 @@ export default {
      * Add to selected item to cart
      * @param item {Object}
      */
-    addToCart(item) {
+    addToCart(selectedItem) {
+			let item = selectedItem.toObject();
       if (this.quantity > 0) {
         item.showMessage = false;
         item.quantity = this.quantity;
@@ -139,43 +142,36 @@ export default {
 
 .card {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  background: #dedede;
-  min-height: 7rem;
-  margin-top: 0.2rem;
-  margin-right: 0.2rem;
-  padding: 0.5rem;
-  font-family: 'Poppins', sans-serif;
-  flex-wrap: wrap;
-  font-size: 1.2rem;
-  min-font-size: 0rem;
-  border-radius: 0.7rem;
+	border-bottom: solid 1px #dedede;
+	min-height: 170px;
+}
+
+.card .containerImage {
+	width: 200px;
 }
 
 .card p {
   display: flex;
-  width: 20ch;
+  width: 200px;
   justify-content: flex-start;
   align-items: flex-start;
 }
 
 img {
-  width: 10rem;
-  height: 7rem;
-  border-radius: 4px;
-  box-shadow: 4px 2px 2px gray;
+  width: 180px;
+  height: 150px;
+	border: solid 1px #dedede;
+	font-size: 10px;
 }
 
 .qtyContainer {
-  position: relative;
 }
 
 .inputCell {
   align-items: center;
   width: 3rem;
-  border: none;
+	border: 1px solid #2095E1FF;
   font-family: 'Poppins', sans-serif;
   font-size: 1rem;
   padding-left: 5px;
@@ -183,21 +179,27 @@ img {
   border-radius: 6px;
 }
 
-.inputCell:hover {
-  border: 2px solid #2095E1FF;
+.productItem {
+	flex-grow: 2;
+	display: flex;
+	padding-left: 10px;
+	align-items: center;
 }
 
 .qtyContainer .invalidQty {
-  position: absolute;
-  font-size: 1rem;
-  color: red;
-  top: 2rem;
-  --animate-duration: 0.4s;
+  color: #FF0000FF;
+}
+
+.containerProduct {
+	width: 100%;
+}
+
+.addToCartContainer {
+	margin-right: 20px;
+	white-space: nowrap;
 }
 
 .productName {
-  font-size: 1.15rem;
-  min-font-size: 0;
   font-weight: bold;
 }
 
@@ -209,7 +211,6 @@ img {
 .addToCart {
   background-color: rgb(16, 191, 255);
   padding: 0.6rem;
-  font-size: 1rem;
   color: white;
   text-transform: uppercase;
   font-weight: bold;
@@ -230,9 +231,8 @@ img {
   }
 
   .productName {
-    max-font-size: 0.9rem;
-    min-font-size: 0rem;
-
+    /*max-font-size: 0.9rem;*/
+    /*min-font-size: 0rem;*/
   }
 
   .addToCart {

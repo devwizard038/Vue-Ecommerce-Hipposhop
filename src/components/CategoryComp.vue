@@ -1,9 +1,9 @@
 <template>
   <div class="categoryPageContainer">
-    <div class="headerCategory">
-      <h3>Categories</h3>
-      <hr/>
-    </div>
+<!--    <div class="headerCategory">-->
+<!--      <h3>Categories</h3>-->
+<!--      <hr/>-->
+<!--    </div>-->
     <div class="categoriesContainer">
       <!-- Category data organised in a tree -->
       <TreeBrowser
@@ -69,15 +69,9 @@ export default {
   width: 100%;
   display: grid;
   grid-template:
-      "headerCategory" 8%
-      "contentCategory" 92%
+      /*"headerCategory" 8%*/
+      "contentCategory" 100%
       / 100%;
-}
-
-.headerCategory {
-  width: 100%;
-  height: 100%;
-  grid-area: headerCategory;
 }
 
 .categoriesContainer {
@@ -85,6 +79,11 @@ export default {
   width: 100%;
   grid-area: contentCategory;
   overflow: auto;
+	background-color: #efefef;
+}
+
+.categoriesContainer > div {
+	margin-left: -20px !important;
 }
 
 .categoriesContainer::-webkit-scrollbar {
@@ -99,13 +98,6 @@ export default {
 .categoriesContainer::-webkit-scrollbar-thumb {
   background-color: rgb(16, 191, 255);
   border-radius: 100px;
-}
-
-h3 {
-  text-align: center;
-  font-size: 1.5rem;
-  padding-bottom: 0;
-  margin: 0;
 }
 
 ul {

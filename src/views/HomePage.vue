@@ -1,8 +1,5 @@
 <template>
   <div class="homeContainer">
-    <div class="header">
-      <h1>Home Page</h1>
-    </div>
     <div class="table">
       <!-- Display: Category List-->
       <div class="left">
@@ -115,15 +112,8 @@ export default {
   overflow: hidden;
   display: grid;
   grid-template:
-      "header" 7%
-      "content" 93%
+      "content" 100%
       / 100%;
-}
-
-.header{
-  width: 100%;
-  height: 100%;
-  grid-area: header;
 }
 
 h1 {
@@ -137,7 +127,7 @@ h1 {
   height: 100%;
   grid-area: content;
   display: grid;
-  grid-template:"left right" 100%/ 25% 75%
+  grid-template: "left right" 100%/ 350px auto;
 }
 
 .table .left{

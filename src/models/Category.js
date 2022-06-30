@@ -27,6 +27,6 @@ export class Category {
      * @returns {Category[]}
      */
     path() {
-        return this.parent.id ? this.parent.path().concat([this]) : [this];
+        return this.parent && this.parent.id ? this.parent.path().concat([this]) : [this];
     }
 }
