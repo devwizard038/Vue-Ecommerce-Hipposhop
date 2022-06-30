@@ -194,7 +194,7 @@ html, body {
 }
 
 .brand-title {
-  font-size: 30px;
+  font-size: 24px;
   margin-left: 20px;
 }
 
@@ -258,8 +258,8 @@ html, body {
   border-radius: 6px;
   padding: 0.8rem;
   right: 3.5rem;
-  margin-top: 0.2rem;
-  box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.40);
+  margin-top: -10px;
+  box-shadow: 0 0 13px 1px rgba(0, 0, 0, 0.40);
 }
 
 .userToolTip p {
