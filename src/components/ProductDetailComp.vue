@@ -340,7 +340,7 @@ export default {
   margin: 0;
 }
 
-.pricingContainer {`
+.pricingContainer {
   grid-area: pricing;
   width: 100%;
   height: 100%;
