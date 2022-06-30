@@ -50,7 +50,7 @@ export default {
       commit("setCart", data);
     },
     /**
-     * Deletes selected item from Shopping Cart.
+     * Deletes selected item from Shopping Cart and LocalStorage.
      * @param commit
      * @param state
      * @param data {Object}
@@ -62,6 +62,17 @@ export default {
             state.cartList.filter(n => n.id !== data.id))
       );
       commit("setCart", newCart);
+    },
+    /**
+     * Deletes all the items from Shopping Cart and LocalStorage.
+     * @param commit {Array}
+     */
+    emptyCart({commit}){
+      let newCart = localStorage.setItem(
+          `${SHOP_KEY}-${TABLES.CART}`,
+          JSON.stringify([])
+      );
+      commit("setCart",newCart);
     },
     /**
      * Selected product will be updated with new selected quantity.
