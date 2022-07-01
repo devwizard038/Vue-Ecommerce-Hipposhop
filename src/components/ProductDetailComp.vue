@@ -12,10 +12,8 @@
       </div>
       <div class="modalDetailsContainer">
         <div class="title">
-          <h2>{{ getDetails.title }}
-						<br>
-						{{ getDetails.categories }}
-					</h2>
+          <h2>{{ getDetails.title }}</h2>
+          <p>{{ displayCategories }}</p>
         </div>
         <div class="pricingContainer">
           <div class="pricingQty">
@@ -142,6 +140,19 @@ export default {
         return variantList
       } else return null
     },
+    displayCategories(){
+      let categories = this.getDetails.categories
+      if(categories.length > 1){
+        let display ='';
+        for(let i=0; i< categories.length; i++){
+          if(i==0){
+            display += categories[i]
+          }
+          display += '-> ' + categories[i]
+        }
+        return display
+      } else return categories[0]
+    }
   },
   methods: {
     ...mapActions({
@@ -302,13 +313,14 @@ export default {
   grid-area: content;
   display: grid;
   grid-template:
-      "title" 60px
+      "title" 120px
       "pricing" auto
       "description" auto
       /auto;
 }
 
 .title {
+  margin:0;
   width: 100%;
   height: 100%;
   grid-area: title;
@@ -316,6 +328,16 @@ export default {
 	flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.title p{
+  color: rgb(16, 191, 255);
+  font-size: 0.9rem;
+  margin: 0;
+}
+.title h2{
+  text-align: center;
+  margin: 0;
 }
 
 .pricingContainer {

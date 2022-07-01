@@ -1,7 +1,7 @@
 <template>
   <div class="shopContainer">
     <div class="header">
-      <h1>Your Cart</h1>
+      <h1>Votre panier</h1>
       <button @click="closeCart()">X</button>
     </div>
     <div class="itemContainer">
@@ -51,12 +51,21 @@
         class="checkOutContainer"
         v-if="this.computedCart.length > 0"
       >
+        <ShopCartMessageComp
+          v-if="emptyCartShow === true"
+          itemName="Tous les articles"
+          :deleteConfirm="deleteConfirm"
+          :itemToDelete="item"
+        />
         <p>+ Shipping: 1.99$</p>
         <h2>Total : {{ this.getCartPrice + this.shipping }} $</h2>
-        <button class="outBtn">Check Out</button>
+        <div>
+          <button class="outBtn">Check Out</button>
+          <button class="clearAll" @click="emptyCartConfirmation()">Panier clair</button>
+        </div>
       </div>
       <div class="empty" v-else>
-        <h2>Your cart is empty !</h2>
+        <h2>Votre panier est vide !</h2>
       </div>
     </div>
 
@@ -78,6 +87,7 @@ export default {
       shipping: 1.99,
       deleteItem: false,
       itemToDelete: [],
+      emptyCartShow:false,
     }
   },
   computed: {
@@ -99,23 +109,36 @@ export default {
     ...mapActions({
       loadCart: "cart/loadCart",
       deleteCartItem: "cart/deleteCartItem",
-      modifyCart: "cart/modifyCart"
+      modifyCart: "cart/modifyCart",
+      emptyCart:"cart/emptyCart"
     }),
     /**
      * deleteClick + deleteConfirm -> Confirmation message for deleting an item from cart.
      * @param{Object} item
      */
     deleteClick(item) {
+      console.log(item);
       item.showMessage = true
       this.itemToDelete = item
     },
+    emptyCartConfirmation(){
+      this.emptyCartShow = true;
+      this.itemToDelete = "emptyCartConfirmation"
+    },
     deleteConfirm(deleteItem) {
       let item = this.itemToDelete
-      if (deleteItem === true) {
+      if (deleteItem) {
+        if(item === "emptyCartConfirmation"){
+          this.emptyCart()
+          deleteItem = false
+          this.emptyCartShow = false;
+          return
+        }
         this.deleteCartItem(item)
         deleteItem = false
       } else {
         item.showMessage = false
+        this.emptyCartShow = false;
       }
     },
     closeCart() {
@@ -130,6 +153,7 @@ export default {
 @import "../assets/css/fontRoboto.css";
 
 .shopContainer {
+  box-shadow: -3px 3px 8px 0px rgba(0,0,0,0.35);
   z-index: 1000;
   position: absolute;
   right: 0;
@@ -187,10 +211,10 @@ h2 {
   width: 100%;
   height: 100%;
   grid-area: contentShopCart;
-  display: grid;
+  display:grid;
   grid-template:
       "items" auto
-      "footer" 200px
+      "footer" 300px
       /100%;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
@@ -221,6 +245,7 @@ h2 {
 
 
 .checkOutContainer {
+  display: inline-block;
   grid-area: footer;
   height: 100%;
   width: 100%;
@@ -332,6 +357,24 @@ h2 {
 .outBtn:hover {
   background-color: rgb(7, 72, 96);
   cursor: pointer;
+}
+
+.clearAll {
+  margin-left: 1rem;
+  background-color: rgb(255, 16, 52);
+  padding: 0.6rem;
+  font-size: 1rem;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 0.7rem;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.clearAll:hover{
+  background-color: rgb(194, 11, 38);
 }
 
 .empty {

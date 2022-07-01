@@ -2,7 +2,7 @@
   <div class="pop-message">
     <div class="message">
       <div>
-        Ești sigur că vrei să ștergi din coș
+        Voulez-vous vraiment supprimer du panier:
         <br>{{ itemName }}?
       </div>
       <div>
@@ -10,13 +10,13 @@
           class="press-yes"
           @click="deleteConfirm(true)"
         >
-          Da
+          Oui
         </button>
         <button
           class="press-no"
           @click="deleteConfirm(false)"
         >
-          Nu
+          Non
         </button>
       </div>
     </div>

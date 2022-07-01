@@ -9,7 +9,7 @@
         class="popup"
         v-if="this.responseUpdate"
       >
-        Server updated
+        Serveur mis à jour !
       </p>
     </transition>
     <div class="title">

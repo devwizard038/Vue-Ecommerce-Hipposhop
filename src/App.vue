@@ -6,6 +6,9 @@
   <div v-if="this.showLogin === true">
     <LoginModalComp @closeLogin="closeLogin"/>
   </div>
+  <div v-if="this.showRegister === true">
+    <RegisterModalComp @closeRegister="closeRegister"/>
+  </div>
   <div class="appContainer">
     <nav class="navbar">
       <div class="brand-title">Cegedim Shopping Center</div>
@@ -31,7 +34,7 @@
               <p>{{ this.getUser ? this.getUser : 'Vous devez authentifier pour accéder votre compte' }}</p>
               <div class="userToolButtons" v-if="this.getUser === null">
                 <button class="addToCart" @click="openLogin">Se connecter</button>
-                <button class="signUp">Créer un compte</button>
+                <button class="signUp"  @click="openRegister">Créer un compte</button>
               </div>
               <div class="userToolButtons" v-else>
                 <button class="logOut" @click="submitLogout">Logout</button>
@@ -51,7 +54,7 @@
       <p
         class="popup"
         v-if="this.selected != null"
-      ><b>Ati adaugat in cos:</b>
+      ><b>Vous avez ajouté au panier:</b>
         {{ this.selected.quantity }}/{{ this.selected.unit }} de "{{ this.selected.title }}"
       </p>
     </transition>
@@ -62,7 +65,8 @@
 
 <script>
 import ShoppingCart from "@/components/ShoppingCartComp.vue";
-import LoginModalComp from "@/components/LoginModalComp"
+import LoginModalComp from "@/components/LoginModalComp";
+import RegisterModalComp from "@/components/RegisterModalComp";
 import {mapActions, mapGetters} from "vuex";
 
 
@@ -70,7 +74,8 @@ export default {
   name: 'App',
   components: {
     ShoppingCart,
-    LoginModalComp
+    LoginModalComp,
+    RegisterModalComp,
   },
   data() {
     return {
@@ -78,6 +83,7 @@ export default {
       selected: null,
       active: false,
       showLogin: false,
+      showRegister: false,
     }
   },
   computed: {
@@ -128,11 +134,17 @@ export default {
     closeLogin() {
       this.showLogin = false;
     },
+    closeRegister() {
+      this.showRegister = false;
+    },
     openCart() {
       this.showCart = true;
     },
     openLogin() {
       this.showLogin = true;
+    },
+    openRegister() {
+      this.showRegister = true;
     },
     toggleMobile() {
       this.active = !this.active

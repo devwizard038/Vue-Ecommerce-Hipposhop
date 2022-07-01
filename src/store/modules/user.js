@@ -3,11 +3,17 @@ import {SHOP_KEY, TABLES} from "@/const";
 
 export default {
     namespaced: true,
-    name:'user',
+    name: 'user',
     state() {
         return {
             user: null,
             admin: false,
+            newUser: {
+                "id": null,
+                "name": "",
+                "email": "",
+                "password": ""
+            },
         };
     },
     getters: {
@@ -16,7 +22,10 @@ export default {
         },
         getAdmin(state) {
             return state.admin;
-        }
+        },
+        getNewUser(state) {
+            return state.newUser;
+        },
     },
     mutations: {
         setUser(state, data) {
@@ -25,6 +34,12 @@ export default {
         setAdmin(state, data) {
             state.admin = data;
         },
+        setNewUser(state, data) {
+          state.newUser = data;
+        },
+        setResetNewUser(state, data) {
+            state.newUser = data;
+        },
     },
     actions: {
         loadUser({commit}, user) {
@@ -32,6 +47,17 @@ export default {
         },
         loadAdmin({commit}, adminStatus) {
             commit("setAdmin", adminStatus);
+        },
+        loadNewUser({commit}, data) {
+            commit("setNewUser", data);
+        },
+        resetNewUser({commit, getters}) {
+            let data = getters["getNewUser"];
+            data.id = null;
+            data.name = "";
+            data.email = "";
+            data.password = "";
+            commit("setResetNewUser", data);
         },
         saveUserLocal({state}) {
             if (state.user !== null) {
@@ -42,16 +68,16 @@ export default {
                     }));
             }
         },
-        deleteUserLocal(){
+        deleteUserLocal() {
             localStorage.removeItem(`${SHOP_KEY}-${TABLES.USER}`);
         },
-        loadUserLocal({commit}){
-           let data = JSON.parse(
+        loadUserLocal({commit}) {
+            let data = JSON.parse(
                 localStorage.getItem(`${SHOP_KEY}-${TABLES.USER}`));
-           if(data !== null){
-               commit("setUser", data.user);
-               commit("setAdmin", data.admin);
-           }
+            if (data !== null) {
+                commit("setUser", data.user);
+                commit("setAdmin", data.admin);
+            }
         }
     },
 };

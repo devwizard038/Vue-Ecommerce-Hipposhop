@@ -131,7 +131,6 @@ export default {
 				let home = new Category({id: 0, name: "Accueil"});
 				path.unshift(home);
 			}
-			console.log(path);
       return path;
     },
   },
@@ -204,7 +203,7 @@ export default {
           if (currentProduct) {
             currentProduct.quantity += item.quantity;
           } else {
-            localCart.push(item.toObject());
+            localCart.push(item);
           }
         }
         this.updateCart(localCart);
@@ -214,7 +213,6 @@ export default {
      * Sort: Display selected category clicked on BreadCrumb element.
      * */
     emitNode(value) {
-			console.log(value);
       this.loadId(value.id);
       this.loadCategory(value);
     }

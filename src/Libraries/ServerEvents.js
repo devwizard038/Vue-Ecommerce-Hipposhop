@@ -22,4 +22,7 @@ export default {
     postJsonProducts(itemToSent) {
         return apiClient.post('/products.php', itemToSent);
     },
+    postNewUser(itemToSent) {
+        return apiClient.post('/users.php', itemToSent);
+    },
 };

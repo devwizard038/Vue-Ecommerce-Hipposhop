@@ -1,12 +1,23 @@
 <template>
-  <div class="login-container">
-    <div class="loginComponent">
-      <div class="headerLogin">
-        <button @click="closeLogin()">X</button>
-        <h1 v-if="this.getUser === null">Login</h1>
+  <div class="register-container">
+    <div class="registerComponent">
+      <div class="headerRegister">
+        <button @click="closeRegister()">X</button>
+        <h1 v-if="this.getUser === null">Register</h1>
       </div>
-      <div class="contentLogin" v-if="this.getUser === null ">
-        <label for="user">User</label><br/>
+      <div class="contentRegister">
+        <label for="user">User Name</label><br/>
+        <input
+          class="inputComponent"
+          id="userNameInput"
+          type="text"
+          name="user"
+          minlength=4
+          placeholder="Enter user name..."
+          v-model="userName"
+          required
+        /><br/>
+        <label for="user">Email</label><br/>
         <input
           :class='["inputComponent",checkEmail(email)]'
           id="emailInput"
@@ -42,23 +53,49 @@
           v-model="password"
           required
         /><br/>
-        <p
-          style="color: red"
-          v-if="this.loginError">User or password don't match!</p>
+        <label for="password">Confirm Password</label><br/>
+        <p class="passwordReq">
+          <span
+            style="color:green"
+            v-if="matchPass"
+          >
+            &#10004; Passwords match
+          </span>
+          <span
+            style="color: red"
+            v-else
+          >
+            &#10006; Passwords don't match
+          </span>
+        </p>
+        <input
+          :class='["inputComponent",checkPasswordMatch(passwordCheck)]'
+          type="password"
+          name="password"
+          minlength=6
+          placeholder="Enter password..."
+          v-model="passwordCheck"
+          required
+        /><br/>
+        <p class="passwordReq">
+          <span
+            style="color: red"
+            v-if="errorMessage"
+          >
+            {{ errorMessage }}
+          </span>
+        </p>
         <button
-          :class="[checkPassword(password) === 'valid' && checkEmail(email) === 'valid' ? 'btnLogin' : 'btnLoginInactive']"
+          :class="[
+            checkPassword(password) === 'valid'
+            && checkEmail(email) === 'valid'
+            && matchPass
+            && userName
+            ? 'btnRegister'
+            : 'btnRegisterInactive']"
           type="submit"
-          @click="submitLogin()"
-        >Login
-        </button>
-      </div>
-      <div class="contentLogin" v-else>
-        <h1> {{ this.getUser }} </h1>
-        <button
-          class="logOut"
-          type="submit"
-          @click="submitLogout()"
-        >Logout
+          @click="submitRegister()"
+        >Register
         </button>
       </div>
     </div>
@@ -68,28 +105,32 @@
 <script>
 import validatorEmail from "@/Libraries/validatorEmail";
 import validatorPassword from "@/Libraries/validatorPassword";
-import EventService from "@/Libraries/ServerEvents"
+import ServerEvents from "@/Libraries/ServerEvents";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-  name: 'LoginModalComp',
+  name: 'RegisterModalComp',
   emits: {
     // null -> No validation needed
-    closeLogin: null,
+    closeRegister: null,
   },
   data() {
     return {
+      userName: '',
       email: '',
       password: '',
+      passwordCheck: '',
       validEmail: false,
       validPass: false,
-      login: false,
-      loginError: false,
+      matchPass: false,
+      register: false,
+      errorMessage: '',
     }
   },
   computed: {
     ...mapGetters({
       getUser: "user/getUser",
+      getNewUser: "user/getNewUser"
     })
   },
   methods: {
@@ -98,34 +139,45 @@ export default {
       loadAdmin: "user/loadAdmin",
       saveUserLocal: "user/saveUserLocal",
       deleteUserLocal: "user/deleteUserLocal",
+      loadNewUser: "user/loadNewUser",
+      resetNewUser: "user/resetNewUser",
     }),
-    closeLogin() {
-      this.$emit('closeLogin');
+    closeRegister() {
+      this.$emit('closeRegister');
     },
-    submitLogin() {
-      EventService.getUserList().then(
-        response => {
-          let data = response.data.results
-            for (let item in data) {
-              if (data[item].email === this.email && data[item].password === this.password) {
-                this.loginError= false
+    submitRegister() {
 
-                this.loadUser(this.email);
-                if (data[item].admin) {
-                  this.loadAdmin(true);
-                } else this.loadAdmin(false);
-                this.closeLogin();
-                this.saveUserLocal()
-              } else {this.loginError = true}
+      ServerEvents.getUserList().then(
+        response => {
+          let data = response.data.results;
+
+          data.forEach(item => {
+              if (item.email === this.email) {
+                this.errorMessage = "l'email existe déjà"
+                setTimeout(() => {
+                  this.errorMessage = ''
+                }, 2000)
+                throw new Error("l'email existe déjà")
+              }
             }
+          )
+          let newUser = this.getNewUser;
+          newUser.id = data[data.length - 1].id + 1;
+          newUser.name = this.userName;
+          newUser.email = this.email;
+          newUser.password = this.passwordCheck;
+          this.loadNewUser(newUser);
         }
       )
-        .catch(err => console.log('error promisiune:' + err));
-    },
-    submitLogout() {
-      this.loadUser(null);
-      this.loadAdmin(false);
-      this.deleteUserLocal();
+        .then(() => {
+          ServerEvents.postNewUser("[" + JSON.stringify(this.getNewUser) + "]")
+            .then((response) => {
+                console.log(response);
+                this.resetNewUser();
+              }
+            )
+        })
+        .catch(err => console.warn('error promisiune:' + err));
     },
     /**
      * Checks email requirements (@, .com/.co etc.)
@@ -140,6 +192,11 @@ export default {
       this.validPass = validatorPassword(arg) === 'valid';
       return validatorPassword(arg)
     },
+    checkPasswordMatch(arg) {
+      if (arg === "") return
+      arg === this.password ? this.matchPass = true : this.matchPass = false;
+      return this.matchPass ? 'valid' : 'invalid'
+    },
   }
 }
 </script>
@@ -153,7 +210,7 @@ h1 {
   font-size: 3rem;
 }
 
-.login-container {
+.register-container {
   top: 0;
   display: flex;
   position: absolute;
@@ -168,12 +225,12 @@ h1 {
   backdrop-filter: blur(5px);
 }
 
-.loginComponent {
+.registerComponent {
   padding: 1rem;
   display: grid;
   grid-template:
-      "headerLogin" auto
-      "contentLogin" auto
+      "headerRegister" auto
+      "contentRegister" auto
   /100%;
   align-items: center;
   background-color: #2d2d2d;
@@ -184,13 +241,13 @@ h1 {
   text-align: center;
 }
 
-.headerLogin {
-  grid-area: headerLogin;
+.headerRegister {
+  grid-area: headerRegister;
   display: flex;
   flex-direction: column;
 }
 
-.headerLogin button {
+.headerRegister button {
   align-self: flex-end;
   background-color: white;
   color: rgb(173, 58, 12);
@@ -198,7 +255,7 @@ h1 {
   cursor: pointer;
 }
 
-.headerLogin button:hover {
+.headerRegister button:hover {
   background-color: red;
   color: white;
   border: 2px solid red;
@@ -223,21 +280,21 @@ h1 {
   background-color: #f8bfbf;
 }
 
-.contentLogin label {
+.contentRegister label {
   font-size: 1.6rem;
 }
 
-.contentLogin {
-  grid-area: contentLogin;
+.contentRegister {
+  grid-area: contentRegister;
 }
 
-.contentLogin .passwordReq {
+.contentRegister .passwordReq {
   font-size: 0.8rem;
   word-spacing: 0rem;
   text-align: center;
 }
 
-.btnLogin {
+.btnRegister {
   background-color: rgb(16, 191, 255);
   padding: 0.6rem;
   padding-left: 1rem;
@@ -251,12 +308,12 @@ h1 {
   text-decoration: none;
 }
 
-.btnLogin:hover {
+.btnRegister:hover {
   background-color: #0e9eb1;
   cursor: pointer;
 }
 
-.btnLoginInactive {
+.btnRegisterInactive {
   background-color: rgb(54, 57, 58);
   padding: 0.6rem;
   padding-left: 1rem;
