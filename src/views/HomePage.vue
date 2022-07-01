@@ -3,6 +3,7 @@
     <div class="table">
       <!-- Display: Category List-->
       <div class="left">
+        <div class="loaderCategories" v-if="this.getCategories.length < 1"></div>
         <CategoryComp @selected="getSelectedCategory"
                       @breadCrumb="getBreadCrumb"/>
       </div>
@@ -39,7 +40,8 @@ export default {
     ...mapGetters({
       getId: "selectedcateg/getId",
       getProducts: "products/getProducts",
-      getCart: "cart/getCart"
+      getCart: "cart/getCart",
+      getCategories:"category/getCategories"
     }),
     products() {
       return this.getProducts;
@@ -64,6 +66,7 @@ export default {
     if (this.getCart === null) {
       this.updateCart([])
     }
+    console.log(this.getCategories.length);
   },
   methods: {
     ...mapActions({
@@ -91,6 +94,22 @@ export default {
   position:absolute;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 10rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+.loaderCategories{
+  position:absolute;
+  margin-left: 5rem;
   margin-top: 10rem;
   left: 0;
   right: 0;

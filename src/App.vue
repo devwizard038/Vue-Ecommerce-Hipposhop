@@ -54,7 +54,7 @@
       <p
         class="popup"
         v-if="this.selected != null"
-      ><b>Ati adaugat in cos:</b>
+      ><b>Vous avez ajouté au panier:</b>
         {{ this.selected.quantity }}/{{ this.selected.unit }} de "{{ this.selected.title }}"
       </p>
     </transition>

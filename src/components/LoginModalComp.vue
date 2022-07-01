@@ -114,6 +114,7 @@ export default {
                 if (data[item].admin) {
                   this.loadAdmin(true);
                 } else this.loadAdmin(false);
+                this.closeLogin();
                 this.saveUserLocal()
               } else {this.loginError = true}
             }
