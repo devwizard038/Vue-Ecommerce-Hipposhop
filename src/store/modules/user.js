@@ -12,7 +12,8 @@ export default {
                 "id": null,
                 "name": "",
                 "email": "",
-                "password": ""
+                "password": "",
+                "admin": false
             },
         };
     },
@@ -57,6 +58,7 @@ export default {
             data.name = "";
             data.email = "";
             data.password = "";
+            data.admin = false;
             commit("setResetNewUser", data);
         },
         saveUserLocal({state}) {
