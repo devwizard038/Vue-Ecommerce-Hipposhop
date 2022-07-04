@@ -134,6 +134,7 @@ export default {
           field.push(
             {
               field: `${key}`,
+              editable: key !== 'id',
               wrapText: true,
               autoHeight: true,
               valueParser: param => {
