@@ -26,9 +26,14 @@
         :columnDefs="columnsDef()"
         :rowData="this.getAdminList.length > 0 ? this.getAdminList : this.getUserList"
         :defaultColDef="this.defaultColDef"
+        :suppressClickEdit="this.suppressClickEdit"
         rowSelection="multiple"
         animateRows="true"
+        editType="fullRow"
         @cell-value-changed="onCellValueChanged"
+        @row-editing-started="onRowEditingStarted"
+        @row-editing-stopped="onRowEditingStopped"
+        @cell-clicked="onCellClicked"
       />
     </div>
     <div class="buttons">
@@ -37,8 +42,8 @@
       </button>
       <button v-if="this.getAdminList.length > 0 || this.getUserList.length > 0" @click="clearList" class="btn-clear">Clear list
       </button>
-      <button @click="saveAdminTable()" class="btn-load">Load Product List</button>
-      <button @click="loadUserList()" class="btn-load">Load User List</button>
+      <button @click="saveAdminTable()" class="btn-load" v-if="this.getUserList.length === 0">Load Product List</button>
+      <button @click="loadUserList()" class="btn-load" v-if="this.getAdminList.length  === 0">Load User List</button>
 
     </div>
   </div>
@@ -66,7 +71,9 @@ export default {
         flex: 1,
         resizable: true,
       },
+      suppressClickEdit:true,
       responseUpdate: false,
+      showEditButtons: true,
     }
   },
   computed: {
@@ -105,8 +112,7 @@ export default {
       this.saveModifiedUserList([])
       // Resets Cart List from LocalStorage
       this.updateCart([]);
-    }
-    ,
+    },
     /**
      * Create columns heads for table
      * @returns {Array}
@@ -131,24 +137,80 @@ export default {
               wrapText: true,
               autoHeight: true,
               valueParser: param => {
-                Number(param.newValue) ? Number(param.newValue) : param.newValue
-                param.newValue ? Boolean(param.newValue) : param.newValue
+                return Number(param.newValue) ? Number(param.newValue) : param.newValue
               },
               cellRenderer: (param) => {
                 if (key === 'image') {
                   if (param.data[key] !== null) {
                     return `<image style="height: 80px; width: 100px" src=${param.data[key]} />`;
-                  } else return 'NU AVEM POZA !'
+                  } else return 'No photo !'
                 }
                 return param.data[key]
               },
             }
           )
         })
+        field.push({
+          field:'action',
+          headerName:'Action',
+          cellRenderer:this.actionCellRenderer,
+          editable:false,
+        })
       }
       return field
-    }
-    ,
+    },
+    actionCellRenderer(params){
+      let eGui = document.createElement('div');
+      let editingCells = params.api.getEditingCells();
+      let isCurrentRowEditing = editingCells.some((cell) => {
+        return cell.rowIndex === params.node.rowIndex;
+      });
+
+      if (isCurrentRowEditing) {
+        eGui.innerHTML = `
+        <button
+          class="action-button update"
+          data-action="update">
+               Update
+        </button>
+        <button
+          class="action-button cancel"
+          data-action="cancel">
+               Cancel
+        </button>
+        `;
+      } else {
+        eGui.innerHTML = `
+        <button
+          class="action-button edit"
+          data-action="edit">
+             Edit
+          </button>
+        <button
+          class="action-button delete"
+          data-action="delete"
+          >
+             Delete
+        </button>
+        `;
+      }
+
+      return eGui;
+    },
+    onRowEditingStarted: (params) => {
+      params.api.refreshCells({
+        columns: ['action'],
+        rowNodes: [params.node],
+        force: true,
+      });
+    },
+    onRowEditingStopped: (params) => {
+      params.api.refreshCells({
+        columns: ['action'],
+        rowNodes: [params.node],
+        force: true,
+      });
+    },
     /**
      * Confirmed edited data changed
      */
@@ -162,9 +224,51 @@ export default {
         modifications.push(params.data);
         this.saveModifiedUserList(modifications)
       }
-    }
-    ,
+    },
+    onCellClicked(params) {
+      // Handle click event for action cells
+      if (
+        params.column.colId === 'action' &&
+        params.event.target.dataset.action
+      ) {
+        let action = params.event.target.dataset.action;
+        if (action === 'edit') {
+          console.log(params.columnApi)
+          params.api.startEditingCell({
+            rowIndex: params.node.rowIndex,
+            colKey: params.columnApi.getDisplayedCenterColumns()[0].colId,
+          });
+        }
+        /**
+         * Delete function for action buttons
+         */
+        if (action === 'delete') {
+          if(this.getUserList.length > 0){
+            EvenService.deleteUser(params.data.id)
+              .then(() =>
+                params.api.applyTransaction({
+                  remove: [params.node.data],
+                }))
+              .catch(err => console.log(err))
+           }
+          if(this.getAdminList.length > 0) {
+            EvenService.deleteProduct(params.data.id)
+              .then(() =>
+                params.api.applyTransaction({
+                  remove: [params.node.data],
+                }))
+              .catch(err => console.log(err))
+          }
+          }
+        if (action === 'update') {
+          params.api.stopEditing(false);
+        }
 
+        if (action === 'cancel') {
+          params.api.stopEditing(true);
+        }
+      }
+    },
     updateServer() {
       if(this.getModifiedItemsList.length > 0){
         EvenService.postJsonProducts(JSON.stringify(this.getModifiedItemsList))
@@ -299,6 +403,10 @@ export default {
   justify-content: center;
   height: 100%;
   width: 100%;
+}
+
+.action-button {
+  padding: 20rem
 }
 
 table {
