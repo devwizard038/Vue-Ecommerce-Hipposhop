@@ -24,5 +24,5 @@ export default {
     },
     postNewUser(itemToSent) {
         return apiClient.post('/users.php', itemToSent);
-    },
+    }
 };

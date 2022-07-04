@@ -16,15 +16,15 @@
       <h1>Admin Page</h1>
       <hr/>
     </div>
-    <div class="stateError" v-if="this.getAdminList.length === 0">
+    <div class="stateError" v-if="this.getAdminList.length === 0 && this.getUserList.length === 0">
       <h2>Please download list for the administrator</h2>
     </div>
-    <div class="adminTableContainer" v-if="this.getAdminList.length > 0">
+    <div class="adminTableContainer" v-if="this.getAdminList.length > 0 || this.getUserList.length > 0">
       <ag-grid-vue
         class="ag-theme-alpine"
         style="height: 500px; width: 100%"
         :columnDefs="columnsDef()"
-        :rowData="this.getAdminList"
+        :rowData="this.getAdminList.length > 0 ? this.getAdminList : this.getUserList"
         :defaultColDef="this.defaultColDef"
         rowSelection="multiple"
         animateRows="true"
@@ -32,13 +32,14 @@
       />
     </div>
     <div class="buttons">
-      <!-- Clear LocalStorage initiator -->
-      <button v-if="this.getModifiedItemsList.length > 0" @click="updateServer()" class="btn-server">Update
+      <button v-if="this.getModifiedItemsList.length > 0 || this.getModifiedUserList.length > 0" @click="updateServer()" class="btn-server">Update
         Server
       </button>
-      <button v-if="this.getAdminList.length > 0" @click="clearList" class="btn-clear">Clear list
+      <button v-if="this.getAdminList.length > 0 || this.getUserList.length > 0" @click="clearList" class="btn-clear">Clear list
       </button>
-      <button @click="saveList" class="btn-load">Load Product List</button>
+      <button @click="saveAdminTable()" class="btn-load">Load Product List</button>
+      <button @click="loadUserList()" class="btn-load">Load User List</button>
+
     </div>
   </div>
 </template>
@@ -49,6 +50,7 @@ import EvenService from "@/Libraries/ServerEvents";
 import {AgGridVue} from 'ag-grid-vue3'
 import 'ag-grid-community/dist/styles/ag-grid.css'
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
+import adminCheckCell from "@/components/agGridComponents/adminCheckCell";
 
 export default {
   name: 'AdminPage',
@@ -70,7 +72,9 @@ export default {
   computed: {
     ...mapGetters({
       getAdminList: "products/getAdminList",
-      getModifiedItemsList: "products/getModifiedItemsList"
+      getModifiedItemsList: "products/getModifiedItemsList",
+      getUserList:"user/getUserList",
+      getModifiedUserList:"user/getModifiedUserList"
     }),
   },
   watch: {
@@ -89,15 +93,16 @@ export default {
         saveAdminTable: "products/saveAdminTable",
         deleteAdminTable: "products/deleteAdminTable",
         updateCart: "cart/updateCart",
+        loadUserList:"user/loadUserList",
+        deleteUserList:"user/deleteUserList",
+        saveModifiedUserList:"user/saveModifiedUserList",
       }),
-    saveList() {
-      this.saveAdminTable();
-    }
-    ,
     clearList() {
       // Clears Product List from LocalStorage
       this.deleteAdminTable();
+      this.deleteUserList();
       this.saveModifedItemsList([]);
+      this.saveModifiedUserList([])
       // Resets Cart List from LocalStorage
       this.updateCart([]);
     }
@@ -107,16 +112,28 @@ export default {
      * @returns {Array}
      */
     columnsDef() {
-      let locallist = this.getAdminList;
+      let locallist = this.getAdminList.length > 0 ? this.getAdminList : this.getUserList;
       let field = []
       if (locallist !== null && locallist.length > 0) {
         Object.keys(locallist[0]).forEach(key => {
+          if(key==='admin'){
+            field.push( {
+              editable: false,
+              headerName: "Admin",
+              field: "admin",
+              cellRenderer: adminCheckCell
+            })
+            return
+          }
           field.push(
             {
               field: `${key}`,
               wrapText: true,
               autoHeight: true,
-              valueParser: param => Number(param.newValue) ? Number(param.newValue) : param.newValue,
+              valueParser: param => {
+                Number(param.newValue) ? Number(param.newValue) : param.newValue
+                param.newValue ? Boolean(param.newValue) : param.newValue
+              },
               cellRenderer: (param) => {
                 if (key === 'image') {
                   if (param.data[key] !== null) {
@@ -124,7 +141,7 @@ export default {
                   } else return 'NU AVEM POZA !'
                 }
                 return param.data[key]
-              }
+              },
             }
           )
         })
@@ -136,22 +153,38 @@ export default {
      * Confirmed edited data changed
      */
     onCellValueChanged(params) {
-      let modifications = this.getModifiedItemsList;
-      modifications.push(params.data);
-      this.saveModifedItemsList(modifications);
+      if(this.getAdminList.length > 0){
+        let modifications = this.getModifiedItemsList;
+        modifications.push(params.data);
+        this.saveModifedItemsList(modifications);}
+      if(this.getUserList.length > 0){
+        let modifications = this.getModifiedUserList;
+        modifications.push(params.data);
+        this.saveModifiedUserList(modifications)
+      }
     }
     ,
 
     updateServer() {
-      EvenService.postJsonProducts(JSON.stringify(this.getModifiedItemsList))
-        .then((response) => {
-            this.saveModifedItemsList([]);
-            this.responseUpdate = true;
-            console.log(response)
-          }
-        ).catch(error => console.log(error));
+      if(this.getModifiedItemsList.length > 0){
+        EvenService.postJsonProducts(JSON.stringify(this.getModifiedItemsList))
+          .then((response) => {
+              this.saveModifedItemsList([]);
+              this.responseUpdate = true;
+              console.log(response)
+            }
+          ).catch(error => console.log(error));
+      }
+      if(this.getModifiedUserList.length > 0){
+        EvenService.postNewUser(JSON.stringify(this.getModifiedUserList))
+          .then((response) => {
+              this.saveModifiedUserList([]);
+              this.responseUpdate = true;
+              console.log(response)
+            }
+          ).catch(error => console.log(error));
+      }
     }
-    ,
   }
 }
 

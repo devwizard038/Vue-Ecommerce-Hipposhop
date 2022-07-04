@@ -99,7 +99,7 @@ export default {
         },
         saveAdminTable({commit}) {
             let jsonProducts = [];
-            EvenService.getJsonProducts()
+            return EvenService.getJsonProducts()
                 .then(response => {
                     jsonProducts = response.data.results;
                     commit("setAdminList", jsonProducts);
