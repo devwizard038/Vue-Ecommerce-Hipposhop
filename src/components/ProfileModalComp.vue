@@ -258,8 +258,8 @@ export default {
           newDetails.id = this.idFromServer;
           newDetails.name = this.userNameFromServer;
           this.userName = '';
-          newDetails.email = this.email;
-          this.emailFromServer = this.email;
+          if(this.email !== '') this.emailFromServer = this.email;
+          newDetails.email = this.emailFromServer;
           this.email = '';
           newDetails.password = this.passwordFromServer;
           this.password = '';
@@ -314,7 +314,7 @@ export default {
 @import "../assets/css/fontPoppins.css";
 
 h1 {
-  font-size: 2rem;
+  font-size: 2.3rem;
 }
 
 .detailsTitle {
