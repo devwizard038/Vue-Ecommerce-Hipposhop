@@ -1,5 +1,9 @@
 <template>
   <div class="adminContainer">
+    <deleteConfirmAdmin
+      v-if="showModal"
+      :deleteConfirm="deleteConfirm"
+    />
     <transition
       mode="in-out"
       enter-active-class="animate__animated animate__fadeInDown"
@@ -37,10 +41,12 @@
       />
     </div>
     <div class="buttons">
-      <button v-if="this.getModifiedItemsList.length > 0 || this.getModifiedUserList.length > 0" @click="updateServer()" class="btn-server">Update
+      <button v-if="this.getModifiedItemsList.length > 0 || this.getModifiedUserList.length > 0" @click="updateServer()"
+              class="btn-server">Update
         Server
       </button>
-      <button v-if="this.getAdminList.length > 0 || this.getUserList.length > 0" @click="clearList" class="btn-clear">Clear list
+      <button v-if="this.getAdminList.length > 0 || this.getUserList.length > 0" @click="clearList" class="btn-clear">
+        Clear list
       </button>
       <button @click="saveAdminTable()" class="btn-load" v-if="this.getUserList.length === 0">Load Product List</button>
       <button @click="loadUserList()" class="btn-load" v-if="this.getAdminList.length  === 0">Load User List</button>
@@ -56,11 +62,13 @@ import {AgGridVue} from 'ag-grid-vue3'
 import 'ag-grid-community/dist/styles/ag-grid.css'
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
 import adminCheckCell from "@/components/agGridComponents/adminCheckCell";
+import deleteConfirmAdmin from "@/components/agGridComponents/deleteCofirmAdmin"
 
 export default {
   name: 'AdminPage',
   components: {
-    AgGridVue
+    AgGridVue,
+    deleteConfirmAdmin
   },
   data() {
     return {
@@ -71,17 +79,19 @@ export default {
         flex: 1,
         resizable: true,
       },
-      suppressClickEdit:true,
+      suppressClickEdit: true,
       responseUpdate: false,
       showEditButtons: true,
+      showModal: false,
+      temp: null,
     }
   },
   computed: {
     ...mapGetters({
       getAdminList: "products/getAdminList",
       getModifiedItemsList: "products/getModifiedItemsList",
-      getUserList:"user/getUserList",
-      getModifiedUserList:"user/getModifiedUserList"
+      getUserList: "user/getUserList",
+      getModifiedUserList: "user/getModifiedUserList"
     }),
   },
   watch: {
@@ -100,9 +110,9 @@ export default {
         saveAdminTable: "products/saveAdminTable",
         deleteAdminTable: "products/deleteAdminTable",
         updateCart: "cart/updateCart",
-        loadUserList:"user/loadUserList",
-        deleteUserList:"user/deleteUserList",
-        saveModifiedUserList:"user/saveModifiedUserList",
+        loadUserList: "user/loadUserList",
+        deleteUserList: "user/deleteUserList",
+        saveModifiedUserList: "user/saveModifiedUserList",
       }),
     clearList() {
       // Clears Product List from LocalStorage
@@ -122,8 +132,8 @@ export default {
       let field = []
       if (locallist !== null && locallist.length > 0) {
         Object.keys(locallist[0]).forEach(key => {
-          if(key==='admin'){
-            field.push( {
+          if (key === 'admin') {
+            field.push({
               editable: false,
               headerName: "Admin",
               field: "admin",
@@ -152,15 +162,15 @@ export default {
           )
         })
         field.push({
-          field:'action',
-          headerName:'Action',
-          cellRenderer:this.actionCellRenderer,
-          editable:false,
+          field: 'action',
+          headerName: 'Action',
+          cellRenderer: this.actionCellRenderer,
+          editable: false,
         })
       }
       return field
     },
-    actionCellRenderer(params){
+    actionCellRenderer(params) {
       let eGui = document.createElement('div');
       let editingCells = params.api.getEditingCells();
       let isCurrentRowEditing = editingCells.some((cell) => {
@@ -171,12 +181,30 @@ export default {
         eGui.innerHTML = `
         <button
           class="action-button update"
-          data-action="update">
+          data-action="update"
+           style="
+          border: none;
+          background-color: rgb(69,121,172);
+          color: white;
+          padding: 0.6rem;
+          border-radius: 6px;
+          cursor: pointer
+          "
+          >
                Update
         </button>
         <button
           class="action-button cancel"
-          data-action="cancel">
+          data-action="cancel"
+           style="
+          border: none;
+          background-color: rgb(194, 34, 34);
+          color: white;
+          padding: 0.6rem;
+          border-radius: 6px;
+          cursor: pointer
+          "
+          >
                Cancel
         </button>
         `;
@@ -184,12 +212,28 @@ export default {
         eGui.innerHTML = `
         <button
           class="action-button edit"
-          data-action="edit">
+          data-action="edit"
+           style="
+          border: none;
+          background-color: rgb(69, 172, 69);
+          color: white;
+          padding: 0.6rem;
+          border-radius: 6px;
+          cursor: pointer
+          "
+          >
              Edit
           </button>
         <button
-          class="action-button delete"
           data-action="delete"
+          style="
+          border: none;
+          background-color: rgb(194, 34, 34);
+          color: white;
+          padding: 0.6rem;
+          border-radius: 6px;
+          cursor: pointer
+          "
           >
              Delete
         </button>
@@ -216,11 +260,12 @@ export default {
      * Confirmed edited data changed
      */
     onCellValueChanged(params) {
-      if(this.getAdminList.length > 0){
+      if (this.getAdminList.length > 0) {
         let modifications = this.getModifiedItemsList;
         modifications.push(params.data);
-        this.saveModifedItemsList(modifications);}
-      if(this.getUserList.length > 0){
+        this.saveModifedItemsList(modifications);
+      }
+      if (this.getUserList.length > 0) {
         let modifications = this.getModifiedUserList;
         modifications.push(params.data);
         this.saveModifiedUserList(modifications)
@@ -244,23 +289,9 @@ export default {
          * Delete function for action buttons
          */
         if (action === 'delete') {
-          if(this.getUserList.length > 0){
-            EvenService.deleteUser(params.data.id)
-              .then(() =>
-                params.api.applyTransaction({
-                  remove: [params.node.data],
-                }))
-              .catch(err => console.log(err))
-           }
-          if(this.getAdminList.length > 0) {
-            EvenService.deleteProduct(params.data.id)
-              .then(() =>
-                params.api.applyTransaction({
-                  remove: [params.node.data],
-                }))
-              .catch(err => console.log(err))
-          }
-          }
+          this.temp = params;
+          this.showModal = true;
+        }
         if (action === 'update') {
           params.api.stopEditing(false);
         }
@@ -270,8 +301,27 @@ export default {
         }
       }
     },
+    deleteConfirm(answer) {
+      if (answer) {
+        if (this.getUserList.length > 0) {
+          EvenService.deleteUser(this.temp.data.id)
+            .then(() =>
+              this.loadUserList(),
+            )
+            .catch(err => console.log(err))
+        }
+        if (this.getAdminList.length > 0) {
+          EvenService.deleteProduct(this.temp.data.id)
+            .then(() =>
+              this.saveAdminTable()
+            )
+            .catch(err => console.log(err))
+        }
+        this.showModal = false
+      } else this.showModal = false
+    },
     updateServer() {
-      if(this.getModifiedItemsList.length > 0){
+      if (this.getModifiedItemsList.length > 0) {
         EvenService.postJsonProducts(JSON.stringify(this.getModifiedItemsList))
           .then((response) => {
               this.saveModifedItemsList([]);
@@ -280,7 +330,7 @@ export default {
             }
           ).catch(error => console.log(error));
       }
-      if(this.getModifiedUserList.length > 0){
+      if (this.getModifiedUserList.length > 0) {
         EvenService.postNewUser(JSON.stringify(this.getModifiedUserList))
           .then((response) => {
               this.saveModifiedUserList([]);
