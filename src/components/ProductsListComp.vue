@@ -107,7 +107,6 @@ export default {
       getCart: "cart/getCart",
       getCategory: "selectedcateg/getCategory",
     }),
-    //  Retrieve list from LocalStorage.
     products() {
       if (this.categoryId) {
         return this.getProducts.filter(

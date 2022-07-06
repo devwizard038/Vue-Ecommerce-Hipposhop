@@ -1,5 +1,5 @@
 // noinspection JSVoidFunctionReturnValueUsed
-import {FILTERS, SHOP_KEY, TABLES} from "@/const";
+import {FILTERS} from "@/const";
 import {ProductTransformer} from "@/transformers/ProductTransformer";
 import EvenService from "@/Libraries/ServerEvents";
 
@@ -42,13 +42,6 @@ export default {
         }
     },
     actions: {
-        loadUnfilteredList({commit}, data) {
-            commit("setUnfilteredList", data);
-        },
-        loadLocal({commit}) {
-            let data = JSON.parse(localStorage.getItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`));
-            commit("setLocalState", data);
-        },
         /**
          * Fetch,process and save data to state
          * @param commit
@@ -67,35 +60,6 @@ export default {
                     commit("setProducts", products);
                 })
                 .catch(error => console.log(error));
-        },
-        /**
-         * @param commit
-         * @param newProducts
-         */
-        saveModifiedProducts: function ({commit}, newProducts) {
-            commit("setProducts", newProducts);
-        },
-        /**
-         * @param commit
-         * @param getters
-         * @param {Product} product
-         */
-        // saveProduct: function ({commit, getters}, {product}) {
-        //     let products = getters['getProducts'] ?? [];
-        //
-        //     commit("setProducts", []); // vuejs2
-        //     products = products.filter(item => item.id !== product.id); // TODO: optimize find product by id and update it
-        //     products.push(product);
-        //     commit("setProducts", products); // vuejs2
-        //
-        //     let productsObj = product.map(item => ProductTransformer.reverseTransform(item));
-        //     localStorage.setItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`, JSON.stringify(productsObj));
-        // },
-        deleteProducts({commit, state}) {
-            let data =
-                localStorage.removeItem(`${SHOP_KEY}-${TABLES.PRODUCTS}`);
-            commit("setProducts", data);
-            state.productList = [];
         },
         saveAdminTable({commit}) {
             let jsonProducts = [];

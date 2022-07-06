@@ -126,7 +126,6 @@ export default {
 			saveCategories: "category/saveCategories",
 		}),
     clearList() {
-      // Clears Product List from LocalStorage
       this.deleteAdminTable();
       this.deleteUserList();
       this.saveModifedItemsList([]);
@@ -206,7 +205,6 @@ export default {
 					width: 130
         })
       }
-			console.log(field);
       return field;
     },
     actionCellRenderer(params) {
@@ -318,7 +316,6 @@ export default {
       ) {
         let action = params.event.target.dataset.action;
         if (action === 'edit') {
-          console.log(params.columnApi)
           params.api.startEditingCell({
             rowIndex: params.node.rowIndex,
             colKey: params.columnApi.getDisplayedCenterColumns()[0].colId,

@@ -117,7 +117,6 @@ export default {
      * @param{Object} item
      */
     deleteClick(item) {
-      console.log(item);
       item.showMessage = true
       this.itemToDelete = item
     },

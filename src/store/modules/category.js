@@ -24,7 +24,6 @@ export default {
                 return EventService.getCategoryList()
                     .then(response => {
                             jsonCategories = response.data.results;
-                            console.log("load categories frim server");
                             commit("setCategories", jsonCategories);
                         }
                     ).catch(err => console.log(err));

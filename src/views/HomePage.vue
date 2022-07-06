@@ -59,14 +59,10 @@ export default {
     this.saveProducts();
   },
   mounted() {
-    /**
-     * Catch error: for empty local storage for category and cart
-     */
     this.loadCart()
     if (this.getCart === null) {
       this.updateCart([])
     }
-    console.log(this.getCategories.length);
   },
   methods: {
     ...mapActions({
