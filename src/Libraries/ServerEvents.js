@@ -25,4 +25,10 @@ export default {
     postNewUser(itemToSent) {
         return apiClient.post('/users.php', itemToSent);
     },
+    deleteProduct(productIdToSent){
+        return apiClient.delete('/products.php', {data: [{'id': productIdToSent}] });
+    },
+    deleteUser(userIdToSent){
+        return apiClient.delete('/users.php', {data: [{'id': userIdToSent}] });
+    }
 };

@@ -2,12 +2,12 @@ import {Product} from "@/models/Product";
 
 export class ProductTransformer {
 
-	static transform({ attributes, category_id, id, image, price, titleProduct, unit }) {
+	static transform({ attributes, category_id, id, image, price, title, unit }) {
 		return (new Product())
 			.setId(id)
 			.setImage(image)
-			.setPrice(price)
-			.setTitle(titleProduct)
+			.setPrice(Number(price))
+			.setTitle(title)
 			.setUnit(unit)
 			.setAttributes(attributes)
 			.setCategoryId(category_id)

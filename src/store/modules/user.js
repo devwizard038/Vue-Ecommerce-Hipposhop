@@ -1,5 +1,6 @@
 // noinspection JSVoidFunctionReturnValueUsed
 import {SHOP_KEY, TABLES} from "@/const";
+import EvenService from "@/Libraries/ServerEvents";
 
 export default {
     namespaced: true,
@@ -12,8 +13,11 @@ export default {
                 "id": null,
                 "name": "",
                 "email": "",
-                "password": ""
+                "password": "",
+                "admin": false
             },
+            userList:[],
+            modifiedUserList:[],
         };
     },
     getters: {
@@ -26,6 +30,12 @@ export default {
         getNewUser(state) {
             return state.newUser;
         },
+        getUserList(state){
+            return state.userList;
+        },
+        getModifiedUserList(state){
+            return state.modifiedUserList;
+        }
     },
     mutations: {
         setUser(state, data) {
@@ -40,8 +50,29 @@ export default {
         setResetNewUser(state, data) {
             state.newUser = data;
         },
+        setUserList(state,data){
+            state.userList = data;
+        },
+        setModifiedUserList(state,data){
+            state.modifiedUserList = data;
+        }
     },
     actions: {
+        loadUserList({commit}){
+            let jsonProducts = [];
+            EvenService.getUserList()
+                .then(response => {
+                    jsonProducts = response.data.results;
+                    commit("setUserList", jsonProducts);
+                })
+                .catch(error => console.log(error));
+        },
+        deleteUserList({commit}){
+            commit("setUserList",[]);
+        },
+        saveModifiedUserList({commit}, newData) {
+            commit("setModifiedUserList",newData);
+        },
         loadUser({commit}, user) {
             commit("setUser", user);
         },
@@ -57,6 +88,7 @@ export default {
             data.name = "";
             data.email = "";
             data.password = "";
+            data.admin=false;
             commit("setResetNewUser", data);
         },
         saveUserLocal({state}) {

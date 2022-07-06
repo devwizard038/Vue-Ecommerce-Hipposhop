@@ -8,7 +8,7 @@
         <img
           :src="getDetails._image"
           :alt="getDetails._title"
-				/>
+        />
       </div>
       <div class="modalDetailsContainer">
         <div class="title">
@@ -41,28 +41,19 @@
             class="variantsContainer"
             v-if="Object.keys(getDetails.attributes).length > 0"
           >
-            <p style="text-align: center">Tip</p>
-            <div>
-              <button
-                v-for="items in variantsTypeList"
-                @click="loadDetails(items)"
-                :class="items.id !== getDetails.id
+            <div v-for="att in this.getAttList" :key="att">
+              <p style="text-align: center">{{ att }}</p>
+              <div>
+                <button
+                  v-for="items in this.getAttSets[att]"
+                  @click="loadDetails(items); this.loadAttributesLists();"
+                  :class="items.id !== getDetails.id
                 ? 'variantsBtn' : 'selected'"
-                :key="items.attributes.name"
-              >
-                {{ items.attributes.type }}
-              </button>
-            </div>
-            <p style="text-align: center">Marime</p>
-            <div>
-              <button
-                v-for="items in variantsSizeList"
-                @click="loadDetails(items)"
-                :class="items.id !== getDetails.id
-                ? 'variantsBtn' : 'selected'"
-                :key="items._attributes.name">
-                {{ items._attributes.size }}
-              </button>
+                  :key="items.attributes.name"
+                >
+                  {{ items.attributes[att] }}
+                </button>
+              </div>
             </div>
           </div>
           <button
@@ -73,17 +64,14 @@
         </div>
         <div class="description">
           <h3>Despre produs</h3>
-          <p>i.e., "from the outset," referring to an inquiry or investigation. Ab
-            initio mundi means "from the begzzinning of the world." In literature,
-            it refers to a story told from the beginning rather than in medias res
-            ('from the middle'). In science, it refers to the first principles. In
-            other contexts, it often refers to beginner or training courses. In
-            law, it refers to a thing being true from its beginning or from the
-            instant of the act, rather than from when the court declared it so.
-            Likewise, an annulment is a judicial declaration of the invalidity or
-            nullity of a marriage ab initio: the so-called marriage was "no thing"
-            (Latin: nullius, from which the word "nullity" derives) and never
-            existed, except perhaps in name only.</p>
+          <p>c'est-à-dire «dès le début», se référant à une enquête ou à une enquête. Ab initio mundi signifie "depuis
+            le début du monde". En littérature, il fait référence à une histoire racontée depuis le début plutôt qu'in
+            medias res (« du milieu »). En science, il fait référence aux premiers principes. Dans d'autres contextes,
+            il fait souvent référence à des cours de débutant ou de formation. En droit, il fait référence à une chose
+            qui est vraie depuis son début ou depuis l'instant de l'acte, plutôt qu'à partir du moment où le tribunal
+            l'a déclarée telle. De même, une annulation est une déclaration judiciaire d'invalidité ou de nullité d'un
+            mariage ab initio : le soi-disant mariage n'était « rien » (latin : nullius, d'où dérive le mot « nullité »)
+            et n'a jamais existé, sauf peut-être en nom uniquement.</p>
         </div>
       </div>
     </div>
@@ -104,12 +92,16 @@ export default {
     return {
       quantity: 0,
       validQuantity: false,
+      // attList: [],
+      // attSets: {},
     }
   },
   computed: {
     ...mapGetters({
       getProducts: "products/getProducts",
-      getDetails: "productDetail/getDetails"
+      getDetails: "productDetail/getDetails",
+      getAttList: "productDetail/getAttList",
+      getAttSets: "productDetail/getAttSets",
     }),
     /**
      * Filter TYPE for same SIZE objects
@@ -140,12 +132,12 @@ export default {
         return variantList
       } else return null
     },
-    displayCategories(){
+    displayCategories() {
       let categories = this.getDetails.categories
-      if(categories.length > 1){
-        let display ='';
-        for(let i=0; i< categories.length; i++){
-          if(i==0){
+      if (categories.length > 1) {
+        let display = '';
+        for (let i = 0; i < categories.length; i++) {
+          if (i === 0) {
             display += categories[i]
           }
           display += '-> ' + categories[i]
@@ -154,14 +146,56 @@ export default {
       } else return categories[0]
     }
   },
+  mounted() {
+    this.loadAttributesLists();
+    // if (this.getDetails.attributes) {
+    //   for (let att in this.getDetails.attributes) {
+    //     if (att !== 'nom') {
+    //       this.attList.push(att)
+    //       this.attSets[att] = []
+    //     }
+    //   }
+    // }
+    //
+    // if (this.attList) {
+    //   if (this.attList.length > 1) {
+    //     for (let first in this.attList) {
+    //       for (let second in this.attList) {
+    //         if (first !== second) {
+    //           let att1 = this.attList[first];
+    //           let att2 = this.attList[second];
+    //           for (let prod in this.getProducts) {
+    //             if (this.getProducts[prod].attributes.nom === this.getDetails.attributes.nom &&
+    //               this.getProducts[prod].attributes[att1] === this.getDetails.attributes[att1]) {
+    //               this.attSets[att2].push(this.getProducts[prod])
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   } else {
+    //     let att = this.attList[0];
+    //     for (let prod in this.getProducts) {
+    //       if (this.getProducts[prod].attributes.nom === this.getDetails.attributes.nom) {
+    //         this.attSets[att].push(this.getProducts[prod])
+    //       }
+    //     }
+    //   }
+    // }
+    //
+    // console.log(this.attSets);
+
+  },
   methods: {
     ...mapActions({
       loadDetails: "productDetail/loadDetails",
-      loadSelected: "cart/loadSelected"
+      loadSelected: "cart/loadSelected",
+      loadAttributesLists: "productDetail/loadAttributesLists",
     }),
     closeModal() {
       this.$emit('closeModal');
-    },
+    }
+    ,
     addToCart(item) {
       if (this.quantity > 0) {
         item.showMessage = false;
@@ -320,22 +354,23 @@ export default {
 }
 
 .title {
-  margin:0;
+  margin: 0;
   width: 100%;
   height: 100%;
   grid-area: title;
   display: flex;
-	flex-direction: column;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.title p{
+.title p {
   color: rgb(16, 191, 255);
   font-size: 0.9rem;
   margin: 0;
 }
-.title h2{
+
+.title h2 {
   text-align: center;
   margin: 0;
 }

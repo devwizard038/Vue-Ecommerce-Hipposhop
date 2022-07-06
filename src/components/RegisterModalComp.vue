@@ -156,7 +156,7 @@ export default {
                 this.errorMessage = "l'email existe déjà"
                 setTimeout(() => {
                   this.errorMessage = ''
-                }, 2000)
+                }, 3000)
                 throw new Error("l'email existe déjà")
               }
             }
@@ -171,8 +171,7 @@ export default {
       )
         .then(() => {
           ServerEvents.postNewUser("[" + JSON.stringify(this.getNewUser) + "]")
-            .then((response) => {
-                console.log(response);
+            .then(() => {
                 this.resetNewUser();
               }
             )

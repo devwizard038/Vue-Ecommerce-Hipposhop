@@ -9,6 +9,9 @@
   <div v-if="this.showRegister === true">
     <RegisterModalComp @closeRegister="closeRegister"/>
   </div>
+  <div v-if="this.showProfile === true">
+    <ProfileComp @closeProfile="closeProfile"/>
+  </div>
   <div class="appContainer">
     <nav class="navbar">
       <div class="brand-title">Cegedim Shopping Center</div>
@@ -34,10 +37,11 @@
               <p>{{ this.getUser ? this.getUser : 'Vous devez authentifier pour accéder votre compte' }}</p>
               <div class="userToolButtons" v-if="this.getUser === null">
                 <button class="addToCart" @click="openLogin">Se connecter</button>
-                <button class="signUp"  @click="openRegister">Créer un compte</button>
+                <button class="signUp" @click="openRegister">Créer un compte</button>
               </div>
               <div class="userToolButtons" v-else>
                 <button class="logOut" @click="submitLogout">Logout</button>
+                <button class="signUp" @click="openProfile">Détails du profil</button>
               </div>
 
             </div>
@@ -67,6 +71,7 @@
 import ShoppingCart from "@/components/ShoppingCartComp.vue";
 import LoginModalComp from "@/components/LoginModalComp";
 import RegisterModalComp from "@/components/RegisterModalComp";
+import ProfileComp from "@/components/ProfileModalComp";
 import {mapActions, mapGetters} from "vuex";
 
 
@@ -76,6 +81,7 @@ export default {
     ShoppingCart,
     LoginModalComp,
     RegisterModalComp,
+    ProfileComp,
   },
   data() {
     return {
@@ -84,6 +90,7 @@ export default {
       active: false,
       showLogin: false,
       showRegister: false,
+      showProfile: false,
     }
   },
   computed: {
@@ -153,6 +160,12 @@ export default {
       this.loadUser(null);
       this.loadAdmin(false);
       this.deleteUserLocal();
+    },
+    openProfile() {
+      this.showProfile = true;
+    },
+    closeProfile() {
+      this.showProfile = false;
     }
   },
 }

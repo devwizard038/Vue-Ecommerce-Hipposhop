@@ -1,5 +1,9 @@
 <template>
   <div class="adminContainer">
+    <deleteConfirmAdmin
+      v-if="showModal"
+      :deleteConfirm="deleteConfirm"
+    />
     <transition
       mode="in-out"
       enter-active-class="animate__animated animate__fadeInDown"
@@ -16,29 +20,37 @@
       <h1>Admin Page</h1>
       <hr/>
     </div>
-    <div class="stateError" v-if="this.getAdminList.length === 0">
+    <div class="stateError" v-if="this.getAdminList.length === 0 && this.getUserList.length === 0">
       <h2>Please download list for the administrator</h2>
     </div>
-    <div class="adminTableContainer" v-if="this.getAdminList.length > 0">
+    <div class="adminTableContainer" v-if="this.getAdminList.length > 0 || this.getUserList.length > 0">
       <ag-grid-vue
         class="ag-theme-alpine"
         style="height: 500px; width: 100%"
         :columnDefs="columnsDef()"
-        :rowData="this.getAdminList"
+        :rowData="this.getAdminList.length > 0 ? this.getAdminList : this.getUserList"
         :defaultColDef="this.defaultColDef"
+        :suppressClickEdit="this.suppressClickEdit"
         rowSelection="multiple"
         animateRows="true"
+        editType="fullRow"
         @cell-value-changed="onCellValueChanged"
+        @row-editing-started="onRowEditingStarted"
+        @row-editing-stopped="onRowEditingStopped"
+        @cell-clicked="onCellClicked"
       />
     </div>
     <div class="buttons">
-      <!-- Clear LocalStorage initiator -->
-      <button v-if="this.getModifiedItemsList.length > 0" @click="updateServer()" class="btn-server">Update
+      <button v-if="this.getModifiedItemsList.length > 0 || this.getModifiedUserList.length > 0" @click="updateServer()"
+              class="btn-server">Update
         Server
       </button>
-      <button v-if="this.getAdminList.length > 0" @click="clearList" class="btn-clear">Clear list
+      <button v-if="this.getAdminList.length > 0 || this.getUserList.length > 0" @click="clearList" class="btn-clear">
+        Clear list
       </button>
-      <button @click="saveList" class="btn-load">Load Product List</button>
+      <button @click="saveAdminTable()" class="btn-load" v-if="this.getUserList.length === 0">Load Product List</button>
+      <button @click="loadUserList()" class="btn-load" v-if="this.getAdminList.length  === 0">Load User List</button>
+
     </div>
   </div>
 </template>
@@ -49,11 +61,14 @@ import EvenService from "@/Libraries/ServerEvents";
 import {AgGridVue} from 'ag-grid-vue3'
 import 'ag-grid-community/dist/styles/ag-grid.css'
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
+import adminCheckCell from "@/components/agGridComponents/adminCheckCell";
+import deleteConfirmAdmin from "@/components/agGridComponents/deleteCofirmAdmin"
 
 export default {
   name: 'AdminPage',
   components: {
-    AgGridVue
+    AgGridVue,
+    deleteConfirmAdmin
   },
   data() {
     return {
@@ -64,13 +79,19 @@ export default {
         flex: 1,
         resizable: true,
       },
+      suppressClickEdit: true,
       responseUpdate: false,
+      showEditButtons: true,
+      showModal: false,
+      temp: null,
     }
   },
   computed: {
     ...mapGetters({
       getAdminList: "products/getAdminList",
-      getModifiedItemsList: "products/getModifiedItemsList"
+      getModifiedItemsList: "products/getModifiedItemsList",
+      getUserList: "user/getUserList",
+      getModifiedUserList: "user/getModifiedUserList"
     }),
   },
   watch: {
@@ -89,69 +110,236 @@ export default {
         saveAdminTable: "products/saveAdminTable",
         deleteAdminTable: "products/deleteAdminTable",
         updateCart: "cart/updateCart",
+        loadUserList: "user/loadUserList",
+        deleteUserList: "user/deleteUserList",
+        saveModifiedUserList: "user/saveModifiedUserList",
       }),
-    saveList() {
-      this.saveAdminTable();
-    }
-    ,
     clearList() {
       // Clears Product List from LocalStorage
       this.deleteAdminTable();
+      this.deleteUserList();
       this.saveModifedItemsList([]);
+      this.saveModifiedUserList([])
       // Resets Cart List from LocalStorage
       this.updateCart([]);
-    }
-    ,
+    },
     /**
      * Create columns heads for table
      * @returns {Array}
      */
     columnsDef() {
-      let locallist = this.getAdminList;
+      let locallist = this.getAdminList.length > 0 ? this.getAdminList : this.getUserList;
       let field = []
       if (locallist !== null && locallist.length > 0) {
         Object.keys(locallist[0]).forEach(key => {
+          if (key === 'admin') {
+            field.push({
+              editable: false,
+              headerName: "Admin",
+              field: "admin",
+              cellRenderer: adminCheckCell
+            })
+            return
+          }
           field.push(
             {
               field: `${key}`,
+              editable: key !== 'id',
               wrapText: true,
               autoHeight: true,
-              valueParser: param => Number(param.newValue) ? Number(param.newValue) : param.newValue,
+              valueParser: param => {
+                return Number(param.newValue) ? Number(param.newValue) : param.newValue
+              },
               cellRenderer: (param) => {
                 if (key === 'image') {
                   if (param.data[key] !== null) {
                     return `<image style="height: 80px; width: 100px" src=${param.data[key]} />`;
-                  } else return 'NU AVEM POZA !'
+                  } else return 'No photo !'
                 }
                 return param.data[key]
-              }
+              },
             }
           )
         })
+        field.push({
+          field: 'action',
+          headerName: 'Action',
+          cellRenderer: this.actionCellRenderer,
+          editable: false,
+        })
       }
       return field
-    }
-    ,
+    },
+    actionCellRenderer(params) {
+      let eGui = document.createElement('div');
+      let editingCells = params.api.getEditingCells();
+      let isCurrentRowEditing = editingCells.some((cell) => {
+        return cell.rowIndex === params.node.rowIndex;
+      });
+
+      if (isCurrentRowEditing) {
+        eGui.innerHTML = `
+        <button
+          class="action-button update"
+          data-action="update"
+           style="
+          border: none;
+          background-color: rgb(69,121,172);
+          color: white;
+          padding: 0.6rem;
+          border-radius: 6px;
+          cursor: pointer
+          "
+          >
+               Update
+        </button>
+        <button
+          class="action-button cancel"
+          data-action="cancel"
+           style="
+          border: none;
+          background-color: rgb(194, 34, 34);
+          color: white;
+          padding: 0.6rem;
+          border-radius: 6px;
+          cursor: pointer
+          "
+          >
+               Cancel
+        </button>
+        `;
+      } else {
+        eGui.innerHTML = `
+        <button
+          class="action-button edit"
+          data-action="edit"
+           style="
+          border: none;
+          background-color: rgb(69, 172, 69);
+          color: white;
+          padding: 0.6rem;
+          border-radius: 6px;
+          cursor: pointer
+          "
+          >
+             Edit
+          </button>
+        <button
+          data-action="delete"
+          style="
+          border: none;
+          background-color: rgb(194, 34, 34);
+          color: white;
+          padding: 0.6rem;
+          border-radius: 6px;
+          cursor: pointer
+          "
+          >
+             Delete
+        </button>
+        `;
+      }
+
+      return eGui;
+    },
+    onRowEditingStarted: (params) => {
+      params.api.refreshCells({
+        columns: ['action'],
+        rowNodes: [params.node],
+        force: true,
+      });
+    },
+    onRowEditingStopped: (params) => {
+      params.api.refreshCells({
+        columns: ['action'],
+        rowNodes: [params.node],
+        force: true,
+      });
+    },
     /**
      * Confirmed edited data changed
      */
     onCellValueChanged(params) {
-      let modifications = this.getModifiedItemsList;
-      modifications.push(params.data);
-      this.saveModifedItemsList(modifications);
-    }
-    ,
+      if (this.getAdminList.length > 0) {
+        let modifications = this.getModifiedItemsList;
+        modifications.push(params.data);
+        this.saveModifedItemsList(modifications);
+      }
+      if (this.getUserList.length > 0) {
+        let modifications = this.getModifiedUserList;
+        modifications.push(params.data);
+        this.saveModifiedUserList(modifications)
+      }
+    },
+    onCellClicked(params) {
+      // Handle click event for action cells
+      if (
+        params.column.colId === 'action' &&
+        params.event.target.dataset.action
+      ) {
+        let action = params.event.target.dataset.action;
+        if (action === 'edit') {
+          console.log(params.columnApi)
+          params.api.startEditingCell({
+            rowIndex: params.node.rowIndex,
+            colKey: params.columnApi.getDisplayedCenterColumns()[0].colId,
+          });
+        }
+        /**
+         * Delete function for action buttons
+         */
+        if (action === 'delete') {
+          this.temp = params;
+          this.showModal = true;
+        }
+        if (action === 'update') {
+          params.api.stopEditing(false);
+        }
 
+        if (action === 'cancel') {
+          params.api.stopEditing(true);
+        }
+      }
+    },
+    deleteConfirm(answer) {
+      if (answer) {
+        if (this.getUserList.length > 0) {
+          EvenService.deleteUser(this.temp.data.id)
+            .then(() =>
+              this.loadUserList(),
+            )
+            .catch(err => console.log(err))
+        }
+        if (this.getAdminList.length > 0) {
+          EvenService.deleteProduct(this.temp.data.id)
+            .then(() =>
+              this.saveAdminTable()
+            )
+            .catch(err => console.log(err))
+        }
+        this.showModal = false
+      } else this.showModal = false
+    },
     updateServer() {
-      EvenService.postJsonProducts(JSON.stringify(this.getModifiedItemsList))
-        .then((response) => {
-            this.saveModifedItemsList([]);
-            this.responseUpdate = true;
-            console.log(response)
-          }
-        ).catch(error => console.log(error));
+      if (this.getModifiedItemsList.length > 0) {
+        EvenService.postJsonProducts(JSON.stringify(this.getModifiedItemsList))
+          .then((response) => {
+              this.saveModifedItemsList([]);
+              this.responseUpdate = true;
+              console.log(response)
+            }
+          ).catch(error => console.log(error));
+      }
+      if (this.getModifiedUserList.length > 0) {
+        EvenService.postNewUser(JSON.stringify(this.getModifiedUserList))
+          .then((response) => {
+              this.saveModifiedUserList([]);
+              this.responseUpdate = true;
+              console.log(response)
+            }
+          ).catch(error => console.log(error));
+      }
     }
-    ,
   }
 }
 
@@ -266,6 +454,10 @@ export default {
   justify-content: center;
   height: 100%;
   width: 100%;
+}
+
+.action-button {
+  padding: 20rem
 }
 
 table {
