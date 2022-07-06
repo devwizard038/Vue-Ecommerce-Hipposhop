@@ -54,10 +54,8 @@ export default {
                 }
             }
 
-            let prodListLocal = [];
-            prodListLocal = rootGetters["products/getProducts"]
+            let prodListLocal = rootGetters["products/getProducts"]
                 .filter(prod => prod.attributes[Object.keys(prod.attributes)[0]] === product[Object.keys(product)[0]]);
-
             if (attListLocal) {
                 if (attListLocal.length > 1) {
                     for (let att in attListLocal) {
@@ -68,7 +66,7 @@ export default {
                             }
                         }
                     }
-                } else {
+                } else if (attListLocal.length === 1) {
                     let att = attListLocal[0];
                     for (let prod in prodListLocal) {
                         if (prodListLocal[prod].attributes.nom === product.nom) {
@@ -80,7 +78,6 @@ export default {
 
             commit("setAttList", attListLocal);
             commit("setAttSets", attSetsLocal);
-
         }
     },
 };
