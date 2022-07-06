@@ -77,9 +77,10 @@
     </div>
   </div>
 </template>
-<script>
 
+<script>
 import {mapActions, mapGetters} from "vuex";
+// import {ProductTransformer} from "@/transformers/ProductTransformer";
 
 export default {
   name: 'ProductDetailComponent',
@@ -102,36 +103,8 @@ export default {
       getDetails: "productDetail/getDetails",
       getAttList: "productDetail/getAttList",
       getAttSets: "productDetail/getAttSets",
+      getCart: "cart/getCart",
     }),
-    /**
-     * Filter TYPE for same SIZE objects
-     * @returns {Object}
-     */
-    variantsTypeList() {
-      if (Object.keys(this.getDetails.attributes).length > 0) {
-        return this.getProducts.filter(item =>
-          item._attributes != null
-          && item.attributes.size === this.getDetails.attributes.size
-          && item.attributes.name === this.getDetails.attributes.name
-        );
-      }
-
-      return null;
-    },
-    /**
-     * Filter SIZE for same TYPE objects
-     * @returns {Object}
-     */
-    variantsSizeList() {
-      if (Object.keys(this.getDetails.attributes).length > 0) {
-        let variantList = this.getProducts.filter(item =>
-          item.attributes != null
-          && item.attributes.type === this.getDetails.attributes.type
-          && item.attributes.name === this.getDetails.attributes.name
-        )
-        return variantList
-      } else return null
-    },
     displayCategories() {
       let categories = this.getDetails.categories
       if (categories.length > 1) {
@@ -148,55 +121,22 @@ export default {
   },
   mounted() {
     this.loadAttributesLists();
-    // if (this.getDetails.attributes) {
-    //   for (let att in this.getDetails.attributes) {
-    //     if (att !== 'nom') {
-    //       this.attList.push(att)
-    //       this.attSets[att] = []
-    //     }
-    //   }
-    // }
-    //
-    // if (this.attList) {
-    //   if (this.attList.length > 1) {
-    //     for (let first in this.attList) {
-    //       for (let second in this.attList) {
-    //         if (first !== second) {
-    //           let att1 = this.attList[first];
-    //           let att2 = this.attList[second];
-    //           for (let prod in this.getProducts) {
-    //             if (this.getProducts[prod].attributes.nom === this.getDetails.attributes.nom &&
-    //               this.getProducts[prod].attributes[att1] === this.getDetails.attributes[att1]) {
-    //               this.attSets[att2].push(this.getProducts[prod])
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   } else {
-    //     let att = this.attList[0];
-    //     for (let prod in this.getProducts) {
-    //       if (this.getProducts[prod].attributes.nom === this.getDetails.attributes.nom) {
-    //         this.attSets[att].push(this.getProducts[prod])
-    //       }
-    //     }
-    //   }
-    // }
-    //
-    // console.log(this.attSets);
-
   },
   methods: {
     ...mapActions({
       loadDetails: "productDetail/loadDetails",
       loadSelected: "cart/loadSelected",
       loadAttributesLists: "productDetail/loadAttributesLists",
+      updateCart: "cart/updateCart",
     }),
     closeModal() {
       this.$emit('closeModal');
-    }
-    ,
-    addToCart(item) {
+    },
+    addToCart(selectedItem) {
+      /**
+       * Catch error: if local storage cart is empty
+       */
+      let item = selectedItem.toObject();
       if (this.quantity > 0) {
         item.showMessage = false;
         item.quantity = this.quantity;
