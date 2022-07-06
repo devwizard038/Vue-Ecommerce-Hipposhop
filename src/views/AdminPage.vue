@@ -26,7 +26,7 @@
     <div class="adminTableContainer" v-if="this.getAdminList.length > 0 || this.getUserList.length > 0">
       <ag-grid-vue
         class="ag-theme-alpine"
-        style="height: 500px; width: 100%"
+        style="height: 100%; width: 100%"
         :columnDefs="columnsDef()"
         :rowData="this.getAdminList.length > 0 ? this.getAdminList : this.getUserList"
         :defaultColDef="this.defaultColDef"
@@ -53,6 +53,10 @@
 
     </div>
   </div>
+
+<!--	<cell-categories-->
+<!--		style="display: none;"-->
+<!--	/>-->
 </template>
 
 <script>
@@ -62,13 +66,16 @@ import {AgGridVue} from 'ag-grid-vue3'
 import 'ag-grid-community/dist/styles/ag-grid.css'
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
 import adminCheckCell from "@/components/agGridComponents/adminCheckCell";
-import deleteConfirmAdmin from "@/components/agGridComponents/deleteCofirmAdmin"
+import deleteConfirmAdmin from "@/components/agGridComponents/deleteCofirmAdmin";
+import cellCategories from "@/components/agGridComponents/cellCategories";
 
 export default {
   name: 'AdminPage',
   components: {
     AgGridVue,
-    deleteConfirmAdmin
+    deleteConfirmAdmin,
+		// eslint-disable-next-line vue/no-unused-components
+		cellCategories
   },
   data() {
     return {
@@ -76,7 +83,7 @@ export default {
         sortable: true,
         filter: true,
         editable: true,
-        flex: 1,
+        // flex: 1,
         resizable: true,
       },
       suppressClickEdit: true,
@@ -103,17 +110,21 @@ export default {
       }
     }
   },
-  methods: {
+	mounted() {
+		this.saveCategories();
+	},
+	methods: {
     ...
-      mapActions({
-        saveModifedItemsList: "products/saveModifedItemsList",
-        saveAdminTable: "products/saveAdminTable",
-        deleteAdminTable: "products/deleteAdminTable",
-        updateCart: "cart/updateCart",
-        loadUserList: "user/loadUserList",
-        deleteUserList: "user/deleteUserList",
-        saveModifiedUserList: "user/saveModifiedUserList",
-      }),
+		mapActions({
+			saveModifedItemsList: "products/saveModifedItemsList",
+			saveAdminTable: "products/saveAdminTable",
+			deleteAdminTable: "products/deleteAdminTable",
+			updateCart: "cart/updateCart",
+			loadUserList: "user/loadUserList",
+			deleteUserList: "user/deleteUserList",
+			saveModifiedUserList: "user/saveModifiedUserList",
+			saveCategories: "category/saveCategories",
+		}),
     clearList() {
       // Clears Product List from LocalStorage
       this.deleteAdminTable();
@@ -129,7 +140,7 @@ export default {
      */
     columnsDef() {
       let locallist = this.getAdminList.length > 0 ? this.getAdminList : this.getUserList;
-      let field = []
+      let field = [];
       if (locallist !== null && locallist.length > 0) {
         Object.keys(locallist[0]).forEach(key => {
           if (key === 'admin') {
@@ -137,38 +148,66 @@ export default {
               editable: false,
               headerName: "Admin",
               field: "admin",
-              cellRenderer: adminCheckCell
+              cellRenderer: adminCheckCell,
+							width: 100
             })
             return
           }
-          field.push(
-            {
-              field: `${key}`,
-              editable: key !== 'id',
-              wrapText: true,
-              autoHeight: true,
-              valueParser: param => {
-                return Number(param.newValue) ? Number(param.newValue) : param.newValue
-              },
-              cellRenderer: (param) => {
-                if (key === 'image') {
-                  if (param.data[key] !== null) {
-                    return `<image style="height: 80px; width: 100px" src=${param.data[key]} />`;
-                  } else return 'No photo !'
-                }
-                return param.data[key]
-              },
-            }
-          )
+					if (key === 'category_id') {
+						field.push(
+							{
+								field: `${key}`,
+								editable: true,
+								autoHeight: true,
+								cellRenderer: "cellCategories",
+								flex: 1
+							});
+					} else if (key === "id" || key === "price") {
+						field.push(
+							{
+								field: `${key}`,
+								editable: false,
+								width: 80,
+								valueParser: param => {
+									return Number(param.newValue)
+								}
+							}
+						);
+					} else {
+						field.push(
+							{
+								field: `${key}`,
+								editable: key !== 'id',
+								flex: 1,
+								// wrapText: true,
+								// autoHeight: true,
+								valueParser: param => {
+									return Number(param.newValue) ? Number(param.newValue) : param.newValue
+								},
+								cellRenderer: (param) => {
+									if (key === 'image') {
+										if (param.data[key] !== null) {
+											return `<image style="height: 80px; width: 100px" src=${param.data[key]} />`;
+										} else return 'No photo !'
+									}
+									return param.data[key]
+								},
+							}
+						);
+					}
+
+
         })
         field.push({
           field: 'action',
           headerName: 'Action',
           cellRenderer: this.actionCellRenderer,
           editable: false,
+					width: 130
         })
       }
-      return field
+			console.log(field);
+      return field;
     },
     actionCellRenderer(params) {
       let eGui = document.createElement('div');
@@ -365,7 +404,7 @@ export default {
   display: grid;
   grid-template:
         "header" 70px
-        "table" 30rem
+        "table" auto
         "buttons" 90px
         /auto;
 }

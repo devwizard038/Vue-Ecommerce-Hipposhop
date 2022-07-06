@@ -18,14 +18,17 @@ export default {
         },
     },
     actions: {
-        saveCategories({commit}) {
-            let jsonCategories = [];
-            return EventService.getCategoryList()
-                .then(response => {
-                    jsonCategories = response.data.results;
-                        commit("setCategories", jsonCategories);
-                    }
-                ).catch(err => console.log(err));
+        saveCategories({ commit, getters }) {
+            if (!getters["getCategories"].length) {
+                let jsonCategories = [];
+                return EventService.getCategoryList()
+                    .then(response => {
+                            jsonCategories = response.data.results;
+                            console.log("load categories frim server");
+                            commit("setCategories", jsonCategories);
+                        }
+                    ).catch(err => console.log(err));
+            }
         },
     },
 };
