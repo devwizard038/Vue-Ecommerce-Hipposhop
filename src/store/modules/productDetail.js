@@ -58,11 +58,14 @@ export default {
                 .filter(prod => prod.attributes[Object.keys(prod.attributes)[0]] === product[Object.keys(product)[0]]);
             if (attListLocal) {
                 if (attListLocal.length > 1) {
-                    for (let att in attListLocal) {
-                        let attribute = attListLocal[att];
-                        for (let item in prodListLocal) {
-                            if (prodListLocal[item].attributes[attribute] === product[attribute]) {
-                                attSetsLocal[attribute].push(prodListLocal[item]);
+                    for (let attA in attListLocal) {
+                        let att1 = attListLocal[attA];
+                        let tempList = prodListLocal;
+                        for(let attB in attListLocal){
+                            let att2 = attListLocal[attB];
+                            if(att1 !== att2 && attSetsLocal[att1].length === 0) {
+                                tempList = tempList.filter(prod => prod.attributes[att2] === product[att2]);
+                                attSetsLocal[att1] = tempList;
                             }
                         }
                     }
