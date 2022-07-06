@@ -133,7 +133,6 @@ export default {
                 this.errorMessage = "l'email existe déjà"
                 setTimeout(() => {
                   this.errorMessage = ''
-                  this.closeRegister()
                 }, 3000)
                 throw new Error("l'email existe déjà")
               }
@@ -145,6 +144,7 @@ export default {
           newUser.email = this.email;
           newUser.password = this.passwordCheck;
           this.loadNewUser(newUser);
+          this.closeRegister();
         }
       )
         .then(() => {

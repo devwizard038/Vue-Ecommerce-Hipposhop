@@ -1,10 +1,11 @@
 <template>
-  <selction>
+  <div>
 		<div
-			v-for="category in getCategories(ids)"
+			v-for="category in getCategories(this.ids)"
 			:key="category"
-		>{{ category }}</div>
-	</selction>
+		>{{ category }}
+    </div>
+  </div>
 </template>
 
 <script>
@@ -29,7 +30,7 @@ export default {
     return {
     };
   },
-	methods: {
+  methods: {
 		...mapGetters({
 			getCategories:"category/getCategories"
 		}),
@@ -42,5 +43,7 @@ export default {
 <style scoped>
 div {
 	line-height: 1.7em;
+  display: flex;
+  flex-direction: column;
 }
 </style>
