@@ -81,7 +81,6 @@ export default {
             for (let item in data) {
               if (data[item].email === this.email && data[item].password === this.password) {
                 this.loginError= false
-
                 this.loadUser(this.email);
                 if (data[item].admin) {
                   this.loadAdmin(true);

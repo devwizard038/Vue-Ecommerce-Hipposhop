@@ -1,102 +1,79 @@
 <template>
   <div class="register-container">
     <div class="registerComponent">
-      <div class="headerRegister">
-        <button @click="closeRegister()">X</button>
-        <h1 v-if="this.getUser === null">Register</h1>
-      </div>
-      <div class="contentRegister">
-        <label for="user">User Name</label><br/>
-        <input
-          class="inputComponent"
-          id="userNameInput"
-          type="text"
-          name="user"
-          minlength=4
-          placeholder="Enter user name..."
-          v-model="userName"
-          required
-        /><br/>
-        <label for="user">Email</label><br/>
-        <input
-          :class='["inputComponent",checkEmail(email)]'
-          id="emailInput"
-          type="email"
-          name="user"
-          minlength=4
-          placeholder="Enter email..."
-          v-model="email"
-          required
-        /><br/>
-        <label for="password">Password</label><br/>
-        <p class="passwordReq">
-          <span
-            style="color:green"
-            v-if="checkPassword(password) === 'valid'"
-          >
-            &#10004;
-          </span>
-          <span
-            style="color: red"
-            v-else
-          >
-            &#10006;
-          </span>
-          Minimum eight characters, at least one letter and one number
-        </p>
-        <input
-          :class='["inputComponent",checkPassword(password)]'
-          type="password"
-          name="password"
-          minlength=6
-          placeholder="Enter password..."
-          v-model="password"
-          required
-        /><br/>
-        <label for="password">Confirm Password</label><br/>
-        <p class="passwordReq">
-          <span
-            style="color:green"
-            v-if="matchPass"
-          >
-            &#10004; Passwords match
-          </span>
-          <span
-            style="color: red"
-            v-else
-          >
-            &#10006; Passwords don't match
-          </span>
-        </p>
-        <input
-          :class='["inputComponent",checkPasswordMatch(passwordCheck)]'
-          type="password"
-          name="password"
-          minlength=6
-          placeholder="Enter password..."
-          v-model="passwordCheck"
-          required
-        /><br/>
-        <p class="passwordReq">
-          <span
-            style="color: red"
-            v-if="errorMessage"
-          >
-            {{ errorMessage }}
-          </span>
-        </p>
+      <div class="form">
         <button
-          :class="[
-            checkPassword(password) === 'valid'
-            && checkEmail(email) === 'valid'
-            && matchPass
-            && userName
-            ? 'btnRegister'
-            : 'btnRegisterInactive']"
-          type="submit"
-          @click="submitRegister()"
-        >Register
-        </button>
+          class="closeModal"
+          @click="closeRegister()"
+        >X</button>
+        <div class="title">Bonjour!</div>
+        <div class="subtitle">
+          Créons votre compte!</div>
+
+        <div class="input-container ic1">
+          <input
+            id="userName"
+            :class='["input",userName.length > 2 ? "valid" : " ", userName.length > 0 && userName.length <= 2  ? "invalid" : ""]'
+            type="text"
+            placeholder=" "
+            v-model="userName"
+          />
+          <div class="cut cut-long"></div>
+          <label for="email" class=placeholder>User Name</label>
+        </div>
+
+        <div class="input-container ic2">
+          <input
+            id="email"
+            :class='["input",checkEmail(email)]'
+            type="email"
+            placeholder=" "
+            v-model="email"
+          />
+          <div class="cut cut-short"></div>
+          <label for="email" class=placeholder>Email</label>
+        </div>
+        <div class="input-container ic2">
+          <input
+            id="password"
+            :class='["input",checkPassword(password)]' type="password" placeholder=" "
+            v-model="password"
+          />
+          <div class="cut "></div>
+          <label for="password" class="placeholder">Password</label>
+        </div>
+        <div class="input-container ic3">
+          <input
+            id="passwordConfirm"
+            :class='["input",checkPasswordMatch(passwordCheck)]' type="password" placeholder=" "
+            v-model="passwordCheck"
+          />
+          <div class="cut cut-long2"></div>
+          <label for="password" class="placeholder">Confirm Password</label>
+        </div>
+        <div class="input-container">
+          <p
+          :style='[password.length > 0 && checkPassword(password) === "valid" ? "color:green" : "",
+          password.length > 0 && checkPassword(password) === "invalid" ? "color:red" :""
+          ]'
+          ><span>{{password.length > 0 && checkPassword(password) === "valid" ? "&#9745;":"&#9744;" }}</span>
+             Le mot de passe doit comporter au moins huit caractères, une lettre majuscule et un chiffre.</p>
+          <p
+          :style='[passwordCheck.length > 0 && checkPasswordMatch(passwordCheck) === "valid" ? "color:green" : "",
+          passwordCheck.length > 0 && checkPasswordMatch(passwordCheck) === "invalid" ? "color:red" : ""
+          ]'
+          ><span>{{passwordCheck.length > 0 && checkPasswordMatch(password) === "valid" ? "&#9745;":"&#9744;" }}</span>
+            Les mots de passe correspondent.</p>
+        </div>
+        <button
+          type="text"
+          :class='[checkEmail(email) === "valid"
+          && checkPassword(password) === "valid"
+          && checkPasswordMatch(passwordCheck) === "valid"
+          && userName.length > 2
+          ? "submit" : "submitOff"]'
+          @click="submitRegister()">
+          Créer un compte</button>
       </div>
     </div>
   </div>
@@ -156,6 +133,7 @@ export default {
                 this.errorMessage = "l'email existe déjà"
                 setTimeout(() => {
                   this.errorMessage = ''
+                  this.closeRegister()
                 }, 3000)
                 throw new Error("l'email existe déjà")
               }
@@ -205,9 +183,23 @@ export default {
 @import "../assets/css/fontRoboto.css";
 @import "../assets/css/fontPoppins.css";
 
-h1 {
-  font-size: 3rem;
+.closeModal{
+  position: absolute;
+  background-color: #eee;
+  border: none;
+  cursor: pointer;
+  align-self: flex-end;
+  right: 5%;
 }
+
+.closeModal:hover{
+  background-color: #939393;
+}
+
+.closeModal:active{
+  background-color: #484848;
+}
+
 
 .register-container {
   top: 0;
@@ -224,125 +216,189 @@ h1 {
   backdrop-filter: blur(5px);
 }
 
-.registerComponent {
-  padding: 1rem;
-  display: grid;
-  grid-template:
-      "headerRegister" auto
-      "contentRegister" auto
-  /100%;
-  align-items: center;
-  background-color: #2d2d2d;
-  color: #efefef;
-  font-family: 'Poppins', sans-serif;
-  border-radius: 5px;
-  font-size: 1rem;
-  text-align: center;
+
+.form {
+  background-color: #15172b;
+  border-radius: 20px;
+  box-sizing: border-box;
+  height: 630px;
+  padding: 20px;
+  width: 320px;
+  position: relative;
 }
 
-.headerRegister {
-  grid-area: headerRegister;
-  display: flex;
-  flex-direction: column;
+.title {
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 36px;
+  font-weight: 600;
+  margin-top: 30px;
 }
 
-.headerRegister button {
-  align-self: flex-end;
-  background-color: white;
-  color: rgb(173, 58, 12);
-  border: 2px white solid;
+.subtitle {
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.input-container {
+  height: 50px;
+  position: relative;
+  width: 100%;
+}
+
+.input-container p{
+  font-size: 13px;
+  color: #eee;
+  font-family: sans-serif;
+  padding-left: 0.2rem;
+  width: 100%;
+}
+
+.validReq{
+  color:green;
+}
+
+invalidReq{
+  color:red
+}
+
+.ic1 {
+  margin-top: 40px;
+}
+
+.ic2 {
+  margin-top: 30px;
+}
+
+.ic3{
+  margin-top: 30px;
+}
+.input {
+  background-color: #303245;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 18px;
+  height: 100%;
+  outline: 0;
+  padding: 4px 20px 0;
+  width: 100%;
+}
+
+.cut {
+  background-color: #15172b;
+  border-radius: 10px;
+  height: 20px;
+  left: 20px;
+  position: absolute;
+  top: -20px;
+  transform: translateY(0);
+  transition: transform 200ms;
+  width: 76px;
+}
+
+.cut-short {
+  width: 50px;
+}
+
+.cut-long{
+  width: 80px;
+}
+
+.cut-long2{
+  width: 120px
+}
+
+.input:focus ~ .cut,
+.input:not(:placeholder-shown) ~ .cut {
+  transform: translateY(8px);
+}
+
+.placeholder {
+  color: #65657b;
+  font-family: sans-serif;
+  left: 20px;
+  line-height: 14px;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: 0 50%;
+  transition: transform 200ms, color 200ms;
+  top: 20px;
+}
+
+.input:focus ~ .placeholder,
+.input:not(:placeholder-shown) ~ .placeholder {
+  transform: translateY(-30px) translateX(10px) scale(0.75);
+}
+
+.input:not(:placeholder-shown) ~ .placeholder {
+  color: #808097;
+}
+
+.input:focus ~ .placeholder {
+  color: #d6d6de;
+}
+
+.submit {
+  background-color: #08d;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
   cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 38px;
+  outline: 0;
+  text-align: center;
+  width: 100%;
 }
 
-.headerRegister button:hover {
-  background-color: red;
-  color: white;
-  border: 2px solid red;
+.submit:active {
+  background-color: #06b;
 }
 
-.inputComponent {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  padding-right: 3rem;
-  padding-left: 3rem;
-  font-size: 1.2rem;
-  margin-top: 0.3rem;
-  margin-bottom: 2rem;
-  /*background-color: lightgray;*/
+.submitOff {
+  background-color: #4f4f4f;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  cursor: not-allowed;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 38px;
+  outline: 0;
+  text-align: center;
+  width: 100%;
+}
+
+
+.login-container {
+  top: 0;
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.3);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 }
 
 .valid {
-  background-color: #c2f8b5;
+  background-color: rgba(39, 229, 23, 0.15);
+
 }
 
 .invalid {
-  background-color: #f8bfbf;
-}
-
-.contentRegister label {
-  font-size: 1.6rem;
-}
-
-.contentRegister {
-  grid-area: contentRegister;
-}
-
-.contentRegister .passwordReq {
-  font-size: 0.8rem;
-  word-spacing: 0rem;
-  text-align: center;
-}
-
-.btnRegister {
-  background-color: rgb(16, 191, 255);
-  padding: 0.6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 1rem;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 0.7rem;
-  border: none;
-  text-decoration: none;
-}
-
-.btnRegister:hover {
-  background-color: #0e9eb1;
-  cursor: pointer;
-}
-
-.btnRegisterInactive {
-  background-color: rgb(54, 57, 58);
-  padding: 0.6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 1rem;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 0.7rem;
-  border: none;
-  text-decoration: none;
-  cursor: not-allowed;
-}
-
-.logOut {
-  background-color: rgb(162, 7, 7);
-  padding: 0.6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 1rem;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 0.7rem;
-  border: none;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.logOut:hover {
-  background-color: red;
+  background-color: rgba(255, 0, 0, 0.15);
 }
 </style>
