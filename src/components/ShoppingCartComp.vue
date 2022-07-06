@@ -18,7 +18,7 @@
               v-if="item.showMessage === true"
               :itemName="item.title"
               :deleteConfirm="deleteConfirm"
-              :itemToDelete="item"
+              :itemToDelete="this.deleteCartItem"
             />
           </div>
           <div class="itemList">
@@ -137,7 +137,7 @@ export default {
         this.deleteCartItem(item)
         deleteItem = false
       } else {
-        item.showMessage = false
+        if(item !== "emptyCartConfirmation") item.showMessage = false
         this.emptyCartShow = false;
       }
     },
