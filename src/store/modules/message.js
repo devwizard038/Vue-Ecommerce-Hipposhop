@@ -2,18 +2,18 @@ export default {
     namespaced: true,
     state() {
         return {
-            messageState: false,
+            message: '',
         };
     },
     getters: {
-        getMessageState(state) {
-            return state.messageState;
+        getMessage(state) {
+            return state.message;
         },
     },
     mutations: {
-        setMessageState(state, data) {
-            state.messageState = data;
-        }
+        setMessage(state, data) {
+            state.message = data;
+        },
     },
     actions: {
         /**
@@ -21,8 +21,22 @@ export default {
          * @param commit
          * @param data
          */
-        loadMessageState({ commit }, data) {
-            commit("setMessageState", data);
+        loadLoginMessage({ commit }) {
+            let data = "Connexion Réussie"
+            commit("setMessage", data);
+        },
+        /**
+         *
+         * @param commit
+         * @param data
+         */
+        loadLogoutMessage({ commit }) {
+            let data = "Déconnexion Réussie"
+            commit("setMessage", data);
+        },
+        loadRegisterMessage({ commit }) {
+            let data = "Inscription Réussie"
+            commit("setMessage", data);
         }
     },
 };

@@ -118,6 +118,7 @@ export default {
       deleteUserLocal: "user/deleteUserLocal",
       loadNewUser: "user/loadNewUser",
       resetNewUser: "user/resetNewUser",
+      loadRegisterMessage: "message/loadRegisterMessage",
     }),
     closeRegister() {
       this.$emit('closeRegister');
@@ -145,6 +146,7 @@ export default {
           newUser.password = this.passwordCheck;
           this.loadNewUser(newUser);
           this.closeRegister();
+          this.loadRegisterMessage();
         }
       )
         .then(() => {

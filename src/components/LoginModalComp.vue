@@ -62,6 +62,7 @@ export default {
   computed: {
     ...mapGetters({
       getUser: "user/getUser",
+      getMessage: "message/getMessage"
     })
   },
   methods: {
@@ -70,6 +71,8 @@ export default {
       loadAdmin: "user/loadAdmin",
       saveUserLocal: "user/saveUserLocal",
       deleteUserLocal: "user/deleteUserLocal",
+      loadLoginMessage: "message/loadLoginMessage",
+      loadLogoutMessage: "message/loadLogoutMessage",
     }),
     closeLogin() {
       this.$emit('closeLogin');
@@ -86,7 +89,8 @@ export default {
                   this.loadAdmin(true);
                 } else this.loadAdmin(false);
                 this.closeLogin();
-                this.saveUserLocal()
+                this.saveUserLocal();
+                this.loadLoginMessage();
               } else {this.loginError = true}
             }
         }

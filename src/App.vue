@@ -57,6 +57,17 @@
     >
       <p
         class="popup"
+        v-if="this.messageUpdate"
+      >{{ this.getMessage }}
+      </p>
+    </transition>
+    <transition
+      mode="in-out"
+      enter-active-class="animate__animated animate__fadeInDown"
+      leave-active-class="animate__animated animate__fadeOutUp"
+    >
+      <p
+        class="popup"
         v-if="this.selected != null"
       ><b>Vous avez ajouté au panier:</b>
         {{ this.selected.quantity }}/{{ this.selected.unit }} de "{{ this.selected.title }}"
@@ -74,7 +85,6 @@ import RegisterModalComp from "@/components/RegisterModalComp";
 import ProfileComp from "@/components/ProfileModalComp";
 import {mapActions, mapGetters} from "vuex";
 
-
 export default {
   name: 'App',
   components: {
@@ -91,6 +101,7 @@ export default {
       showLogin: false,
       showRegister: false,
       showProfile: false,
+      messageUpdate: false,
     }
   },
   computed: {
@@ -98,7 +109,8 @@ export default {
       getCartCount: "cart/getCartCount",
       getSelected: "cart/getSelected",
       getUser: "user/getUser",
-      getAdmin: "user/getAdmin"
+      getAdmin: "user/getAdmin",
+      getMessage: "message/getMessage"
     }),
     /**
      * Display count of products in the cart
@@ -112,6 +124,13 @@ export default {
     }
   },
   watch: {
+    getMessage(){
+      console.log(this.getMessage);
+      this.messageUpdate = true;
+      setTimeout(() => {
+        this.messageUpdate = false
+      }, 3000)
+    },
     selectedCart(nv) {
       if (nv != null) {
         this.selected = nv
@@ -134,6 +153,7 @@ export default {
       loadAdmin:"user/loadAdmin",
       deleteUserLocal:"user/deleteUserLocal",
       loadUser:"user/loadUser",
+      loadLogoutMessage: "message/loadLogoutMessage",
     }),
     closeCart() {
       this.showCart = false;
@@ -160,6 +180,7 @@ export default {
       this.loadUser(null);
       this.loadAdmin(false);
       this.deleteUserLocal();
+      this.loadLogoutMessage();
     },
     openProfile() {
       this.showProfile = true;
