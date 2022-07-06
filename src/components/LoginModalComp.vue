@@ -1,89 +1,37 @@
 <template>
   <div class="login-container">
     <div class="loginComponent">
-<!--      -->
       <div class="form">
-        <button @click="closeLogin()">X</button>
+        <button
+          class="closeModal"
+          @click="closeLogin()"
+        >X</button>
         <div class="title">Bonjour!</div>
         <div class="subtitle">Connectez-vous à votre compte pour plus d'informations</div>
         <div class="input-container ic1">
           <input
             id="email"
-            class="input"
+            :class='["input",checkEmail(email)]'
             type="email"
             placeholder=" "
             v-model="email"
           />
-          <div class="cut"></div>
-          <label for="firstname" :class='["placeholder", checkPassword(email)]'>Email</label>
+          <div class="cut cut-short"></div>
+          <label for="email" class=placeholder>Email</label>
         </div>
         <div class="input-container ic2">
-          <input id="email" class="input" type="password" placeholder=" " v-model="password"/>
-          <div class="cut cut-short"></div>
-          <label for="email" :class='["placeholder",checkPassword(password)]'>Password</label>
+          <input
+            id="password"
+            :class='["input",checkPassword(password)]' type="password" placeholder=" "
+            v-model="password"
+          />
+          <div class="cut "></div>
+          <label for="password" class="placeholder">Password</label>
         </div>
-        <button type="text" class="submit">submit</button>
-      </div>
-<!--      -->
-      <div class="headerLogin">
-
-        <h1 v-if="this.getUser === null">Login</h1>
-      </div>
-      <div class="contentLogin" v-if="this.getUser === null ">
-        <label for="user">User</label><br/>
-        <input
-          :class='["inputComponent",checkEmail(email)]'
-          id="emailInput"
-          type="email"
-          name="user"
-          minlength=4
-          placeholder="Enter email..."
-          v-model="email"
-          required
-        /><br/>
-        <label for="password">Password</label><br/>
-        <p class="passwordReq">
-          <span
-            style="color:green"
-            v-if="checkPassword(password) === 'valid'"
-          >
-            &#10004;
-          </span>
-          <span
-            style="color: red"
-            v-else
-          >
-            &#10006;
-          </span>
-          Minimum eight characters, at least one letter and one number
-        </p>
-        <input
-          :class='["inputComponent",checkPassword(password)]'
-          type="password"
-          name="password"
-          minlength=6
-          placeholder="Enter password..."
-          v-model="password"
-          required
-        /><br/>
-        <p
-          style="color: red"
-          v-if="this.loginError">User or password don't match!</p>
         <button
-          :class="[checkPassword(password) === 'valid' && checkEmail(email) === 'valid' ? 'btnLogin' : 'btnLoginInactive']"
-          type="submit"
-          @click="submitLogin()"
-        >Login
-        </button>
-      </div>
-      <div class="contentLogin" v-else>
-        <h1> {{ this.getUser }} </h1>
-        <button
-          class="logOut"
-          type="submit"
-          @click="submitLogout()"
-        >Logout
-        </button>
+          type="text"
+          :class='[checkEmail(email) === "valid" && checkPassword(password) === "valid" ? "submit" : "submitOff"]'
+          @click="submitLogin()">submit</button>
       </div>
     </div>
   </div>
@@ -173,8 +121,21 @@ export default {
 @import "../assets/css/fontRoboto.css";
 @import "../assets/css/fontPoppins.css";
 
-h1 {
-  font-size: 3rem;
+.closeModal{
+  position: absolute;
+  background-color: #eee;
+  border: none;
+  cursor: pointer;
+  align-self: flex-end;
+  right: 5%;
+}
+
+.closeModal:hover{
+  background-color: #939393;
+}
+
+.closeModal:active{
+  background-color: #484848;
 }
 
 .form {
@@ -184,6 +145,7 @@ h1 {
   height: 500px;
   padding: 20px;
   width: 320px;
+  position: relative;
 }
 
 .title {
@@ -250,7 +212,7 @@ h1 {
   transform: translateY(8px);
 }
 
-.valid {
+.placeholder {
   color: #65657b;
   font-family: sans-serif;
   left: 20px;
@@ -271,12 +233,8 @@ h1 {
   color: #808097;
 }
 
-.input:focus ~ .valid {
-  color: green;
-}
-
-.input:focus ~ .invalid {
-  color: red;
+.input:focus ~ .placeholder {
+  color: #d6d6de;
 }
 
 .submit {
@@ -289,7 +247,7 @@ h1 {
   font-size: 18px;
   height: 50px;
   margin-top: 38px;
-  outline: 0;
+ outline: 0;
   text-align: center;
   width: 100%;
 }
@@ -297,6 +255,22 @@ h1 {
 .submit:active {
   background-color: #06b;
 }
+
+.submitOff {
+  background-color: #4f4f4f;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  cursor: not-allowed;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 38px;
+  outline: 0;
+  text-align: center;
+  width: 100%;
+}
+
 
 .login-container {
   top: 0;
@@ -313,125 +287,15 @@ h1 {
   backdrop-filter: blur(5px);
 }
 
-.loginComponent {
-  padding: 1rem;
-  display: grid;
-  grid-template:
-      "headerLogin" auto
-      "contentLogin" auto
-  /100%;
-  align-items: center;
-  background-color: #2d2d2d;
-  color: #efefef;
-  font-family: 'Poppins', sans-serif;
-  border-radius: 5px;
-  font-size: 1rem;
-  text-align: center;
-}
-
-.headerLogin {
-  grid-area: headerLogin;
-  display: flex;
-  flex-direction: column;
-}
-
-.headerLogin button {
-  align-self: flex-end;
-  background-color: white;
-  color: rgb(173, 58, 12);
-  border: 2px white solid;
-  cursor: pointer;
-}
-
-.headerLogin button:hover {
-  background-color: red;
-  color: white;
-  border: 2px solid red;
-}
-
-.inputComponent {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  padding-right: 3rem;
-  padding-left: 3rem;
-  font-size: 1.2rem;
-  margin-top: 0.3rem;
-  margin-bottom: 2rem;
-  /*background-color: lightgray;*/
-}
-
 .valid {
-  color: green;
+  background-color: rgba(39, 229, 23, 0.15);
+
 }
 
 .invalid {
-  color: red;
+  background-color: rgba(255, 0, 0, 0.15);
 }
 
-.contentLogin label {
-  font-size: 1.6rem;
-}
+/*//////////////////////*/
 
-.contentLogin {
-  grid-area: contentLogin;
-}
-
-.contentLogin .passwordReq {
-  font-size: 0.8rem;
-  word-spacing: 0rem;
-  text-align: center;
-}
-
-.btnLogin {
-  background-color: rgb(16, 191, 255);
-  padding: 0.6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 1rem;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 0.7rem;
-  border: none;
-  text-decoration: none;
-}
-
-.btnLogin:hover {
-  background-color: #0e9eb1;
-  cursor: pointer;
-}
-
-.btnLoginInactive {
-  background-color: rgb(54, 57, 58);
-  padding: 0.6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 1rem;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 0.7rem;
-  border: none;
-  text-decoration: none;
-  cursor: not-allowed;
-}
-
-.logOut {
-  background-color: rgb(162, 7, 7);
-  padding: 0.6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 1rem;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 0.7rem;
-  border: none;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.logOut:hover {
-  background-color: red;
-}
 </style>
