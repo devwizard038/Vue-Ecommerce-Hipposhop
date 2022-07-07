@@ -397,7 +397,6 @@ invalidReq{
 
 .valid {
   background-color: rgba(39, 229, 23, 0.15);
-
 }
 
 .invalid {

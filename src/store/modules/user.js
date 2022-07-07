@@ -100,6 +100,15 @@ export default {
                     }));
             }
         },
+        saveModifiedUserLocal({state},data) {
+            if(state.user !== null ){
+                localStorage.setItem(`${SHOP_KEY}-${TABLES.USER}`,
+                    JSON.stringify({
+                        user: data.email,
+                        admin: data.admin
+                    }));
+            }
+        },
         deleteUserLocal() {
             localStorage.removeItem(`${SHOP_KEY}-${TABLES.USER}`);
         },

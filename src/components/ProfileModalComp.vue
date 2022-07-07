@@ -1,178 +1,181 @@
 <template>
   <div class="register-container">
-    <div class="registerComponent">
-      <div class="headerRegister">
-        <button @click="closeProfile()">X</button>
-        <h1>Détails du profil</h1>
-        <p
-          v-if="updated"
-          style="color:green"
-        >
-          détails du profil mis à jour
-        </p>
-      </div>
+      <div class="form">
+        <button
+          class="closeModal"
+          @click="closeProfile()"
+        >X</button>
+        <div class="title">Bonjour!</div>
+        <div class="subtitle">
+          Créons votre compte!</div>
 
-      <div class="contentProfile">
-        <div>
-          <p class="detailsTitle">Nom</p>
-          <div v-if="modifyUser">
-            <input
-              class="inputComponent"
-              id="userNameInput"
-              type="text"
-              name="user"
-              minlength=4
-              placeholder="Nouveau nom..."
-              v-model="userName"
-              required
-            />
-            <br>
-            <button
-              class="btnChange"
-              @click="userNameFromServer = userName; submitNewDetails()"
-            >soumettre
-            </button>
-            <button
-              class="cancel"
-              @click="modifyUser = false"
-            >annuler
-            </button>
-          </div>
-          <div v-else>
-            <label class="detailsContent">{{ userNameFromServer }}</label>
-            <br>
-            <button
-              class="btnChange"
-              @click="modifyUser = true"
-            >changer
-            </button>
-          </div>
+        <div class="input-container ic1">
+          <input
+            id="userName"
+            ref="userInput"
+            :class='[
+              "input",userName.length > 2 ? "valid" : "",
+              userName.length > 0 && userName.length <= 2  ? "invalid" : "",
+              ]'
+            type="text"
+            placeholder=" "
+            v-model="userName"
+            :readOnly="this.readOnlyToggleUser"
+          />
+          <div class="cut cut-long"></div>
+          <label for="email" class=placeholder>Nom d'utilisateur</label>
         </div>
-        <br/>
-
-        <div>
-          <p class="detailsTitle">Email</p>
-          <div v-if="modifyEmail">
-            <input
-              :class='["inputComponent",checkEmail(email)]'
-              id="emailInput"
-              type="email"
-              name="user"
-              minlength=4
-              placeholder="Enter email..."
-              v-model="email"
-              required
-            />
-            <p class="passwordReq">
-              <span
-                style="color: red"
-                v-if="errorMessage"
-              >
-                {{ errorMessage }}
-              </span>
-            </p>
-
+        <button
+          v-if="this.readOnlyToggleUser"
+          type="text"
+          class="submit"
+          @click="() => {
+            this.readOnlyToggleUser = !this.readOnlyToggleUser
+            this.$refs.userInput.focus()
+          }">
+          Modify User
+        </button>
+        <div class="actionContainer" v-if="!this.readOnlyToggleUser">
+          <button
+            type="submit"
+            class="updateBtn"
+            @click="() => {
+              if(userName !== userNameFromServer){
+                readOnlyToggleUser = true
+                updatedUser = true;
+              }
+          }">Save</button>
             <button
-              class="btnChange"
-              @click="submitNewDetails()"
-            >soumettre
-            </button>
-            <button
-              class="cancel"
-              @click="modifyEmail = false"
-            >annuler
-            </button>
-          </div>
-          <div v-else>
-            <label class="detailsContent">{{ emailFromServer }}</label>
-            <br/>
-            <button
-              class="btnChange"
-              @click="modifyEmail = true"
-            >changer
-            </button>
-          </div>
+              class="cancelBtn"
+              @click="cancelUserChange()">Cancel</button>
         </div>
-        <br/>
-
-        <div>
-          <p class="detailsTitle">Password</p>
-          <div v-if="modifyPassword">
-            <p class="passwordReq">
-          <span
-            style="color:green"
-            v-if="checkPassword(password) === 'valid'"
-          >
-            &#10004;
-          </span>
-              <span
-                style="color: red"
-                v-else
-              >
-            &#10006;
-          </span>
-              Minimum eight characters,
-              <br/> at least one letter and one number
-            </p>
-            <input
-              :class='["inputComponent",checkPassword(password)]'
-              type="password"
-              name="password"
-              minlength=6
-              placeholder="Enter password..."
-              v-model="password"
-              required
-            /><br/>
-            <label class="detailsTitle">Confirm Password</label><br/>
-            <p class="passwordReq">
-              <span v-if="matchPass">
-                <span style="color:green">&#10004;</span>
-                <span>Passwords match</span>
-              </span>
-              <span v-else>
-                <span style="color: red">&#10006;</span>
-                <span>Passwords don't match</span>
-              </span>
-            </p>
-            <input
-              :class='["inputComponent",checkPasswordMatch(passwordCheck)]'
-              type="password"
-              name="password"
-              minlength=6
-              placeholder="Enter password..."
-              v-model="passwordCheck"
-              required
-            /><br/>
-
+        <div class="input-container ic2">
+          <input
+            ref="emailInput"
+            id="email"
+            :class='["input",checkEmail(emailFromServer)]'
+            type="email"
+            placeholder=" "
+            v-model="email"
+            :readOnly="this.readOnlyToggleEmail"
+          />
+          <div class="cut cut-short"></div>
+          <label for="email" class=placeholder>E-mail</label>
+        </div>
+        <button
+          v-if="this.readOnlyToggleEmail"
+          type="text"
+          class="submit"
+          @click="() => {
+            this.readOnlyToggleEmail = !this.readOnlyToggleEmail
+            this.$refs.emailInput.focus()
+          }">
+          Modify Email
+        </button>
+        <div class="actionContainer" v-if="!this.readOnlyToggleEmail">
+          <button
+            type="submit"
+            class="updateBtn"
+            @click="() => {
+              if(email !== emailFromServer && checkEmail(email) === 'valid'){
+                readOnlyToggleUser = true
+                updatedEmail = true
+                readOnlyToggleEmail = true;
+              }
+          }">Save</button>
+          <button
+            class="cancelBtn"
+            @click="cancelEmailChange()">Cancel</button>
+        </div>
+        <div class="input-container ic2">
+          <input
+            ref="passInput"
+            id="password"
+            :class='["input",checkPassword(password)]'
+            type="password"
+            placeholder=" "
+            v-model="password"
+            :readOnly="readOnlyTogglePass"
+          />
+          <div :class='["cut",readOnlyTogglePass ? "cut-long3" : "cut-long4"]'></div>
+          <label for="password" class="placeholder">{{this.readOnlyTogglePass ? 'Mot de passe' : 'Nouveau mot de passe' }}</label>
+          <button
+            v-if="readOnlyTogglePass"
+            type="text"
+            class="submit"
+            @click="
+            this.password = ''
+            this.readOnlyTogglePass = !this.readOnlyTogglePass;
+            this.$refs.passInput.focus()
+          ">
+            Modify Password
+          </button>
+        </div>
+        <div class="input-container ic3" v-if="!readOnlyTogglePass">
+          <input
+            id="passwordConfirm"
+            :class='["input",checkPasswordMatch(passwordConfirm)]'
+            type="password"
+            placeholder=" "
+            v-model="passwordConfirm"
+          />
+          <div class="cut cut-long2" v-if="!readOnlyTogglePass"></div>
+          <label for="password" class="placeholder">Confirm Password</label>
+          <div class="actionContainer" v-if="!this.readOnlyTogglePass">
             <button
-              :class="[
-                checkPassword(password) === 'valid'
-                && matchPass
-                ? 'btnChange'
-                : 'btnChangeInactive'
-                ]"
               type="submit"
-              @click="passwordFromServer = password; submitNewDetails()"
-            >soumettre
-            </button>
+              class="updateBtn"
+              @click="() => {
+                if(password !== passwordFromServer){
+                   updatedPass = true;
+           readOnlyTogglePass = true;
+           passwordConfirm = '';
+                }
+            }">Save</button>
             <button
-              class="cancel"
-              @click="modifyPassword = false"
-            >annuler
-            </button>
-          </div>
-          <div v-else>
-            <button
-              class="btnChange"
-              @click="modifyPassword = true"
-            >changer
+              class="cancelBtn"
+              @click="cancelPassChange()">Cancel
             </button>
           </div>
         </div>
-        <br/>
-
+        <div class="input-container ic4" v-if="!readOnlyTogglePass">
+          <p
+            :style='[passwordConfirm.length > 0 && password !== passwordFromServer ? "color: green": "",
+             passwordConfirm.length > 0 && password === passwordFromServer ? "color: red": ""
+             ]'
+          ><span>{{passwordConfirm.length > 0 && password !== passwordFromServer ? "&#9745;":"&#9744;" }}</span>
+            Le nouveau mot de passe est différent de l'ancien.</p>
+          <p
+            :style='[password.length > 0 && checkPassword(password) === "valid" ? "color:green" : "",
+          password.length > 0 && checkPassword(password) === "invalid" ? "color:red" :""
+          ]'
+          ><span>{{password.length > 0 && checkPassword(password) === "valid" ? "&#9745;":"&#9744;" }}</span>
+            Le mot de passe doit comporter au moins huit caractères, une lettre majuscule et un chiffre.</p>
+          <p
+            :style='[passwordConfirm.length > 0 && passwordConfirm === password ? "color:green" : "",
+          passwordConfirm.length > 0 && passwordConfirm !== password ? "color:red" : ""
+          ]'
+          ><span>{{password.length > 0 && passwordConfirm === password ? "&#9745;":"&#9744;" }}</span>
+            Les mots de passe correspondent.</p>
+        </div>
+        <div class="input-container ic5" v-if="updatedEmail || updatedUser || updatedPass">
+          <hr/>
+          <p
+            class="errorMsg"
+            v-if="this.errorMessage !== null"
+            style="color:red; text-transform: uppercase"
+          > Error: {{ this.errorMessage }}!
+          </p>
+          <button
+            type="submit"
+            class="submitToServer"
+            @click="
+              modifyUser()
+            ">
+            Modify Account
+          </button>
+        </div>
       </div>
-    </div>
   </div>
 </template>
 
@@ -198,15 +201,20 @@ export default {
       validPass: false,
       matchPass: false,
       register: false,
-      errorMessage: '',
-      modifyUser: false,
-      modifyEmail: false,
-      modifyPassword: false,
+      errorMessage: null,
       idFromServer: null,
       userNameFromServer: '',
       emailFromServer: '',
       passwordFromServer: '',
-      updated: false,
+      updatedUser: false,
+      updatedEmail: false,
+      updatedPass: false,
+      readOnlyToggleUser:true,
+      readOnlyToggleEmail:true,
+      readOnlyTogglePass:true,
+      passwordConfirm:'',
+      userToModify:null,
+      admin: false,
     }
   },
   computed: {
@@ -216,15 +224,59 @@ export default {
     }),
   },
   beforeMount() {
-    this.extractName();
+    this.extractName()
+      .then(()=>{
+        this.userName = this.userNameFromServer
+        this.email = this.emailFromServer
+        this.password = this.passwordFromServer
+        ;}
+      );
+
   },
   methods: {
     ...mapActions({
       loadUser: "user/loadUser",
       resetNewUser: "user/resetNewUser",
+      saveModifiedUserLocal:"user/saveModifiedUserLocal"
     }),
-    extractName() {
+    modifyUser(){
       ServerEvents.getUserList()
+        .then(
+        response => {
+          let data = response.data.results;
+          data.forEach(item => {
+              if ( this.updatedEmail && item.email === this.email) {
+                this.errorMessage = "l'email existe déjà"
+                setTimeout(()=> this.errorMessage = null, 4000)
+              }
+            }
+          )})
+        .then(() => {
+          if(this.errorMessage === null){
+            this.userToModify = [{
+              id:this.idFromServer,
+              name:this.userName,
+              email: this.email,
+              password: this.password,
+              admin: this.admin
+            }]
+            ServerEvents.postNewUser(JSON.stringify(this.userToModify))
+              .then(()=>{
+                this.loadUser(this.email)
+                this.saveModifiedUserLocal(...this.userToModify)
+                this.updatedUser = false;
+                this.updatedEmail = false;
+                this.updatedPass = false;
+                this.userToModify = null;
+              })
+            } else setTimeout(()=> this.errorMessage = null, 4000)
+
+          }
+        )
+        .catch(err => console.log(err))
+    },
+    extractName() {
+      return ServerEvents.getUserList()
         .then(response => {
           let data = response.data.results;
           data.forEach(item => {
@@ -233,53 +285,10 @@ export default {
                 this.userNameFromServer = item.name;
                 this.emailFromServer = item.email;
                 this.passwordFromServer = item.password;
+                this.admin = item.admin
               }
             }
           )
-        })
-        .catch(err => console.warn('error promisiune:' + err));
-    },
-    submitNewDetails() {
-      ServerEvents.getUserList().then(
-        response => {
-          let data = response.data.results;
-
-          data.forEach(item => {
-              if (item.email === this.email) {
-                this.errorMessage = "l'email existe déjà"
-                setTimeout(() => {
-                  this.errorMessage = ''
-                }, 2500)
-                throw new Error("l'email existe déjà")
-              }
-            }
-          )
-          let newDetails = this.getNewUser
-          newDetails.id = this.idFromServer;
-          newDetails.name = this.userNameFromServer;
-          this.userName = '';
-          if(this.email !== '') this.emailFromServer = this.email;
-          newDetails.email = this.emailFromServer;
-          this.email = '';
-          newDetails.password = this.passwordFromServer;
-          this.password = '';
-          this.passwordCheck = '';
-        }
-      )
-        .then(() => {
-          ServerEvents.postNewUser("[" + JSON.stringify(this.getNewUser) + "]")
-            .then(() => {
-                this.loadUser(this.emailFromServer);
-                this.modifyEmail = false;
-                this.modifyUser = false;
-                this.modifyPassword = false;
-                this.updated = true;
-                setTimeout(() => {
-                  this.updated = false
-                }, 2500);
-                this.resetNewUser();
-              }
-            )
         })
         .catch(err => console.warn('error promisiune:' + err));
     },
@@ -304,6 +313,22 @@ export default {
     closeProfile() {
       this.$emit('closeProfile');
     },
+    cancelUserChange(){
+      this.readOnlyToggleUser = true;
+      this.updatedUser = false;
+      this.userName = this.userNameFromServer;
+    },
+    cancelEmailChange(){
+      this.readOnlyToggleEmail = true;
+      this.updatedEmail = false
+      this.email = this.emailFromServer
+    },
+    cancelPassChange(){
+      this.readOnlyTogglePass = true;
+      this.updatedPass = false;
+      this.password = this.passwordFromServer
+      this.passwordConfirm = '';
+    }
   }
 }
 </script>
@@ -313,27 +338,70 @@ export default {
 @import "../assets/css/fontRoboto.css";
 @import "../assets/css/fontPoppins.css";
 
-h1 {
-  font-size: 2.3rem;
+.focused{
+  border: 2px white solid;
 }
 
-.detailsTitle {
-  font-size: 1.5rem
+.errorMsg{
+  color: red;
+  text-align: center;
+  font-size: 20px;
 }
 
-.detailsContent {
-  color: rgb(16, 191, 255);
-  font-size: 1.1rem
+.actionContainer{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 }
 
-.modify {
-  color: rgb(16, 191, 255);
+.updateBtn{
+  background-color: #278510;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
   cursor: pointer;
+  font-size: 12px;
+  height: 30px;
+  margin-top: 10px;
+  outline: 0;
+  text-align: center;
+  width: 80%;
+  margin-right: 6px;
+}
+.cancelBtn{
+  background-color: #8f0a0a;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  cursor: pointer;
+  font-size: 12px;
+  height: 30px;
+  margin-top: 10px;
+  outline: 0;
+  text-align: center;
+  width: 80%;
 }
 
-.modify:hover {
-  text-decoration: underline;
+
+.closeModal{
+  position: absolute;
+  background-color: #eee;
+  border: none;
+  cursor: pointer;
+  align-self: flex-end;
+  right: 5%;
 }
+
+.closeModal:hover{
+  background-color: #939393;
+}
+
+.closeModal:active{
+  background-color: #484848;
+}
+
 
 .register-container {
   top: 0;
@@ -350,127 +418,192 @@ h1 {
   backdrop-filter: blur(5px);
 }
 
-.registerComponent {
-  padding: 1rem;
-  display: grid;
-  grid-template:
-      "headerRegister" auto
-      "contentProfile" auto
-  /100%;
-  align-items: center;
-  background-color: #2d2d2d;
-  color: #efefef;
-  font-family: 'Poppins', sans-serif;
-  border-radius: 5px;
-  font-size: 1rem;
-  text-align: center;
+
+.form {
+  background-color: #15172b;
+  border-radius: 20px;
+  box-sizing: border-box;
+  height: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 70px;
+  width: 320px;
+  position: relative;
 }
 
-.headerRegister {
-  grid-area: headerRegister;
-  display: flex;
-  flex-direction: column;
+.title {
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 36px;
+  font-weight: 600;
+  margin-top: 30px;
 }
 
-.headerRegister button {
-  align-self: flex-end;
-  background-color: white;
-  color: rgb(173, 58, 12);
-  border: 2px white solid;
+.subtitle {
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.input-container {
+  height: 50px;
+  position: relative;
+  width: 100%;
+}
+
+.input-container p{
+  font-size: 13px;
+  color: #eee;
+  font-family: sans-serif;
+  padding-left: 0.2rem;
+  width: 100%;
+}
+
+.validReq{
+  color:green;
+}
+
+invalidReq{
+  color:red
+}
+
+.ic1 {
+  margin-top: 40px;
+}
+
+.ic2 {
+  margin-top: 30px;
+}
+
+.ic3{
+  margin-top: 30px;
+}
+
+.ic4{
+  margin-top: 60px;
+}
+
+.ic5{
+  margin-top: 70px;
+}
+.input {
+  background-color: #303245;
+  border-radius: 12px;
+  box-sizing: border-box;
+  border:0px;
+  color: #eee;
+  font-size: 18px;
+  height: 100%;
+  outline: 0;
+  padding: 4px 20px 0;
+  width: 100%;
+}
+
+.cut {
+  background-color: #15172b;
+  border-radius: 10px;
+  height: 20px;
+  left: 20px;
+  position: absolute;
+  top: -20px;
+  transform: translateY(0);
+  transition: transform 200ms;
+  width: 76px;
+}
+
+.cut-short {
+  width: 55px;
+}
+
+.cut-long{
+  width: 110px;
+}
+
+.cut-long2{
+  width: 130px
+}
+
+.cut-long3{
+  width: 90px
+}
+
+.cut-long4{
+  width: 145px;
+}
+
+.input:focus ~ .cut,
+.input:not(:placeholder-shown) ~ .cut {
+  transform: translateY(8px);
+}
+
+.placeholder {
+  color: #65657b;
+  font-family: sans-serif;
+  left: 20px;
+  line-height: 14px;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: 0 50%;
+  transition: transform 200ms, color 200ms;
+  top: 20px;
+}
+
+.input:focus ~ .placeholder,
+.input:not(:placeholder-shown) ~ .placeholder {
+  transform: translateY(-30px) translateX(10px) scale(0.75);
+}
+
+.input:not(:placeholder-shown) ~ .placeholder {
+  color: #808097;
+}
+
+.input:focus ~ .placeholder {
+  color: #d6d6de;
+}
+
+.submit {
+  background-color: #08d;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
   cursor: pointer;
+  font-size: 12px;
+  height: 30px;
+  margin-top: 10px;
+  outline: 0;
+  text-align: center;
+  width: 100%;
 }
 
-.headerRegister button:hover {
-  background-color: red;
-  color: white;
-  border: 2px solid red;
+.submitToServer{
+  background-color: #b45306;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  cursor: pointer;
+  font-size: 12px;
+  height: 30px;
+  margin-top: 10px;
+  outline: 0;
+  text-align: center;
+  width: 100%;
 }
 
-.inputComponent {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-right: 2rem;
-  padding-left: 2rem;
-  font-size: 1.1rem;
-  margin-top: 0.1rem;
-  margin-bottom: 1.5rem;
-  /*background-color: lightgray;*/
+.submit:active {
+  background-color: #06b;
 }
 
 .valid {
-  background-color: #c2f8b5;
+  background-color: rgba(39, 229, 23, 0.15);
 }
 
 .invalid {
-  background-color: #f8bfbf;
+  background-color: rgba(255, 0, 0, 0.15);
 }
 
-.contentProfile label {
-  font-size: 1.6rem;
-}
-
-.contentProfile {
-  grid-area: contentProfile;
-}
-
-.contentProfile .passwordReq {
-  font-size: 0.8rem;
-  word-spacing: 0rem;
-  text-align: center;
-}
-
-.btnChange {
-  background-color: rgb(16, 191, 255);
-  padding: 0.6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 0.8rem;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 0.6rem;
-  border: none;
-  text-decoration: none;
-  margin-top: 0.5rem;
-}
-
-.btnChange:hover {
-  background-color: #0e9eb1;
-  cursor: pointer;
-}
-
-.btnChangeInactive {
-  background-color: rgb(54, 57, 58);
-  padding: 0.6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 1rem;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 0.7rem;
-  border: none;
-  text-decoration: none;
-  cursor: not-allowed;
-}
-
-.cancel {
-  background-color: rgb(162, 7, 7);
-  padding: 0.6rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 0.8rem;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 0.7rem;
-  border: none;
-  text-decoration: none;
-  margin-left: 1rem;
-}
-
-.cancel:hover {
-  background-color: red;
-  cursor: pointer;
-}
 </style>
