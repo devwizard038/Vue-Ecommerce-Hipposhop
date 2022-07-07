@@ -57,10 +57,10 @@
           :deleteConfirm="deleteConfirm"
           :itemToDelete="itemToDelete"
         />
-        <p>+ Shipping: 1.99$</p>
-        <h2>Total : {{ (this.getCartPrice + this.shipping).toFixed(2)}}  $</h2>
+        <p>+ Expédition: 1.99€</p>
+        <h2>Total : {{ (this.getCartPrice + this.shipping).toFixed(2)}}  €</h2>
         <div>
-          <button class="outBtn">Check Out</button>
+          <button class="outBtn">Commander</button>
           <button class="clearAll" @click="emptyCartConfirmation()">Panier clair</button>
         </div>
       </div>

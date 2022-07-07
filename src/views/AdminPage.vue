@@ -20,10 +20,14 @@
       <h1>Admin Page</h1>
       <hr/>
     </div>
-    <div class="stateError" v-if="this.getAdminList.length === 0 && this.getUserList.length === 0">
-      <h2>Please download list for the administrator</h2>
+    <div class="stateError"
+         v-if="this.getAdminList.length === 0 && this.getUserList.length === 0"
+    >
+      <h2>S'il vous plaît télécharger la liste désirée pour l'administration</h2>
     </div>
-    <div class="adminTableContainer" v-if="this.getAdminList.length > 0 || this.getUserList.length > 0">
+    <div class="adminTableContainer"
+         v-if="this.getAdminList.length > 0 || this.getUserList.length > 0"
+    >
       <ag-grid-vue
         class="ag-theme-alpine"
         style="height: 100%; width: 100%"
@@ -41,22 +45,36 @@
       />
     </div>
     <div class="buttons">
-      <button v-if="this.getModifiedItemsList.length > 0 || this.getModifiedUserList.length > 0" @click="updateServer()"
-              class="btn-server">Update
-        Server
+      <button v-if="this.getModifiedItemsList.length > 0 || this.getModifiedUserList.length > 0"
+              @click="updateServer()"
+              class="btn-server"
+      >
+        Mettre à jour le serveur
       </button>
-      <button v-if="this.getAdminList.length > 0 || this.getUserList.length > 0" @click="clearList" class="btn-clear">
-        Clear list
+      <button v-if="this.getAdminList.length > 0 || this.getUserList.length > 0"
+              @click="clearList" class="btn-clear"
+      >
+        Effacer la liste
       </button>
-      <button @click="saveAdminTable()" class="btn-load" v-if="this.getUserList.length === 0">Load Product List</button>
-      <button @click="loadUserList()" class="btn-load" v-if="this.getAdminList.length  === 0">Load User List</button>
-
+      <button @click="saveAdminTable()"
+              class="btn-load"
+              v-if="this.getUserList.length === 0"
+      >
+        Charger la liste de produits
+      </button>
+      <button
+        @click="loadUserList()"
+        class="btn-load"
+        v-if="this.getAdminList.length  === 0"
+      >
+        Charger la liste des utilisateurs
+      </button>
     </div>
   </div>
 
-<!--	<cell-categories-->
-<!--		style="display: none;"-->
-<!--	/>-->
+  <!--	<cell-categories-->
+  <!--		style="display: none;"-->
+  <!--	/>-->
 </template>
 
 <script>
@@ -74,8 +92,8 @@ export default {
   components: {
     AgGridVue,
     deleteConfirmAdmin,
-		// eslint-disable-next-line vue/no-unused-components
-		cellCategories
+    // eslint-disable-next-line vue/no-unused-components
+    cellCategories
   },
   data() {
     return {
@@ -110,25 +128,24 @@ export default {
       }
     }
   },
-	mounted() {
-		this.saveCategories();
-	},
-	methods: {
-    ...
-		mapActions({
-			saveModifedItemsList: "products/saveModifedItemsList",
-			saveAdminTable: "products/saveAdminTable",
-			deleteAdminTable: "products/deleteAdminTable",
-			updateCart: "cart/updateCart",
-			loadUserList: "user/loadUserList",
-			deleteUserList: "user/deleteUserList",
-			saveModifiedUserList: "user/saveModifiedUserList",
-			saveCategories: "category/saveCategories",
-		}),
+  mounted() {
+    this.saveCategories();
+  },
+  methods: {
+    ...mapActions({
+      saveModifiedItemsList: "products/saveModifiedItemsList",
+      saveAdminTable: "products/saveAdminTable",
+      deleteAdminTable: "products/deleteAdminTable",
+      updateCart: "cart/updateCart",
+      loadUserList: "user/loadUserList",
+      deleteUserList: "user/deleteUserList",
+      saveModifiedUserList: "user/saveModifiedUserList",
+      saveCategories: "category/saveCategories",
+    }),
     clearList() {
       this.deleteAdminTable();
       this.deleteUserList();
-      this.saveModifedItemsList([]);
+      this.saveModifiedItemsList([]);
       this.saveModifiedUserList([])
       // Resets Cart List from LocalStorage
       this.updateCart([]);
@@ -138,62 +155,62 @@ export default {
      * @returns {Array}
      */
     columnsDef() {
-      let locallist = this.getAdminList.length > 0 ? this.getAdminList : this.getUserList;
+      let localList = this.getAdminList.length > 0 ? this.getAdminList : this.getUserList;
       let field = [];
-      if (locallist !== null && locallist.length > 0) {
-        Object.keys(locallist[0]).forEach(key => {
+      if (localList !== null && localList.length > 0) {
+        Object.keys(localList[0]).forEach(key => {
           if (key === 'admin') {
             field.push({
               editable: false,
               headerName: "Admin",
               field: "admin",
               cellRenderer: adminCheckCell,
-							width: 100
+              width: 100
             })
             return
           }
-					if (key === 'category_id') {
-						field.push(
-							{
-								field: `${key}`,
-								editable: true,
-								autoHeight: true,
-								cellRenderer: "cellCategories",
-								flex: 1
-							});
-					} else if (key === "id" || key === "price") {
-						field.push(
-							{
-								field: `${key}`,
-								editable: false,
-								width: 80,
-								valueParser: param => {
-									return Number(param.newValue)
-								}
-							}
-						);
-					} else {
-						field.push(
-							{
-								field: `${key}`,
-								editable: key !== 'id',
-								flex: 1,
-								// wrapText: true,
-								// autoHeight: true,
-								valueParser: param => {
-									return Number(param.newValue) ? Number(param.newValue) : param.newValue
-								},
-								cellRenderer: (param) => {
-									if (key === 'image') {
-										if (param.data[key] !== null) {
-											return `<image style="height: 80px; width: 100px" src=${param.data[key]} />`;
-										} else return 'No photo !'
-									}
-									return param.data[key]
-								},
-							}
-						);
-					}
+          if (key === 'category_id') {
+            field.push(
+              {
+                field: `${key}`,
+                editable: true,
+                autoHeight: true,
+                cellRenderer: "cellCategories",
+                flex: 1
+              });
+          } else if (key === "id" || key === "price") {
+            field.push(
+              {
+                field: `${key}`,
+                editable: false,
+                width: 80,
+                valueParser: param => {
+                  return Number(param.newValue)
+                }
+              }
+            );
+          } else {
+            field.push(
+              {
+                field: `${key}`,
+                editable: key !== 'id',
+                flex: 1,
+                // wrapText: true,
+                // autoHeight: true,
+                valueParser: param => {
+                  return Number(param.newValue) ? Number(param.newValue) : param.newValue
+                },
+                cellRenderer: (param) => {
+                  if (key === 'image') {
+                    if (param.data[key] !== null) {
+                      return `<image style="height: 80px; width: 100px" src=${param.data[key]} />`;
+                    } else return 'No photo !'
+                  }
+                  return param.data[key]
+                },
+              }
+            );
+          }
 
 
         })
@@ -202,7 +219,7 @@ export default {
           headerName: 'Action',
           cellRenderer: this.actionCellRenderer,
           editable: false,
-					width: 130
+          width: 130
         })
       }
       return field;
@@ -228,7 +245,7 @@ export default {
           cursor: pointer
           "
           >
-               Update
+               Mise à jour
         </button>
         <button
           class="action-button cancel"
@@ -242,7 +259,7 @@ export default {
           cursor: pointer
           "
           >
-               Cancel
+               Annuler
         </button>
         `;
       } else {
@@ -259,7 +276,7 @@ export default {
           cursor: pointer
           "
           >
-             Edit
+             Éditer
           </button>
         <button
           data-action="delete"
@@ -272,7 +289,7 @@ export default {
           cursor: pointer
           "
           >
-             Delete
+             Effacer
         </button>
         `;
       }
@@ -300,7 +317,7 @@ export default {
       if (this.getAdminList.length > 0) {
         let modifications = this.getModifiedItemsList;
         modifications.push(params.data);
-        this.saveModifedItemsList(modifications);
+        this.saveModifiedItemsList(modifications);
       }
       if (this.getUserList.length > 0) {
         let modifications = this.getModifiedUserList;
@@ -360,7 +377,7 @@ export default {
       if (this.getModifiedItemsList.length > 0) {
         EvenService.postJsonProducts(JSON.stringify(this.getModifiedItemsList))
           .then((response) => {
-              this.saveModifedItemsList([]);
+              this.saveModifiedItemsList([]);
               this.responseUpdate = true;
               console.log(response)
             }

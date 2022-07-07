@@ -1,9 +1,5 @@
 <template>
   <div class="categoryPageContainer">
-<!--    <div class="headerCategory">-->
-<!--      <h3>Categories</h3>-->
-<!--      <hr/>-->
-<!--    </div>-->
     <div class="categoriesContainer">
       <!-- Category data organised in a tree -->
       <TreeBrowser
