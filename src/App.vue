@@ -40,7 +40,7 @@
                 <button class="signUp" @click="openRegister">Créer un compte</button>
               </div>
               <div class="userToolButtons" v-else>
-                <button class="logOut" @click="submitLogout">Logout</button>
+                <button class="logOut" @click="submitLogout">Se déconnecter</button>
                 <button class="signUp" @click="openProfile">Détails du profil</button>
               </div>
 
@@ -125,7 +125,6 @@ export default {
   },
   watch: {
     getMessage(){
-      console.log(this.getMessage);
       this.messageUpdate = true;
       setTimeout(() => {
         this.messageUpdate = false
@@ -193,7 +192,7 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import "./assets/css/fontPoppins.css";
 
 html, body {
   margin: 0;

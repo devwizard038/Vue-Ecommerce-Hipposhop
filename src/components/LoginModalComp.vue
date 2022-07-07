@@ -17,7 +17,7 @@
             v-model="email"
           />
           <div class="cut cut-short"></div>
-          <label for="email" class=placeholder>Email</label>
+          <label for="email" class=placeholder>E-mail</label>
         </div>
         <div class="input-container ic2">
           <input
@@ -26,12 +26,12 @@
             v-model="password"
           />
           <div class="cut "></div>
-          <label for="password" class="placeholder">Password</label>
+          <label for="password" class="placeholder">Mot de passe</label>
         </div>
         <button
           type="text"
           :class='[checkEmail(email) === "valid" && checkPassword(password) === "valid" ? "submit" : "submitOff"]'
-          @click="submitLogin()">submit</button>
+          @click="submitLogin()">Soumettre</button>
       </div>
     </div>
   </div>
@@ -203,11 +203,11 @@ export default {
   top: -20px;
   transform: translateY(0);
   transition: transform 200ms;
-  width: 76px;
+  width: 92px;
 }
 
 .cut-short {
-  width: 50px;
+  width: 54px;
 }
 
 .input:focus ~ .cut,

@@ -13,7 +13,6 @@
 					:class="{ 'expanded': expanded }"
 				>
 					&gt;
-
 				</div>
 				{{ node.name }}
 			</a>

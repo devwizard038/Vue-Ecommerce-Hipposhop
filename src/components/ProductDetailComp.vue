@@ -17,9 +17,9 @@
         </div>
         <div class="pricingContainer">
           <div class="pricingQty">
-            <p>Pret: {{ getDetails.price }}/{{ getDetails.unit }}</p>
+            <p>Prix: {{ getDetails.price }}/{{ getDetails.unit }}</p>
             <div class="qtyContainer">
-              <p>Cantitate:
+              <p>Quantité:
                 <input
                   class="cell"
                   type="number"
@@ -33,7 +33,7 @@
                 <p
                   v-if="this.validQuantity"
                   class="invalidQty"
-                >Selectati o cantitate !</p>
+                >Sélectionner une quantité!</p>
               </transition>
             </div>
           </div>
@@ -47,8 +47,7 @@
                 <button
                   v-for="items in this.getAttSets[att]"
                   @click="loadDetails(items); this.loadAttributesLists();"
-                  :class="items.id !== getDetails.id
-                ? 'variantsBtn' : 'selected'"
+                  :class="items.id !== getDetails.id ? 'variantsBtn' : 'selected'"
                   :key="items.attributes.name"
                 >
                   {{ items.attributes[att] }}
@@ -59,11 +58,11 @@
           <button
             class="addBtn"
             @click="addToCart(getDetails,this.quantity)">
-            ADD TO CART
+            Ajouter au panier
           </button>
         </div>
         <div class="description">
-          <h3>Despre produs</h3>
+          <h3>Description du produit</h3>
           <p>c'est-à-dire «dès le début», se référant à une enquête ou à une enquête. Ab initio mundi signifie "depuis
             le début du monde". En littérature, il fait référence à une histoire racontée depuis le début plutôt qu'in
             medias res (« du milieu »). En science, il fait référence aux premiers principes. Dans d'autres contextes,

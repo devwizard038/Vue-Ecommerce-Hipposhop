@@ -38,7 +38,7 @@
 						v-if="this.validQuantity"
 						class="invalidQty"
 					>
-							Sélectionner une quantité !
+							Sélectionner une quantité!
 						</span>
 				</div>
 				<div class="addToCartContainer">

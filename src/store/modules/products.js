@@ -70,7 +70,7 @@ export default {
                 })
                 .catch(error => console.log(error));
         },
-        saveModifedItemsList({commit},newData){
+        saveModifiedItemsList({commit},newData){
             commit("setModifiedItemsList", newData);
         },
         deleteAdminTable({state}) {
