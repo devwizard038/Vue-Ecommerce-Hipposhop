@@ -34,7 +34,7 @@
           <li>
             <a>Mon compte</a>
             <div class="userToolTip">
-              <p>{{ this.getUser ? this.getUser : 'Vous devez authentifier pour accéder votre compte' }}</p>
+              <p>{{ this.getUser ? this.getUser : 'Vous devez authentifier pour accéder votre compte ' }}</p>
               <div class="userToolButtons" v-if="this.getUser === null">
                 <button class="addToCart" @click="openLogin">Se connecter</button>
                 <button class="signUp" @click="openRegister">Créer un compte</button>
