@@ -13,13 +13,20 @@
         <div class="input-container ic1">
           <input
             id="userName"
-            :class='["input",userName.length > 2 ? "valid" : " ", userName.length > 0 && userName.length <= 2  ? "invalid" : ""]'
+            :class='[
+              "input",userName.length > 2 ? "valid" : " ",
+              userName.length > 0 && userName.length <= 2  ? "invalid" : ""
+            ]'
             type="text"
             placeholder=" "
             v-model="userName"
           />
           <div class="cut cut-long"></div>
-          <label for="email" class=placeholder>User Name</label>
+          <label
+            for="email"
+            class=placeholder
+          >User Name
+          </label>
         </div>
 
         <div class="input-container ic2">
@@ -31,25 +38,32 @@
             v-model="email"
           />
           <div class="cut cut-short"></div>
-          <label for="email" class=placeholder>Email</label>
+          <label
+            for="email" class
+            =placeholder>E-mail</label>
         </div>
         <div class="input-container ic2">
           <input
             id="password"
-            :class='["input",checkPassword(password)]' type="password" placeholder=" "
+            :class='["input",checkPassword(password)]'
+            type="password" placeholder=" "
             v-model="password"
           />
-          <div class="cut "></div>
-          <label for="password" class="placeholder">Password</label>
+          <div class="cut"></div>
+          <label
+            for="password"
+            class="placeholder"
+          >Mot de passe</label>
         </div>
         <div class="input-container ic3">
           <input
             id="passwordConfirm"
-            :class='["input",checkPasswordMatch(passwordCheck)]' type="password" placeholder=" "
+            :class='["input",checkPasswordMatch(passwordCheck)]'
+            type="password" placeholder=" "
             v-model="passwordCheck"
           />
           <div class="cut cut-long2"></div>
-          <label for="password" class="placeholder">Confirm Password</label>
+          <label for="password" class="placeholder">Confirmez le mot de passe</label>
         </div>
         <div class="input-container">
           <p
@@ -65,6 +79,7 @@
           ><span>{{passwordCheck.length > 0 && checkPasswordMatch(password) === "valid" ? "&#9745;":"&#9744;" }}</span>
             Les mots de passe correspondent.</p>
         </div>
+        <p class="errorMsg" v-if="this.errorMessage !== ''">Error: {{ errorMessage }}</p>
         <button
           type="text"
           :class='[checkEmail(email) === "valid"
@@ -172,8 +187,7 @@ export default {
       return validatorPassword(arg)
     },
     checkPasswordMatch(arg) {
-      if (arg === "") return
-      arg === this.password ? this.matchPass = true : this.matchPass = false;
+      arg.length >0 && arg === this.password ? this.matchPass = true : this.matchPass = false;
       return this.matchPass ? 'valid' : 'invalid'
     },
   }
@@ -300,11 +314,11 @@ invalidReq{
   top: -20px;
   transform: translateY(0);
   transition: transform 200ms;
-  width: 76px;
+  width: 90px;
 }
 
 .cut-short {
-  width: 50px;
+  width: 60px;
 }
 
 .cut-long{
@@ -312,7 +326,7 @@ invalidReq{
 }
 
 .cut-long2{
-  width: 120px
+  width: 170px
 }
 
 .input:focus ~ .cut,
@@ -401,5 +415,12 @@ invalidReq{
 
 .invalid {
   background-color: rgba(255, 0, 0, 0.15);
+}
+
+.errorMsg{
+  color:red;
+  text-align: center;
+  right: 28%;
+  position: absolute;
 }
 </style>

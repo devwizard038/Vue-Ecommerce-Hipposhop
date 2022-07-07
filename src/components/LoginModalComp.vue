@@ -28,6 +28,13 @@
           <div class="cut "></div>
           <label for="password" class="placeholder">Mot de passe</label>
         </div>
+        <div
+          style="
+          padding-top: 12px;
+          color:red;
+          text-align:center;
+          right:30%"
+          v-if="this.loginError">Error: utilisateur ou mot de passe introuvable </div>
         <button
           type="text"
           :class='[checkEmail(email) === "valid" && checkPassword(password) === "valid" ? "submit" : "submitOff"]'
@@ -91,7 +98,9 @@ export default {
                 this.closeLogin();
                 this.saveUserLocal();
                 this.loadLoginMessage();
-              } else {this.loginError = true}
+              } else {
+                this.loginError = true;
+                setTimeout(()=>this.loginError = false,3500)}
             }
         }
       )

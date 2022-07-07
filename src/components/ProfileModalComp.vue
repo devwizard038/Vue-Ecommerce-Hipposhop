@@ -7,7 +7,7 @@
         >X</button>
         <div class="title">Bonjour!</div>
         <div class="subtitle">
-          Créons votre compte!</div>
+          Modifier votre compte!</div>
 
         <div class="input-container ic1">
           <input
@@ -33,7 +33,7 @@
             this.readOnlyToggleUser = !this.readOnlyToggleUser
             this.$refs.userInput.focus()
           }">
-          Modify User
+          Modifier L'utilisateur
         </button>
         <div class="actionContainer" v-if="!this.readOnlyToggleUser">
           <button
@@ -70,7 +70,7 @@
             this.readOnlyToggleEmail = !this.readOnlyToggleEmail
             this.$refs.emailInput.focus()
           }">
-          Modify Email
+          Modifier l'E-mail
         </button>
         <div class="actionContainer" v-if="!this.readOnlyToggleEmail">
           <button
@@ -108,7 +108,7 @@
             this.readOnlyTogglePass = !this.readOnlyTogglePass;
             this.$refs.passInput.focus()
           ">
-            Modify Password
+            Modifier le mot de Passe
           </button>
         </div>
         <div class="input-container ic3" v-if="!readOnlyTogglePass">
@@ -120,7 +120,7 @@
             v-model="passwordConfirm"
           />
           <div class="cut cut-long2" v-if="!readOnlyTogglePass"></div>
-          <label for="password" class="placeholder">Confirm Password</label>
+          <label for="password" class="placeholder">Confirmez le mot de passe</label>
           <div class="actionContainer" v-if="!this.readOnlyTogglePass">
             <button
               type="submit"
@@ -172,7 +172,7 @@
             @click="
               modifyUser()
             ">
-            Modify Account
+            Modifier le Compte
           </button>
         </div>
       </div>
@@ -306,9 +306,8 @@ export default {
       return validatorPassword(arg)
     },
     checkPasswordMatch(arg) {
-      if (arg === "") return
-      arg === this.password ? this.matchPass = true : this.matchPass = false;
-      return this.matchPass ? 'valid' : 'invalid'
+        arg === this.password ? this.matchPass = true : this.matchPass = false;
+        return this.matchPass ? 'valid' : 'invalid'
     },
     closeProfile() {
       this.$emit('closeProfile');
@@ -523,7 +522,7 @@ invalidReq{
 }
 
 .cut-long2{
-  width: 130px
+  width: 170px
 }
 
 .cut-long3{
