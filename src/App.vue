@@ -1,52 +1,58 @@
 <template>
   <!-- Shopping Cart -->
   <div v-if="this.showCart === true">
-    <ShoppingCart @closeCart="closeCart"/>
+    <ShoppingCart @closeCart="closeCart" />
   </div>
   <div v-if="this.showLogin === true">
-    <LoginModalComp @closeLogin="closeLogin"/>
+    <LoginModalComp @closeLogin="closeLogin" />
   </div>
   <div v-if="this.showRegister === true">
-    <RegisterModalComp @closeRegister="closeRegister"/>
+    <RegisterModalComp @closeRegister="closeRegister" />
   </div>
   <div v-if="this.showProfile === true">
-    <ProfileComp @closeProfile="closeProfile"/>
+    <ProfileComp @closeProfile="closeProfile" />
   </div>
   <div class="appContainer">
     <nav class="navbar">
-      <div class="brand-title">Cegedim Shopping Center</div>
+      <div class="brand-title">Hippo Shop</div>
       <div class="toggle-button" @click="toggleMobile">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </div>
-      <div
-        :class="{active: this.active}"
-        class="navbar-links"
-      >
+      <div :class="{ active: this.active }" class="navbar-links">
         <ul>
           <li>
-            <router-link to="/">Accueil</router-link>
+            <router-link to="/">Home</router-link>
           </li>
           <li v-if="this.getAdmin">
-            <router-link to="/admin">Administration</router-link>
+            <router-link to="/admin">Administrator</router-link>
           </li>
           <li>
-            <a>Mon compte</a>
+            <a>My account</a>
             <div class="userToolTip">
-              <p>{{ this.getUser ? this.getUser : 'Vous devez authentifier pour accéder votre compte ' }}</p>
+              <p>
+                {{
+                  this.getUser
+                    ? this.getUser
+                    : "You must login to access your account."
+                }}
+              </p>
               <div class="userToolButtons" v-if="this.getUser === null">
-                <button class="addToCart" @click="openLogin">Se connecter</button>
-                <button class="signUp" @click="openRegister">Créer un compte</button>
+                <button class="addToCart" @click="openLogin">Login</button>
+                <button class="signUp" @click="openRegister">Register</button>
               </div>
               <div class="userToolButtons" v-else>
-                <button class="logOut" @click="submitLogout">Se déconnecter</button>
-                <button class="signUp" @click="openProfile">Détails du profil</button>
+                <button class="logOut" @click="submitLogout">Logout</button>
+                <button class="signUp" @click="openProfile">
+                  Acoount details
+                </button>
               </div>
-
             </div>
           </li>
-          <li><a @click="openCart">&#x1F6D2;({{ this.cartItems }})</a></li>
+          <li>
+            <a @click="openCart">&#x1F6D2;({{ this.cartItems }})</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -55,27 +61,22 @@
       enter-active-class="animate__animated animate__fadeInDown"
       leave-active-class="animate__animated animate__fadeOutUp"
     >
-      <p
-        class="popup"
-        v-if="this.messageUpdate"
-      >{{ this.getMessage }}
-      </p>
+      <p class="popup" v-if="this.messageUpdate">{{ this.getMessage }}</p>
     </transition>
     <transition
       mode="in-out"
       enter-active-class="animate__animated animate__fadeInDown"
       leave-active-class="animate__animated animate__fadeOutUp"
     >
-      <p
-        class="popup"
-        v-if="this.selected != null"
-      ><b>Vous avez ajouté au panier:</b>
-        {{ this.selected.quantity }}/{{ this.selected.unit }} de "{{ this.selected.title }}"
+      <p class="popup" v-if="this.selected != null">
+        <b>Vous avez ajouté au panier:</b> {{ this.selected.quantity }}/{{
+          this.selected.unit
+        }}
+        de "{{ this.selected.title }}"
       </p>
     </transition>
-    <router-view/>
+    <router-view />
   </div>
-
 </template>
 
 <script>
@@ -83,10 +84,10 @@ import ShoppingCart from "@/components/ShoppingCartComp.vue";
 import LoginModalComp from "@/components/LoginModalComp";
 import RegisterModalComp from "@/components/RegisterModalComp";
 import ProfileComp from "@/components/ProfileModalComp";
-import {mapActions, mapGetters} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     ShoppingCart,
     LoginModalComp,
@@ -102,7 +103,7 @@ export default {
       showRegister: false,
       showProfile: false,
       messageUpdate: false,
-    }
+    };
   },
   computed: {
     ...mapGetters({
@@ -110,38 +111,38 @@ export default {
       getSelected: "cart/getSelected",
       getUser: "user/getUser",
       getAdmin: "user/getAdmin",
-      getMessage: "message/getMessage"
+      getMessage: "message/getMessage",
     }),
     /**
      * Display count of products in the cart
      */
     cartItems() {
-      this.loadCart()
-      return this.getCartCount
+      this.loadCart();
+      return this.getCartCount;
     },
     selectedCart() {
-      return this.getSelected
-    }
+      return this.getSelected;
+    },
   },
   watch: {
-    getMessage(){
+    getMessage() {
       this.messageUpdate = true;
       setTimeout(() => {
-        this.messageUpdate = false
-      }, 3000)
+        this.messageUpdate = false;
+      }, 3000);
     },
     selectedCart(nv) {
       if (nv != null) {
-        this.selected = nv
+        this.selected = nv;
       }
       setTimeout(() => {
-        this.loadSelected(null)
-        this.selected = null
-      }, 3000)
-    }
+        this.loadSelected(null);
+        this.selected = null;
+      }, 3000);
+    },
   },
   mounted() {
-    this.loadCart()
+    this.loadCart();
     this.loadUserLocal();
   },
   methods: {
@@ -149,9 +150,9 @@ export default {
       loadCart: "cart/loadCart",
       loadSelected: "cart/loadSelected",
       loadUserLocal: "user/loadUserLocal",
-      loadAdmin:"user/loadAdmin",
-      deleteUserLocal:"user/deleteUserLocal",
-      loadUser:"user/loadUser",
+      loadAdmin: "user/loadAdmin",
+      deleteUserLocal: "user/deleteUserLocal",
+      loadUser: "user/loadUser",
       loadLogoutMessage: "message/loadLogoutMessage",
     }),
     closeCart() {
@@ -173,7 +174,7 @@ export default {
       this.showRegister = true;
     },
     toggleMobile() {
-      this.active = !this.active
+      this.active = !this.active;
     },
     submitLogout() {
       this.loadUser(null);
@@ -186,15 +187,16 @@ export default {
     },
     closeProfile() {
       this.showProfile = false;
-    }
+    },
   },
-}
+};
 </script>
 
 <style>
 @import "./assets/css/fontPoppins.css";
 
-html, body {
+html,
+body {
   margin: 0;
   height: 100%;
   width: 100%;
@@ -215,7 +217,7 @@ html, body {
 }
 
 .appContainer {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   align-items: center;
   width: 100%;
   height: 100%;
@@ -244,20 +246,20 @@ html, body {
 }
 
 .navbar-links {
-	height: 100%;
+  height: 100%;
 }
 
 .navbar-links ul {
   margin: 0;
   padding: 0;
   display: flex;
-	height: 100%;
-	align-items: stretch;
+  height: 100%;
+  align-items: stretch;
 }
 
 .navbar-links li {
   list-style: none;
-	vertical-align: center;
+  vertical-align: center;
 }
 
 .navbar-links li a {
@@ -274,7 +276,7 @@ html, body {
 
 .toggle-button {
   position: absolute;
-  top: .75rem;
+  top: 0.75rem;
   right: 1rem;
   display: none;
   flex-direction: column;
@@ -304,7 +306,7 @@ html, body {
   padding: 0.8rem;
   right: 3.5rem;
   margin-top: -10px;
-  box-shadow: 0 0 13px 1px rgba(0, 0, 0, 0.40);
+  box-shadow: 0 0 13px 1px rgba(0, 0, 0, 0.4);
 }
 
 .userToolTip p {
@@ -330,7 +332,6 @@ html, body {
 
 .userToolTip .userToolButtons .signUp:hover {
   text-decoration: underline;
-
 }
 
 .logOut {
@@ -393,7 +394,7 @@ html, body {
   }
 
   .navbar-links li a {
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
   }
 
   .active {

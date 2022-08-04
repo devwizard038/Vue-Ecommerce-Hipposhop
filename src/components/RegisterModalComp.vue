@@ -2,93 +2,116 @@
   <div class="register-container">
     <div class="registerComponent">
       <div class="form">
-        <button
-          class="closeModal"
-          @click="closeRegister()"
-        >X</button>
-        <div class="title">Bonjour!</div>
-        <div class="subtitle">
-          Créons votre compte!</div>
+        <button class="closeModal" @click="closeRegister()">X</button>
+        <div class="title">Hello !</div>
+        <div class="subtitle">Create your account here...</div>
 
         <div class="input-container ic1">
           <input
             id="userName"
-            :class='[
-              "input",userName.length > 2 ? "valid" : " ",
-              userName.length > 0 && userName.length <= 2  ? "invalid" : ""
-            ]'
+            :class="[
+              'input',
+              userName.length > 2 ? 'valid' : ' ',
+              userName.length > 0 && userName.length <= 2 ? 'invalid' : '',
+            ]"
             type="text"
             placeholder=" "
             v-model="userName"
           />
           <div class="cut cut-long"></div>
-          <label
-            for="email"
-            class=placeholder
-          >User Name
-          </label>
+          <label for="email" class="placeholder">User Name </label>
         </div>
 
         <div class="input-container ic2">
           <input
             id="email"
-            :class='["input",checkEmail(email)]'
+            :class="['input', checkEmail(email)]"
             type="email"
             placeholder=" "
             v-model="email"
           />
           <div class="cut cut-short"></div>
-          <label
-            for="email" class
-            =placeholder>E-mail</label>
+          <label for="email" class="placeholder">E-mail</label>
         </div>
         <div class="input-container ic2">
           <input
             id="password"
-            :class='["input",checkPassword(password)]'
-            type="password" placeholder=" "
+            :class="['input', checkPassword(password)]"
+            type="password"
+            placeholder=" "
             v-model="password"
           />
           <div class="cut"></div>
-          <label
-            for="password"
-            class="placeholder"
-          >Mot de passe</label>
+          <label for="password" class="placeholder">Password</label>
         </div>
         <div class="input-container ic3">
           <input
             id="passwordConfirm"
-            :class='["input",checkPasswordMatch(passwordCheck)]'
-            type="password" placeholder=" "
+            :class="['input', checkPasswordMatch(passwordCheck)]"
+            type="password"
+            placeholder=" "
             v-model="passwordCheck"
           />
           <div class="cut cut-long2"></div>
-          <label for="password" class="placeholder">Confirmez le mot de passe</label>
+          <label for="password" class="placeholder">Confirm password</label>
         </div>
         <div class="input-container">
           <p
-          :style='[password.length > 0 && checkPassword(password) === "valid" ? "color:green" : "",
-          password.length > 0 && checkPassword(password) === "invalid" ? "color:red" :""
-          ]'
-          ><span>{{password.length > 0 && checkPassword(password) === "valid" ? "&#9745;":"&#9744;" }}</span>
-             Le mot de passe doit comporter au moins huit caractères, une lettre majuscule et un chiffre.</p>
+            :style="[
+              password.length > 0 && checkPassword(password) === 'valid'
+                ? 'color:green'
+                : '',
+              password.length > 0 && checkPassword(password) === 'invalid'
+                ? 'color:red'
+                : '',
+            ]"
+          >
+            <span>{{
+              password.length > 0 && checkPassword(password) === "valid"
+                ? "&#9745;"
+                : "&#9744;"
+            }}</span>
+            Password must be at least eight characters, one letter capital
+            letter and a number.
+          </p>
           <p
-          :style='[passwordCheck.length > 0 && checkPasswordMatch(passwordCheck) === "valid" ? "color:green" : "",
-          passwordCheck.length > 0 && checkPasswordMatch(passwordCheck) === "invalid" ? "color:red" : ""
-          ]'
-          ><span>{{passwordCheck.length > 0 && checkPasswordMatch(password) === "valid" ? "&#9745;":"&#9744;" }}</span>
-            Les mots de passe correspondent.</p>
+            :style="[
+              passwordCheck.length > 0 &&
+              checkPasswordMatch(passwordCheck) === 'valid'
+                ? 'color:green'
+                : '',
+              passwordCheck.length > 0 &&
+              checkPasswordMatch(passwordCheck) === 'invalid'
+                ? 'color:red'
+                : '',
+            ]"
+          >
+            <span>{{
+              passwordCheck.length > 0 &&
+              checkPasswordMatch(password) === "valid"
+                ? "&#9745;"
+                : "&#9744;"
+            }}</span>
+            The passwords match.
+          </p>
         </div>
-        <p class="errorMsg" v-if="this.errorMessage !== ''">Error: {{ errorMessage }}</p>
+        <p class="errorMsg" v-if="this.errorMessage !== ''">
+          Error: {{ errorMessage }}
+        </p>
         <button
           type="text"
-          :class='[checkEmail(email) === "valid"
-          && checkPassword(password) === "valid"
-          && checkPasswordMatch(passwordCheck) === "valid"
-          && userName.length > 2
-          ? "submit" : "submitOff"]'
-          @click="submitRegister()">
-          Créer un compte</button>
+          :class="[
+            checkEmail(email) === 'valid' &&
+            checkPassword(password) === 'valid' &&
+            checkPasswordMatch(passwordCheck) === 'valid' &&
+            userName.length > 2
+              ? 'submit'
+              : 'submitOff',
+          ]"
+          @click="submitRegister()"
+        >
+          Sign Up
+        </button>
       </div>
     </div>
   </div>
@@ -98,32 +121,32 @@
 import validatorEmail from "@/Libraries/validatorEmail";
 import validatorPassword from "@/Libraries/validatorPassword";
 import ServerEvents from "@/Libraries/ServerEvents";
-import {mapActions, mapGetters} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-  name: 'RegisterModalComp',
+  name: "RegisterModalComp",
   emits: {
     // null -> No validation needed
     closeRegister: null,
   },
   data() {
     return {
-      userName: '',
-      email: '',
-      password: '',
-      passwordCheck: '',
+      userName: "",
+      email: "",
+      password: "",
+      passwordCheck: "",
       validEmail: false,
       validPass: false,
       matchPass: false,
       register: false,
-      errorMessage: '',
-    }
+      errorMessage: "",
+    };
   },
   computed: {
     ...mapGetters({
       getUser: "user/getUser",
-      getNewUser: "user/getNewUser"
-    })
+      getNewUser: "user/getNewUser",
+    }),
   },
   methods: {
     ...mapActions({
@@ -136,24 +159,22 @@ export default {
       loadRegisterMessage: "message/loadRegisterMessage",
     }),
     closeRegister() {
-      this.$emit('closeRegister');
+      this.$emit("closeRegister");
     },
     submitRegister() {
-
-      ServerEvents.getUserList().then(
-        response => {
+      ServerEvents.getUserList()
+        .then((response) => {
           let data = response.data.results;
 
-          data.forEach(item => {
-              if (item.email === this.email) {
-                this.errorMessage = "l'email existe déjà"
-                setTimeout(() => {
-                  this.errorMessage = ''
-                }, 3000)
-                throw new Error("l'email existe déjà")
-              }
+          data.forEach((item) => {
+            if (item.email === this.email) {
+              this.errorMessage = "l'email existe déjà";
+              setTimeout(() => {
+                this.errorMessage = "";
+              }, 3000);
+              throw new Error("l'email existe déjà");
             }
-          )
+          });
           let newUser = this.getNewUser;
           newUser.id = data[data.length - 1].id + 1;
           newUser.name = this.userName;
@@ -162,16 +183,15 @@ export default {
           this.loadNewUser(newUser);
           this.closeRegister();
           this.loadRegisterMessage();
-        }
-      )
-        .then(() => {
-          ServerEvents.postNewUser("[" + JSON.stringify(this.getNewUser) + "]")
-            .then(() => {
-                this.resetNewUser();
-              }
-            )
         })
-        .catch(err => console.warn('error promisiune:' + err));
+        .then(() => {
+          ServerEvents.postNewUser(
+            "[" + JSON.stringify(this.getNewUser) + "]"
+          ).then(() => {
+            this.resetNewUser();
+          });
+        })
+        .catch((err) => console.warn("error promisiune:" + err));
     },
     /**
      * Checks email requirements (@, .com/.co etc.)
@@ -179,19 +199,21 @@ export default {
      * @returns {String|*}
      */
     checkEmail(arg) {
-      this.validEmail = validatorEmail(arg) === 'valid';
-      return validatorEmail(arg)
+      this.validEmail = validatorEmail(arg) === "valid";
+      return validatorEmail(arg);
     },
     checkPassword(arg) {
-      this.validPass = validatorPassword(arg) === 'valid';
-      return validatorPassword(arg)
+      this.validPass = validatorPassword(arg) === "valid";
+      return validatorPassword(arg);
     },
     checkPasswordMatch(arg) {
-      arg.length >0 && arg === this.password ? this.matchPass = true : this.matchPass = false;
-      return this.matchPass ? 'valid' : 'invalid'
+      arg.length > 0 && arg === this.password
+        ? (this.matchPass = true)
+        : (this.matchPass = false);
+      return this.matchPass ? "valid" : "invalid";
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -199,7 +221,7 @@ export default {
 @import "../assets/css/fontRoboto.css";
 @import "../assets/css/fontPoppins.css";
 
-.closeModal{
+.closeModal {
   position: absolute;
   background-color: #eee;
   border: none;
@@ -208,14 +230,13 @@ export default {
   right: 5%;
 }
 
-.closeModal:hover{
+.closeModal:hover {
   background-color: #939393;
 }
 
-.closeModal:active{
+.closeModal:active {
   background-color: #484848;
 }
-
 
 .register-container {
   top: 0;
@@ -231,7 +252,6 @@ export default {
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
 }
-
 
 .form {
   background-color: #15172b;
@@ -265,7 +285,7 @@ export default {
   width: 100%;
 }
 
-.input-container p{
+.input-container p {
   font-size: 13px;
   color: #eee;
   font-family: sans-serif;
@@ -273,12 +293,12 @@ export default {
   width: 100%;
 }
 
-.validReq{
-  color:green;
+.validReq {
+  color: green;
 }
 
-invalidReq{
-  color:red
+invalidReq {
+  color: red;
 }
 
 .ic1 {
@@ -289,7 +309,7 @@ invalidReq{
   margin-top: 30px;
 }
 
-.ic3{
+.ic3 {
   margin-top: 30px;
 }
 .input {
@@ -314,19 +334,19 @@ invalidReq{
   top: -20px;
   transform: translateY(0);
   transition: transform 200ms;
-  width: 90px;
+  width: 75px;
 }
 
 .cut-short {
   width: 60px;
 }
 
-.cut-long{
+.cut-long {
   width: 80px;
 }
 
-.cut-long2{
-  width: 170px
+.cut-long2 {
+  width: 120px;
 }
 
 .input:focus ~ .cut,
@@ -393,7 +413,6 @@ invalidReq{
   width: 100%;
 }
 
-
 .login-container {
   top: 0;
   display: flex;
@@ -417,8 +436,8 @@ invalidReq{
   background-color: rgba(255, 0, 0, 0.15);
 }
 
-.errorMsg{
-  color:red;
+.errorMsg {
+  color: red;
   text-align: center;
   right: 28%;
   position: absolute;

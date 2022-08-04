@@ -4,37 +4,35 @@
       <!-- Display: Selected category bred crumb -->
       <div class="breadCrumb">
         <div class="links">
-					<span
-						v-for="item in breadcrumb"
-						@click="emitNode(item)"
-						:key="item.id">
-						> {{ item.name ? item.name : item.title }}
-					</span>
-				</div>
+          <span
+            v-for="item in breadcrumb"
+            @click="emitNode(item)"
+            :key="item.id"
+          >
+            > {{ item.name ? item.name : item.title }}
+          </span>
+        </div>
 
-				<div class="filterList">
-					<input
-						class="searchList"
-						type="text"
-						placeholder="Rechercher un produit..."
-						@input="this.searchProduct($event.target.value)"
-					>
-					<select
-						class="sortList"
-						@change="this.sortProducts($event.target.value)">
-						<option value=0>Défaut</option>
-						<option :value="sortPriceAsc">Prix croissants</option>
-						<option :value="sortPriceDesc">Prix décroissants</option>
-						<option :value="sortAlphAsc">Nom croissant</option>
-						<option :value="sortAlphDesc">Nom décroissant</option>
-					</select>
-				</div>
-
+        <div class="filterList">
+          <input
+            class="searchList"
+            type="text"
+            placeholder="Rechercher un produit..."
+            @input="this.searchProduct($event.target.value)"
+          />
+          <select
+            class="sortList"
+            @change="this.sortProducts($event.target.value)"
+          >
+            <option value="0">Défaut</option>
+            <option :value="sortPriceAsc">Prix croissants</option>
+            <option :value="sortPriceDesc">Prix décroissants</option>
+            <option :value="sortAlphAsc">Nom croissant</option>
+            <option :value="sortAlphDesc">Nom décroissant</option>
+          </select>
+        </div>
       </div>
-      <div
-        class="product"
-        ref="productsList"
-      >
+      <div class="product" ref="productsList">
         <div
           v-for="product in products"
           :key="product.id"
@@ -66,15 +64,15 @@
 <script>
 import ProductComp from "./ProductComp.vue";
 import ProductDetailComp from "@/components/ProductDetailComp.vue";
-import {mapActions, mapGetters} from "vuex";
-import {FILTERS} from "@/const";
-import {Category} from "@/models/Category";
+import { mapActions, mapGetters } from "vuex";
+import { FILTERS } from "@/const";
+import { Category } from "@/models/Category";
 
 export default {
   name: "ProductsListComp",
   components: {
     ProductComp,
-    ProductDetailComp
+    ProductDetailComp,
   },
   props: {
     categoryId: {
@@ -92,14 +90,14 @@ export default {
   data() {
     return {
       showModal: false,
-      category: '',
+      category: "",
       sortPriceAsc: FILTERS.PRICE_ASC,
       sortPriceDesc: FILTERS.PRICE_DESC,
       sortAlphAsc: FILTERS.A_Z,
       sortAlphDesc: FILTERS.Z_A,
       intersectionObserver: null,
-      images: []
-    }
+      images: [],
+    };
   },
   computed: {
     ...mapGetters({
@@ -123,22 +121,21 @@ export default {
      * Loads selected category and returns path to parent
      */
     breadcrumb() {
-			let category = this.getCategory;
-			let path = (category ? category.path() : []);
+      let category = this.getCategory;
+      let path = category ? category.path() : [];
 
-			if (!category || (category && category.id)) {
-				let home = new Category({id: 0, name: "Accueil"});
-				path.unshift(home);
-			}
+      if (!category || (category && category.id)) {
+        let home = new Category({ id: 0, name: "Home" });
+        path.unshift(home);
+      }
       return path;
     },
   },
   mounted() {
     let callback = (entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          this.images[entry.target.dataset.id]
-            = entry.target.dataset.img;
+          this.images[entry.target.dataset.id] = entry.target.dataset.img;
         }
       });
     };
@@ -149,12 +146,12 @@ export default {
   },
 
   updated() {
-    Object.entries(this.$refs).forEach(item => {
+    Object.entries(this.$refs).forEach((item) => {
       let target = item.at(1);
       if (Array.isArray(target) && target.length) {
         this.intersectionObserver.observe(target.at(0));
       }
-    })
+    });
   },
   methods: {
     ...mapActions({
@@ -196,7 +193,7 @@ export default {
           localCart = [item];
         } else {
           let currentProduct = localCart.find(
-            product => product.id === item.id
+            (product) => product.id === item.id
           );
 
           if (currentProduct) {
@@ -214,8 +211,8 @@ export default {
     emitNode(value) {
       this.loadId(value.id);
       this.loadCategory(value);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -228,8 +225,8 @@ export default {
   padding: 0;
   display: grid;
   grid-template:
-      "content" 100%
-      / 100%;
+    "content" 100%
+    / 100%;
 }
 
 .productContainer {
@@ -238,9 +235,9 @@ export default {
   grid-area: content;
   display: grid;
   grid-template:
-      "breadCrumb" 50px
-      "content" auto
-      / 100%;
+    "breadCrumb" 50px
+    "content" auto
+    / 100%;
 }
 
 .breadCrumb {
@@ -249,36 +246,36 @@ export default {
   align-items: center;
   justify-content: center;
   grid-area: breadCrumb;
-	padding-left: 10px;
-	background-image: linear-gradient(to right, #ffffff, #efefef);
+  padding-left: 10px;
+  background-image: linear-gradient(to right, #ffffff, #efefef);
 }
 
 .breadCrumb .links {
-	height: 100%;
-	padding-right: 10px;
-	display: flex;
-	align-items: center;
+  height: 100%;
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .breadCrumb span {
-	margin-left: 10px;
+  margin-left: 10px;
   cursor: pointer;
 }
 
 .breadCrumb span:hover {
-  color: #2095E1FF;
+  color: #2095e1ff;
 }
 
 .filterList .searchList {
-	width: 220px;
-	padding: 7px;
-	border-radius: 50px;
+  width: 220px;
+  padding: 7px;
+  border-radius: 50px;
 }
 
 .filterList .sortList {
   margin-left: 10px;
-	border-radius: 50px;
-	padding: 2px;
+  border-radius: 50px;
+  padding: 2px;
 }
 
 .filterList {
@@ -291,7 +288,7 @@ export default {
   height: 100%;
   box-sizing: content-box;
   grid-area: content;
-	padding-left: 20px;
+  padding-left: 20px;
 }
 
 .product::-webkit-scrollbar {

@@ -1,18 +1,12 @@
 <template>
   <div class="shopContainer">
     <div class="header">
-      <h1>Votre panier</h1>
+      <h1>Your Cart</h1>
       <button @click="closeCart()">X</button>
     </div>
     <div class="itemContainer">
-      <div
-        class="contentContainer"
-        v-if="this.computedCart.length > 0"
-      >
-        <div
-          v-for="item in this.computedCart"
-          :key="item.id"
-        >
+      <div class="contentContainer" v-if="this.computedCart.length > 0">
+        <div v-for="item in this.computedCart" :key="item.id">
           <div class="messageBox">
             <ShopCartMessageComp
               v-if="item.showMessage === true"
@@ -27,30 +21,29 @@
               src="../assets/images/no_image_available.jpg"
               alt="{{ item.name }}"
             />
-            <img
-              v-else
-              :src="item.image"
-              :alt="item.name"
-            />
+            <img v-else :src="item.image" :alt="item.name" />
             <p class="title">{{ item.title }}</p>
             <p class="price">{{ item.price }}$</p>
-            <p class="price"><input
-              type="number"
-              min="1"
-              :value="item.quantity"
-              @input="event => this.modifyCart({
-              data:item, quantity:Number(event.target.value)})"
-            >
+            <p class="price">
+              <input
+                type="number"
+                min="1"
+                :value="item.quantity"
+                @input="
+                  (event) =>
+                    this.modifyCart({
+                      data: item,
+                      quantity: Number(event.target.value),
+                    })
+                "
+              />
               {{ item.unit }}
             </p>
             <a @click="deleteClick(item)">&#9747;</a>
           </div>
         </div>
       </div>
-      <div
-        class="checkOutContainer"
-        v-if="this.computedCart.length > 0"
-      >
+      <div class="checkOutContainer" v-if="this.computedCart.length > 0">
         <ShopCartMessageComp
           v-if="emptyCartShow === true"
           itemName="Tous les articles"
@@ -58,28 +51,29 @@
           :itemToDelete="itemToDelete"
         />
         <p>+ Expédition: 1.99€</p>
-        <h2>Total : {{ (this.getCartPrice + this.shipping).toFixed(2)}}  €</h2>
+        <h2>Total : {{ (this.getCartPrice + this.shipping).toFixed(2) }} €</h2>
         <div>
           <button class="outBtn">Commander</button>
-          <button class="clearAll" @click="emptyCartConfirmation()">Panier clair</button>
+          <button class="clearAll" @click="emptyCartConfirmation()">
+            Panier clair
+          </button>
         </div>
       </div>
       <div class="empty" v-else>
-        <h2>Votre panier est vide !</h2>
+        <h2>Your cart is empty !</h2>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
-import ShopCartMessageComp from "@/components/ShopCartMessageComp"
+import { mapActions, mapGetters } from "vuex";
+import ShopCartMessageComp from "@/components/ShopCartMessageComp";
 
 export default {
   name: "ShoppingCartComp",
-  components: {ShopCartMessageComp},
-  emits: ['closeCart'],
+  components: { ShopCartMessageComp },
+  emits: ["closeCart"],
 
   data() {
     return {
@@ -87,8 +81,8 @@ export default {
       shipping: 1.99,
       deleteItem: false,
       itemToDelete: [],
-      emptyCartShow:false,
-    }
+      emptyCartShow: false,
+    };
   },
   computed: {
     ...mapGetters({
@@ -99,8 +93,8 @@ export default {
      * @returns {Object} - Shopping Cart from localStorage
      */
     computedCart() {
-      return this.getCart
-    }
+      return this.getCart;
+    },
   },
   mounted() {
     this.loadCart();
@@ -110,41 +104,41 @@ export default {
       loadCart: "cart/loadCart",
       deleteCartItem: "cart/deleteCartItem",
       modifyCart: "cart/modifyCart",
-      emptyCart:"cart/emptyCart"
+      emptyCart: "cart/emptyCart",
     }),
     /**
      * deleteClick + deleteConfirm -> Confirmation message for deleting an item from cart.
      * @param{Object} item
      */
     deleteClick(item) {
-      item.showMessage = true
-      this.itemToDelete = item
+      item.showMessage = true;
+      this.itemToDelete = item;
     },
-    emptyCartConfirmation(){
+    emptyCartConfirmation() {
       this.emptyCartShow = true;
-      this.itemToDelete = "emptyCartConfirmation"
+      this.itemToDelete = "emptyCartConfirmation";
     },
     deleteConfirm(deleteItem) {
-      let item = this.itemToDelete
+      let item = this.itemToDelete;
       if (deleteItem) {
-        if(item === "emptyCartConfirmation"){
-          this.emptyCart()
-          deleteItem = false
+        if (item === "emptyCartConfirmation") {
+          this.emptyCart();
+          deleteItem = false;
           this.emptyCartShow = false;
-          return
+          return;
         }
-        this.deleteCartItem(item)
-        deleteItem = false
+        this.deleteCartItem(item);
+        deleteItem = false;
       } else {
-        if(item !== "emptyCartConfirmation") item.showMessage = false
+        if (item !== "emptyCartConfirmation") item.showMessage = false;
         this.emptyCartShow = false;
       }
     },
     closeCart() {
-      this.$emit('closeCart')
+      this.$emit("closeCart");
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -152,15 +146,15 @@ export default {
 @import "../assets/css/fontRoboto.css";
 
 .shopContainer {
-  box-shadow: -3px 3px 8px 0px rgba(0,0,0,0.35);
+  box-shadow: -3px 3px 8px 0px rgba(0, 0, 0, 0.35);
   z-index: 1000;
   position: absolute;
   right: 0;
   display: grid;
   grid-template:
-      "headerShopCart" 9%
-      "contentShopCart" 91%
-      /100%;
+    "headerShopCart" 9%
+    "contentShopCart" 91%
+    /100%;
   width: 50vw;
   height: 100%;
   background-color: white;
@@ -177,7 +171,6 @@ export default {
   margin-bottom: 2rem;
   height: 100%;
   width: 100%;
-
 }
 
 .header button {
@@ -199,23 +192,23 @@ export default {
 h1 {
   color: white;
   display: flex;
-  font-family: 'Kanit', sans-serif;
+  font-family: "Kanit", sans-serif;
 }
 
 h2 {
-  font-family: 'Kanit', sans-serif;
+  font-family: "Kanit", sans-serif;
 }
 
 .itemContainer {
   width: 100%;
   height: 100%;
   grid-area: contentShopCart;
-  display:grid;
+  display: grid;
   grid-template:
-      "items" auto
-      "footer" 300px
-      /100%;
-  font-family: 'Poppins', sans-serif;
+    "items" auto
+    "footer" 300px
+    /100%;
+  font-family: "Poppins", sans-serif;
   overflow: hidden;
 }
 
@@ -241,7 +234,6 @@ h2 {
   background-color: rgb(16, 191, 255);
   border-radius: 100px;
 }
-
 
 .checkOutContainer {
   display: inline-block;
@@ -273,7 +265,7 @@ h2 {
   max-height: 10rem;
   margin: 0.5rem;
   padding: 0.4rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   flex-wrap: wrap;
   font-size: 1.1rem;
   min-font-size: 0rem;
@@ -284,7 +276,7 @@ h2 {
   align-items: center;
   width: 1rem;
   border: none;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 0.8rem;
   padding-left: 5px;
   margin-left: 2px;
@@ -316,7 +308,6 @@ h2 {
   background-color: red;
   border: red 2px solid;
   font-weight: bold;
-
 }
 
 .itemList p {
@@ -372,7 +363,7 @@ h2 {
   cursor: pointer;
 }
 
-.clearAll:hover{
+.clearAll:hover {
   background-color: rgb(194, 11, 38);
 }
 
