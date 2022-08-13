@@ -17,18 +17,18 @@
           <input
             class="searchList"
             type="text"
-            placeholder="Rechercher un produit..."
+            placeholder="Search your desired product..."
             @input="this.searchProduct($event.target.value)"
           />
           <select
             class="sortList"
             @change="this.sortProducts($event.target.value)"
           >
-            <option value="0">Défaut</option>
-            <option :value="sortPriceAsc">Prix croissants</option>
-            <option :value="sortPriceDesc">Prix décroissants</option>
-            <option :value="sortAlphAsc">Nom croissant</option>
-            <option :value="sortAlphDesc">Nom décroissant</option>
+            <option value="0">Default</option>
+            <option :value="sortPriceAsc">Ascending price</option>
+            <option :value="sortPriceDesc">Desceding price</option>
+            <option :value="sortAlphAsc">A-Z</option>
+            <option :value="sortAlphDesc">Z-A</option>
           </select>
         </div>
       </div>
