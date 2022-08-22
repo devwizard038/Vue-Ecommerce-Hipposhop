@@ -69,7 +69,7 @@
       leave-active-class="animate__animated animate__fadeOutUp"
     >
       <p class="popup" v-if="this.selected != null">
-        <b>Vous avez ajouté au panier:</b> {{ this.selected.quantity }}/{{
+        <b>You added to cart:</b> {{ this.selected.quantity }}/{{
           this.selected.unit
         }}
         de "{{ this.selected.title }}"
@@ -214,6 +214,7 @@ body {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   z-index: 10000000;
+  max-width: 60ch;
 }
 
 .appContainer {

@@ -3,16 +3,19 @@
     <div class="table">
       <!-- Display: Category List-->
       <div class="left">
-        <div class="loaderCategories" v-if="this.getCategories.length < 1"></div>
-        <CategoryComp @selected="getSelectedCategory"
-                      @breadCrumb="getBreadCrumb"/>
+        <div
+          class="loaderCategories"
+          v-if="this.getCategories.length < 1"
+        ></div>
+        <CategoryComp
+          @selected="getSelectedCategory"
+          @breadCrumb="getBreadCrumb"
+        />
       </div>
       <!-- Display: Products -->
       <div class="right">
         <div class="loader" v-if="this.getProducts.length < 1"></div>
-        <ProductsListComp
-            :categoryId="categoryId"
-        />
+        <ProductsListComp :categoryId="categoryId" />
       </div>
     </div>
   </div>
@@ -21,19 +24,18 @@
 <script>
 import CategoryComp from "@/components/CategoryComp.vue";
 import ProductsListComp from "@/components/ProductsListComp.vue";
-import {mapActions, mapGetters} from "vuex";
-
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-  name:'HomePage',
+  name: "HomePage",
   components: {
     CategoryComp,
-		ProductsListComp
+    ProductsListComp,
   },
   data() {
     return {
       categoryId: 0,
-      loading:true,
+      loading: true,
     };
   },
   computed: {
@@ -41,32 +43,32 @@ export default {
       getId: "selectedcateg/getId",
       getProducts: "products/getProducts",
       getCart: "cart/getCart",
-      getCategories:"category/getCategories"
+      getCategories: "category/getCategories",
     }),
     products() {
       return this.getProducts;
     },
     id() {
-      return this.getId
-    }
+      return this.getId;
+    },
   },
   watch: {
     id(newId) {
-      this.getSelectedCategory(newId)
-    }
+      this.getSelectedCategory(newId);
+    },
   },
   beforeMount() {
     this.saveProducts();
   },
   mounted() {
-    this.loadCart()
+    this.loadCart();
     if (this.getCart === null) {
-      this.updateCart([])
+      this.updateCart([]);
     }
   },
   methods: {
     ...mapActions({
-      saveProducts:"products/saveProducts",
+      saveProducts: "products/saveProducts",
       loadCart: "cart/loadCart",
       updateCart: "cart/updateCart",
     }),
@@ -80,14 +82,13 @@ export default {
     getBreadCrumb(list) {
       this.breadCrumb = list;
     },
-  }
-}
+  },
+};
 </script>
 
 <style>
-
 .loader {
-  position:absolute;
+  position: absolute;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10rem;
@@ -103,8 +104,8 @@ export default {
   animation: spin 2s linear infinite;
 }
 
-.loaderCategories{
-  position:absolute;
+.loaderCategories {
+  position: absolute;
   margin-left: 5rem;
   margin-top: 10rem;
   left: 0;
@@ -119,7 +120,7 @@ export default {
   animation: spin 2s linear infinite;
 }
 
-.homeContainer{
+.homeContainer {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -127,8 +128,8 @@ export default {
   overflow: hidden;
   display: grid;
   grid-template:
-      "content" 100%
-      / 100%;
+    "content" 100%
+    / 100%;
 }
 
 h1 {
@@ -145,7 +146,7 @@ h1 {
   grid-template: "left right" 100%/ 350px auto;
 }
 
-.table .left{
+.table .left {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -155,7 +156,7 @@ h1 {
   grid-template: "leftContent" 100%/100%;
 }
 
-.table .right{
+.table .right {
   width: 100%;
   height: 100%;
   margin: 0;

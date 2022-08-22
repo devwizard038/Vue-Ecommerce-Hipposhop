@@ -2,29 +2,18 @@
   <div class="pop-message">
     <div class="message">
       <div>
-        Voulez-vous vraiment supprimer du panier:
-        <br>{{ itemName }}?
+        Are you sure you want to remove from cart:
+        <br />{{ itemName }}?
       </div>
       <div>
-        <button
-          class="press-yes"
-          @click="deleteConfirm(true)"
-        >
-          Oui
-        </button>
-        <button
-          class="press-no"
-          @click="deleteConfirm(false)"
-        >
-          Non
-        </button>
+        <button class="press-yes" @click="deleteConfirm(true)">Yes</button>
+        <button class="press-no" @click="deleteConfirm(false)">No</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "ShopCartMessageComp",
   props: {
@@ -32,14 +21,14 @@ export default {
       type: String,
       default: () => "",
     },
-    deleteConfirm: Function
+    deleteConfirm: Function,
   },
   data() {
     return {
       confirm: 0,
-    }
+    };
   },
-}
+};
 </script>
 
 <style>
@@ -66,7 +55,7 @@ export default {
   align-items: center;
   background-color: #2d2d2d;
   color: #efefef;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   border-radius: 5px;
   font-size: 18px;
   text-align: center;

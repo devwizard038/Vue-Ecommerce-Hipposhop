@@ -5,10 +5,7 @@
         <p @click="closeModal()">&#9747;</p>
       </div>
       <div class="image">
-        <img
-          :src="getDetails._image"
-          :alt="getDetails._title"
-        />
+        <img :src="getDetails._image" :alt="getDetails._title" />
       </div>
       <div class="modalDetailsContainer">
         <div class="title">
@@ -17,23 +14,25 @@
         </div>
         <div class="pricingContainer">
           <div class="pricingQty">
-            <p>Prix: {{ getDetails.price }}/{{ getDetails.unit }}</p>
+            <p>Price: {{ getDetails.price }}/{{ getDetails.unit }}</p>
             <div class="qtyContainer">
-              <p>Quantité:
+              <p>
+                Quantity:
                 <input
                   class="cell"
                   type="number"
                   min="0"
-                  v-model.number="quantity"/></p>
+                  v-model.number="quantity"
+                />
+              </p>
               <transition
                 mode="in-out"
                 enter-active-class="animate__animated animate__fadeIn"
                 leave-active-class="animate__animated animate__fadeOut"
               >
-                <p
-                  v-if="this.validQuantity"
-                  class="invalidQty"
-                >Sélectionner une quantité!</p>
+                <p v-if="this.validQuantity" class="invalidQty">
+                  Please select a quantity !
+                </p>
               </transition>
             </div>
           </div>
@@ -46,8 +45,13 @@
               <div>
                 <button
                   v-for="items in this.getAttSets[att]"
-                  @click="loadDetails(items); this.loadAttributesLists();"
-                  :class="items.id !== getDetails.id ? 'variantsBtn' : 'selected'"
+                  @click="
+                    loadDetails(items);
+                    this.loadAttributesLists();
+                  "
+                  :class="
+                    items.id !== getDetails.id ? 'variantsBtn' : 'selected'
+                  "
                   :key="items.attributes.name"
                 >
                   {{ items.attributes[att] }}
@@ -55,22 +59,27 @@
               </div>
             </div>
           </div>
-          <button
-            class="addBtn"
-            @click="addToCart(getDetails,this.quantity)">
-            Ajouter au panier
+          <button class="addBtn" @click="addToCart(getDetails, this.quantity)">
+            Add to Cart
           </button>
         </div>
         <div class="description">
-          <h3>Description du produit</h3>
-          <p>c'est-à-dire «dès le début», se référant à une enquête ou à une enquête. Ab initio mundi signifie "depuis
-            le début du monde". En littérature, il fait référence à une histoire racontée depuis le début plutôt qu'in
-            medias res (« du milieu »). En science, il fait référence aux premiers principes. Dans d'autres contextes,
-            il fait souvent référence à des cours de débutant ou de formation. En droit, il fait référence à une chose
-            qui est vraie depuis son début ou depuis l'instant de l'acte, plutôt qu'à partir du moment où le tribunal
-            l'a déclarée telle. De même, une annulation est une déclaration judiciaire d'invalidité ou de nullité d'un
-            mariage ab initio : le soi-disant mariage n'était « rien » (latin : nullius, d'où dérive le mot « nullité »)
-            et n'a jamais existé, sauf peut-être en nom uniquement.</p>
+          <h3>Product description</h3>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+            nisl eros, pulvinar facilisis justo mollis, auctor consequat urna.
+            Morbi a bibendum metus. Donec scelerisque sollicitudin enim eu
+            venenatis. Duis tincidunt laoreet ex, in pretium orci vestibulum
+            eget. Class aptent taciti sociosqu ad litora torquent per conubia
+            nostra, per inceptos himenaeos. Duis pharetra luctus lacus ut
+            vestibulum. Maecenas ipsum lacus, lacinia quis posuere ut, pulvinar
+            vitae dolor. Integer eu nibh at nisi ullamcorper sagittis id vel
+            leo. Integer feugiat faucibus libero, at maximus nisl suscipit
+            posuere. Morbi nec enim nunc. Phasellus bibendum turpis ut ipsum
+            egestas, sed sollicitudin elit convallis. Cras pharetra mi tristique
+            sapien vestibulum lobortis. Nam eget bibendum metus, non dictum
+            mauris. Nulla at tellus sagittis, viverra est a, bibendum metus.
+          </p>
         </div>
       </div>
     </div>
@@ -78,11 +87,11 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 // import {ProductTransformer} from "@/transformers/ProductTransformer";
 
 export default {
-  name: 'ProductDetailComponent',
+  name: "ProductDetailComponent",
   emits: {
     // null -> No validation needed
     closeModal: null,
@@ -92,9 +101,7 @@ export default {
     return {
       quantity: 0,
       validQuantity: false,
-      // attList: [],
-      // attSets: {},
-    }
+    };
   },
   computed: {
     ...mapGetters({
@@ -105,18 +112,18 @@ export default {
       getCart: "cart/getCart",
     }),
     displayCategories() {
-      let categories = this.getDetails.categories
+      let categories = this.getDetails.categories;
       if (categories.length > 1) {
-        let display = '';
+        let display = "";
         for (let i = 0; i < categories.length; i++) {
           if (i === 0) {
-            display += categories[i]
+            display += categories[i];
           }
-          display += '-> ' + categories[i]
+          display += "-> " + categories[i];
         }
-        return display
-      } else return categories[0]
-    }
+        return display;
+      } else return categories[0];
+    },
   },
   mounted() {
     this.loadAttributesLists();
@@ -129,7 +136,7 @@ export default {
       updateCart: "cart/updateCart",
     }),
     closeModal() {
-      this.$emit('closeModal');
+      this.$emit("closeModal");
     },
     addToCart(selectedItem) {
       /**
@@ -142,16 +149,16 @@ export default {
         this.quantity = 0;
         this.loadSelected(item);
         this.validQuantity = false;
-        this.$emit('addToCart', item);
+        this.$emit("addToCart", item);
       } else {
         this.validQuantity = true;
         setTimeout(() => {
-          this.validQuantity = false
-        }, 4000)
+          this.validQuantity = false;
+        }, 4000);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -201,7 +208,7 @@ export default {
   background-color: gray;
   padding: 0.5rem;
   font-weight: bold;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   margin: 0.2rem;
   pointer-events: none;
 }
@@ -212,7 +219,7 @@ export default {
   background-color: white;
   padding: 0.5rem;
   font-weight: bold;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   margin: 0.2rem;
   cursor: pointer;
 }
@@ -226,10 +233,10 @@ export default {
   padding: 1rem;
   display: grid;
   grid-template:
-      "closeButton" 65px
-      "productImage" auto
-      "content" auto
-      /auto;
+    "closeButton" 65px
+    "productImage" auto
+    "content" auto
+    / auto;
   overflow: auto;
 }
 
@@ -247,7 +254,6 @@ export default {
   border-radius: 100px;
 }
 
-
 .closeModal {
   width: 100%;
   grid-area: closeButton;
@@ -259,7 +265,7 @@ export default {
   margin-right: 1rem;
   padding: 0.2rem;
   color: white;
-  background-color: #2095E1FF;
+  background-color: #2095e1ff;
   cursor: pointer;
 }
 
@@ -286,10 +292,10 @@ export default {
   grid-area: content;
   display: grid;
   grid-template:
-      "title" 120px
-      "pricing" auto
-      "description" auto
-      /auto;
+    "title" 120px
+    "pricing" auto
+    "description" auto
+    / auto;
 }
 
 .title {
@@ -325,7 +331,7 @@ export default {
 }
 
 .pricingContainer .addBtn {
-  background-color: #2095E1FF;
+  background-color: #2095e1ff;
   padding: 0.6rem;
   font-size: 1rem;
   color: white;
@@ -351,18 +357,18 @@ export default {
 .pricingQty input {
   padding: 0.2rem;
   font-weight: bold;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   width: 2.5rem;
   border-radius: 6px;
   border: 1px solid black;
 }
 
 .pricingQty input:hover {
-  border: 2px solid #2095E1FF;
+  border: 2px solid #2095e1ff;
 }
 
 .pricingQty input:focus {
-  border: 2px solid #2095E1FF;
+  border: 2px solid #2095e1ff;
 }
 
 .description {

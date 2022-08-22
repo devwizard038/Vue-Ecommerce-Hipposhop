@@ -3,71 +3,57 @@
   <div class="cardContainer">
     <div class="card">
       <div class="containerImage">
-				<img
-					v-if="image === null"
-					src="../assets/images/no_image_available.jpg"
-					alt="{{ name }}"
-				/>
-				<img
-					v-else
-					:src="image"
-					:alt="name"
-				/>
-			</div>
-			<div class="productItem">
-				<div class="containerProduct" @click="toggleModal()">
-					<div class="productName">
-						{{ name }}
-					</div>
-					<div>
-					<b>Prix:</b>&nbsp; {{ price }} / {{ unit }}
-					</div>
-				</div>
-				<div class="qtyContainer">
-					<p>
-						<b>Quantité:</b> &nbsp;
-						<input
-							class="inputCell"
-							type="number"
-							min="0"
-							v-model.number="quantity"
-						/>
-
-					</p>
-					<span
-						v-if="this.validQuantity"
-						class="invalidQty"
-					>
-							Sélectionner une quantité!
-						</span>
-				</div>
-				<div class="addToCartContainer">
-					<button
-						class="addToCart"
-						@click="addToCart(product)"
-					>
-						Ajouter au panier
-					</button>
-				</div>
-			</div>
+        <img
+          v-if="image === null"
+          src="../assets/images/no_image_available.jpg"
+          alt="{{ name }}"
+        />
+        <img v-else :src="image" :alt="name" />
+      </div>
+      <div class="productItem">
+        <div class="containerProduct" @click="toggleModal()">
+          <div class="productName">
+            {{ name }}
+          </div>
+          <div><b>Price:</b>&nbsp; {{ price }} / {{ unit }}</div>
+        </div>
+        <div class="qtyContainer">
+          <p>
+            <b>Quantity:</b> &nbsp;
+            <input
+              class="inputCell"
+              type="number"
+              min="0"
+              v-model.number="quantity"
+            />
+          </p>
+          <span v-if="this.validQuantity" class="invalidQty">
+            Quantity must be over 0 !
+          </span>
+        </div>
+        <div class="addToCartContainer">
+          <button class="addToCart" @click="addToCart(product)">
+            Add to Cart
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-
-import {mapActions} from "vuex";
+import { mapActions } from "vuex";
 
 export default {
-  name: 'ProductComp',
+  name: "ProductComp",
   props: {
     image: {
       type: String,
-      default: null
+      default: null,
     },
     name: {
       type: String,
-      default: 'Nume produs',
+      default: "Nume produs",
     },
     price: {
       type: Number,
@@ -75,16 +61,16 @@ export default {
     },
     unit: {
       type: String,
-      default: 'buc'
+      default: "buc",
     },
     product: {
       type: Object,
-      default: Object
+      default: Object,
     },
     showModal: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   emits: {
     toggleModal: null,
@@ -99,7 +85,7 @@ export default {
   methods: {
     ...mapActions({
       loadDetails: "productDetail/loadDetails",
-      loadSelected: "cart/loadSelected"
+      loadSelected: "cart/loadSelected",
     }),
 
     /**
@@ -115,19 +101,19 @@ export default {
      * @param item {Object}
      */
     addToCart(selectedItem) {
-			let item = selectedItem.toObject();
+      let item = selectedItem.toObject();
       if (this.quantity > 0) {
         item.showMessage = false;
         item.quantity = this.quantity;
         this.quantity = 0;
         this.loadSelected(item);
         this.validQuantity = false;
-        this.$emit('addToCart', item);
+        this.$emit("addToCart", item);
       } else {
         this.validQuantity = true;
         setTimeout(() => {
-          this.validQuantity = false
-        }, 4000)
+          this.validQuantity = false;
+        }, 4000);
       }
     },
   },
@@ -143,12 +129,12 @@ export default {
 .card {
   display: flex;
   align-items: center;
-	border-bottom: solid 1px #dedede;
-	min-height: 170px;
+  border-bottom: solid 1px #dedede;
+  min-height: 170px;
 }
 
 .card .containerImage {
-	width: 200px;
+  width: 200px;
 }
 
 .card p {
@@ -161,8 +147,8 @@ export default {
 img {
   width: 180px;
   height: 150px;
-	border: solid 1px #dedede;
-	font-size: 10px;
+  border: solid 1px #dedede;
+  font-size: 10px;
 }
 
 .qtyContainer {
@@ -171,8 +157,8 @@ img {
 .inputCell {
   align-items: center;
   width: 3rem;
-	border: 1px solid #2095E1FF;
-  font-family: 'Poppins', sans-serif;
+  border: 1px solid #2095e1ff;
+  font-family: "Poppins", sans-serif;
   font-size: 1rem;
   padding-left: 5px;
   margin-left: 2px;
@@ -180,23 +166,23 @@ img {
 }
 
 .productItem {
-	flex-grow: 2;
-	display: flex;
-	padding-left: 10px;
-	align-items: center;
+  flex-grow: 2;
+  display: flex;
+  padding-left: 10px;
+  align-items: center;
 }
 
 .qtyContainer .invalidQty {
-  color: #FF0000FF;
+  color: #ff0000ff;
 }
 
 .containerProduct {
-	width: 100%;
+  width: 100%;
 }
 
 .addToCartContainer {
-	margin-right: 20px;
-	white-space: nowrap;
+  margin-right: 20px;
+  white-space: nowrap;
 }
 
 .productName {
@@ -204,7 +190,7 @@ img {
 }
 
 .productName:hover {
-  color: #2095E1FF;
+  color: #2095e1ff;
   cursor: pointer;
 }
 

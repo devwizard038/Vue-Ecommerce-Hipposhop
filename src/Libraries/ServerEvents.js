@@ -24,7 +24,7 @@ export default {
     return apiClient.get("/users.php");
   },
   getCategoryList() {
-    return apiClient.get("/database.json");
+    return apiClient.get("/category.json");
   },
   postJsonProducts(itemToSent) {
     return apiClient.post("/products.php", itemToSent);

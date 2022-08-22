@@ -96,7 +96,7 @@ export class Product {
       id: this.id,
       image: this.image,
       price: this.price,
-      title: this.titleProduct,
+      title: this.title,
       unit: this.unit,
       attributes: this.attributes,
       categoryId: this.category_id,

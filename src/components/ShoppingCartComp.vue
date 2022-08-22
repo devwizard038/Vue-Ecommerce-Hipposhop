@@ -46,16 +46,16 @@
       <div class="checkOutContainer" v-if="this.computedCart.length > 0">
         <ShopCartMessageComp
           v-if="emptyCartShow === true"
-          itemName="Tous les articles"
+          itemName="All the items"
           :deleteConfirm="deleteConfirm"
           :itemToDelete="itemToDelete"
         />
-        <p>+ Expédition: 1.99€</p>
+        <p>+ Shipping: 1.99€</p>
         <h2>Total : {{ (this.getCartPrice + this.shipping).toFixed(2) }} €</h2>
         <div>
-          <button class="outBtn">Commander</button>
+          <button class="outBtn">Check out</button>
           <button class="clearAll" @click="emptyCartConfirmation()">
-            Panier clair
+            Clear cart
           </button>
         </div>
       </div>
