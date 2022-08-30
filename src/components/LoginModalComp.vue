@@ -42,7 +42,7 @@
               ? 'submit'
               : 'submitOff',
           ]"
-          @click="submitLogin()"
+          @click="submitFirebaseLogin()"
         >
           Login
         </button>
@@ -54,8 +54,10 @@
 <script>
 import validatorEmail from "@/Libraries/validatorEmail";
 import validatorPassword from "@/Libraries/validatorPassword";
-import EventService from "@/Libraries/ServerEvents";
 import { mapActions, mapGetters } from "vuex";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import firebaseInit from "/src/main";
+// import EventService from "@/Libraries/ServerEvents"; USED IN OLD LOGIN, TODO: DELETE ...
 
 export default {
   name: "LoginModalComp",
@@ -78,6 +80,12 @@ export default {
       getUser: "user/getUser",
       getMessage: "message/getMessage",
     }),
+    /**
+     * Firebase Autenthification initializator.
+     */
+    getAuthFirebase() {
+      return getAuth(firebaseInit);
+    },
   },
   methods: {
     ...mapActions({
@@ -91,6 +99,35 @@ export default {
     closeLogin() {
       this.$emit("closeLogin");
     },
+    /**
+     * IMPORTANT: Login function.
+     */
+    async submitFirebaseLogin() {
+      let credentials = await signInWithEmailAndPassword(
+        this.getAuthFirebase,
+        this.email,
+        this.password
+      ).catch((error) => {
+        this.loginError = true;
+        setTimeout(() => (this.loginError = false), 3500);
+        console.warn(error);
+      });
+      // User is saved to state.
+      if (credentials) {
+        this.loginError = false;
+        this.loadUser(this.email);
+        /**
+         * IMPORTANT: Admin status attribution.
+         * ATTENTION: This is not an optimal solution at all, but I am using the free version of Firebase and I can't give users special attributes.
+         */
+        if (this.email === "admin@hipposhop.io") this.loadAdmin(true);
+        else this.loadAdmin(true);
+        this.closeLogin();
+        this.loadLoginMessage();
+      }
+    },
+    /** OLD Login function 
+     * TODO: delete this after everything works 100%
     submitLogin() {
       EventService.getUserList()
         .then((response) => {
@@ -116,6 +153,7 @@ export default {
         })
         .catch((err) => console.log("error promisiune:" + err));
     },
+    */
     submitLogout() {
       this.loadUser(null);
       this.loadAdmin(false);

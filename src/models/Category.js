@@ -18,7 +18,6 @@ export class Category {
    * @param {Category} child
    */
   addChild(child) {
-    console.log("child", child);
     this.children.push(child);
     child.parent = this;
   }
