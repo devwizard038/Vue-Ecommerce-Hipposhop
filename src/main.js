@@ -4,13 +4,17 @@ import router from "./router";
 import "animate.css";
 import store from "./store";
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 let app = createApp(App);
 app.use(router);
 app.use(store);
 app.mount("#app");
 
-export const firebaseInit = initializeApp({
+/**
+ * Firebase App Initializer
+ */
+const firebaseInit = initializeApp({
   apiKey: "AIzaSyC8qBns0wzk1LLwuJDYI3UCPrxcQ6kuTsQ",
   authDomain: "hippo-shop-80389.firebaseapp.com",
   databaseURL:
@@ -21,4 +25,15 @@ export const firebaseInit = initializeApp({
   appId: "1:337782449589:web:4f4f26b6ba94b6e52965fc",
   measurementId: "G-EMYVKVRNRX",
 });
-console.log(firebaseInit);
+// console.log(firebaseInit);
+
+/**
+ * Authentificator Initializer for Firebase.
+ * @param {Object} firebaseConfig
+ * @returns {Object}
+ */
+const firebaseAuthInit = function (firebaseConfig) {
+  return getAuth(firebaseConfig);
+};
+
+export { firebaseInit, firebaseAuthInit };

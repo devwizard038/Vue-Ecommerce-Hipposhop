@@ -85,6 +85,8 @@ import LoginModalComp from "@/components/LoginModalComp";
 import RegisterModalComp from "@/components/RegisterModalComp";
 import ProfileComp from "@/components/ProfileModalComp";
 import { mapActions, mapGetters } from "vuex";
+import { firebaseInit, firebaseAuthInit } from "/src/main";
+import { onAuthStateChanged, signOut } from "@firebase/auth";
 
 export default {
   name: "App",
@@ -141,6 +143,9 @@ export default {
       }, 3000);
     },
   },
+  updated() {
+    this.monitorAuthState();
+  },
   mounted() {
     this.loadCart();
     this.loadUserLocal();
@@ -151,6 +156,7 @@ export default {
       loadSelected: "cart/loadSelected",
       loadUserLocal: "user/loadUserLocal",
       loadAdmin: "user/loadAdmin",
+      loadLoginMessage: "message/loadLoginMessage",
       deleteUserLocal: "user/deleteUserLocal",
       loadUser: "user/loadUser",
       loadLogoutMessage: "message/loadLogoutMessage",
@@ -176,7 +182,12 @@ export default {
     toggleMobile() {
       this.active = !this.active;
     },
-    submitLogout() {
+    /**
+     * IMPORTANT: Logout function
+     * Modifies auth state in app and Firebase database
+     */
+    async submitLogout() {
+      await signOut(firebaseAuthInit(firebaseInit));
       this.loadUser(null);
       this.loadAdmin(false);
       this.deleteUserLocal();
@@ -187,6 +198,19 @@ export default {
     },
     closeProfile() {
       this.showProfile = false;
+    },
+    /**
+     * Verifies users authentification status and updates its state accordingly.
+     */
+    async monitorAuthState() {
+      onAuthStateChanged(firebaseAuthInit(firebaseInit), (user) => {
+        if (!user) return;
+        console.log("user state:", user);
+        this.loadUser(user.email);
+        if (user.email === "admin@hipposhop.io") this.loadAdmin(true);
+        else this.loadAdmin(false);
+        this.loadLoginMessage();
+      });
     },
   },
 };

@@ -55,9 +55,8 @@
 import validatorEmail from "@/Libraries/validatorEmail";
 import validatorPassword from "@/Libraries/validatorPassword";
 import { mapActions, mapGetters } from "vuex";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import firebaseInit from "/src/main";
-// import EventService from "@/Libraries/ServerEvents"; USED IN OLD LOGIN, TODO: DELETE ...
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseInit, firebaseAuthInit } from "/src/main";
 
 export default {
   name: "LoginModalComp",
@@ -80,12 +79,6 @@ export default {
       getUser: "user/getUser",
       getMessage: "message/getMessage",
     }),
-    /**
-     * Firebase Autenthification initializator.
-     */
-    getAuthFirebase() {
-      return getAuth(firebaseInit);
-    },
   },
   methods: {
     ...mapActions({
@@ -100,11 +93,11 @@ export default {
       this.$emit("closeLogin");
     },
     /**
-     * IMPORTANT: Login function.
+     * IMPORTANT: Login submit function.
      */
     async submitFirebaseLogin() {
       let credentials = await signInWithEmailAndPassword(
-        this.getAuthFirebase,
+        firebaseAuthInit(firebaseInit),
         this.email,
         this.password
       ).catch((error) => {
@@ -121,43 +114,10 @@ export default {
          * ATTENTION: This is not an optimal solution at all, but I am using the free version of Firebase and I can't give users special attributes.
          */
         if (this.email === "admin@hipposhop.io") this.loadAdmin(true);
-        else this.loadAdmin(true);
+        else this.loadAdmin(false);
         this.closeLogin();
         this.loadLoginMessage();
       }
-    },
-    /** OLD Login function 
-     * TODO: delete this after everything works 100%
-    submitLogin() {
-      EventService.getUserList()
-        .then((response) => {
-          let data = response.data.results;
-          for (let item in data) {
-            if (
-              data[item].email === this.email &&
-              data[item].password === this.password
-            ) {
-              this.loginError = false;
-              this.loadUser(this.email);
-              if (data[item].admin) {
-                this.loadAdmin(true);
-              } else this.loadAdmin(false);
-              this.closeLogin();
-              this.saveUserLocal();
-              this.loadLoginMessage();
-            } else {
-              this.loginError = true;
-              setTimeout(() => (this.loginError = false), 3500);
-            }
-          }
-        })
-        .catch((err) => console.log("error promisiune:" + err));
-    },
-    */
-    submitLogout() {
-      this.loadUser(null);
-      this.loadAdmin(false);
-      this.deleteUserLocal();
     },
     /**
      * Checks email requirements (@, .com/.co etc.)
