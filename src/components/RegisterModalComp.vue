@@ -6,22 +6,6 @@
         <div class="title">Hello !</div>
         <div class="subtitle">Create your account here...</div>
 
-        <div class="input-container ic1">
-          <input
-            id="userName"
-            :class="[
-              'input',
-              userName.length > 2 ? 'valid' : ' ',
-              userName.length > 0 && userName.length <= 2 ? 'invalid' : '',
-            ]"
-            type="text"
-            placeholder=" "
-            v-model="userName"
-          />
-          <div class="cut cut-long"></div>
-          <label for="email" class="placeholder">User Name </label>
-        </div>
-
         <div class="input-container ic2">
           <input
             id="email"
@@ -103,12 +87,11 @@
           :class="[
             checkEmail(email) === 'valid' &&
             checkPassword(password) === 'valid' &&
-            checkPasswordMatch(passwordCheck) === 'valid' &&
-            userName.length > 2
+            checkPasswordMatch(passwordCheck) === 'valid'
               ? 'submit'
               : 'submitOff',
           ]"
-          @click="submitRegister()"
+          @click="submitFirebaseRegister()"
         >
           Sign Up
         </button>
@@ -120,8 +103,9 @@
 <script>
 import validatorEmail from "@/Libraries/validatorEmail";
 import validatorPassword from "@/Libraries/validatorPassword";
-import ServerEvents from "@/Libraries/ServerEvents";
 import { mapActions, mapGetters } from "vuex";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { firebaseInit, firebaseAuthInit } from "/src/main";
 
 export default {
   name: "RegisterModalComp",
@@ -161,37 +145,23 @@ export default {
     closeRegister() {
       this.$emit("closeRegister");
     },
-    submitRegister() {
-      ServerEvents.getUserList()
-        .then((response) => {
-          let data = response.data.results;
-
-          data.forEach((item) => {
-            if (item.email === this.email) {
-              this.errorMessage = "l'email existe déjà";
-              setTimeout(() => {
-                this.errorMessage = "";
-              }, 3000);
-              throw new Error("l'email existe déjà");
-            }
-          });
-          let newUser = this.getNewUser;
-          newUser.id = data[data.length - 1].id + 1;
-          newUser.name = this.userName;
-          newUser.email = this.email;
-          newUser.password = this.passwordCheck;
-          this.loadNewUser(newUser);
-          this.closeRegister();
-          this.loadRegisterMessage();
-        })
-        .then(() => {
-          ServerEvents.postNewUser(
-            "[" + JSON.stringify(this.getNewUser) + "]"
-          ).then(() => {
-            this.resetNewUser();
-          });
-        })
-        .catch((err) => console.warn("error promisiune:" + err));
+    /**
+     * IMPORTANT: Register function for Firebase.
+     */
+    async submitFirebaseRegister() {
+      let credentials = await createUserWithEmailAndPassword(
+        firebaseAuthInit(firebaseInit),
+        this.email,
+        this.password
+      ).catch((error) => {
+        this.errorMessage = error;
+        setTimeout(() => (this.loginError = ""), 3500);
+        console.warn(error);
+      });
+      if (credentials) {
+        this.closeRegister();
+        this.loadRegisterMessage();
+      }
     },
     /**
      * Checks email requirements (@, .com/.co etc.)
@@ -257,7 +227,7 @@ export default {
   background-color: #15172b;
   border-radius: 20px;
   box-sizing: border-box;
-  height: 630px;
+  height: 560px;
   padding: 20px;
   width: 320px;
   position: relative;

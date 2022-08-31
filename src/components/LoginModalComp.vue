@@ -105,24 +105,15 @@ export default {
         setTimeout(() => (this.loginError = false), 3500);
         console.warn(error);
       });
-      // User is saved to state.
       if (credentials) {
         this.loginError = false;
-        this.loadUser(this.email);
-        /**
-         * IMPORTANT: Admin status attribution.
-         * ATTENTION: This is not an optimal solution at all, but I am using the free version of Firebase and I can't give users special attributes.
-         */
-        if (this.email === "admin@hipposhop.io") this.loadAdmin(true);
-        else this.loadAdmin(false);
         this.closeLogin();
-        this.loadLoginMessage();
       }
     },
     /**
      * Checks email requirements (@, .com/.co etc.)
      * @param arg {String}
-     * @returns {String|*}
+     * @returns {String}
      */
     checkEmail(arg) {
       this.validEmail = validatorEmail(arg) === "valid";

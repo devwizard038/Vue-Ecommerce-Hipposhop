@@ -201,11 +201,11 @@ export default {
     },
     /**
      * Verifies users authentification status and updates its state accordingly.
+     * ** Firebase function **
      */
     async monitorAuthState() {
       onAuthStateChanged(firebaseAuthInit(firebaseInit), (user) => {
         if (!user) return;
-        console.log("user state:", user);
         this.loadUser(user.email);
         if (user.email === "admin@hipposhop.io") this.loadAdmin(true);
         else this.loadAdmin(false);
