@@ -77,6 +77,7 @@
     </transition>
     <router-view />
   </div>
+  <NotifcationComp />
 </template>
 
 <script>
@@ -84,6 +85,7 @@ import ShoppingCart from "@/components/ShoppingCartComp.vue";
 import LoginModalComp from "@/components/LoginModalComp";
 import RegisterModalComp from "@/components/RegisterModalComp";
 import ProfileComp from "@/components/ProfileModalComp";
+import NotifcationComp from "./components/NotifcationComp.vue";
 import { mapActions, mapGetters } from "vuex";
 import { firebaseInit, firebaseAuthInit } from "/src/main";
 import { onAuthStateChanged, signOut } from "@firebase/auth";
@@ -95,6 +97,7 @@ export default {
     LoginModalComp,
     RegisterModalComp,
     ProfileComp,
+    NotifcationComp,
   },
   data() {
     return {
@@ -160,6 +163,7 @@ export default {
       deleteUserLocal: "user/deleteUserLocal",
       loadUser: "user/loadUser",
       loadLogoutMessage: "message/loadLogoutMessage",
+      loadNotification: "notifications/loadNotification",
     }),
     closeCart() {
       this.showCart = false;
@@ -191,7 +195,10 @@ export default {
       this.loadUser(null);
       this.loadAdmin(false);
       this.deleteUserLocal();
-      this.loadLogoutMessage();
+      this.loadNotification({
+        message: `Signed out`,
+        type: "info",
+      });
     },
     openProfile() {
       this.showProfile = true;
@@ -209,8 +216,12 @@ export default {
         this.loadUser(user.email);
         if (user.email === "admin@hipposhop.io") this.loadAdmin(true);
         else this.loadAdmin(false);
-        this.loadLoginMessage();
       });
+      if (this.getUser)
+        this.loadNotification({
+          message: `Signed in to ${this.getUser}`,
+          type: "info",
+        });
     },
   },
 };
