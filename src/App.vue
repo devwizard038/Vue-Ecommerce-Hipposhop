@@ -197,7 +197,7 @@ export default {
       this.deleteUserLocal();
       this.loadNotification({
         message: `Signed out`,
-        type: "info",
+        type: "alert",
       });
     },
     openProfile() {
