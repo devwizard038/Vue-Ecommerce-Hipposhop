@@ -62,11 +62,29 @@ export default {
         })
         .catch((error) => console.log(error));
     },
+    /**
+     * Download the product list and save it for the Admin.
+     * @param {*} param0
+     */
     saveAdminTable({ commit }) {
+      // let jsonProducts = [];
+      // return EvenService.getJsonProducts()
+      //   .then((response) => {
+      //     jsonProducts = response.data.results;
+      //     commit("setAdminList", jsonProducts);
+      //   })
+      //   .catch((error) => console.log(error));
+
+      let products = [];
       let jsonProducts = [];
-      return EvenService.getJsonProducts()
+      EvenService.getJsonProducts()
         .then((response) => {
-          jsonProducts = response.data.results;
+          jsonProducts = response.data;
+          if (jsonProducts !== null)
+            jsonProducts.forEach((item) => {
+              products.push(ProductTransformer.transform(item));
+            });
+          console.log("setAdminlist", jsonProducts);
           commit("setAdminList", jsonProducts);
         })
         .catch((error) => console.log(error));

@@ -61,17 +61,17 @@
       <button
         @click="saveAdminTable()"
         class="btn-load"
-        v-if="this.getUserList.length === 0"
+        v-if="this.getAdminList.length === 0"
       >
         Load Product List
       </button>
-      <button
+      <!-- <button
         @click="loadUserList()"
         class="btn-load"
         v-if="this.getAdminList.length === 0"
       >
         Load User List
-      </button>
+      </button> -->
     </div>
   </div>
 
