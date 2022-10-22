@@ -29,12 +29,12 @@
           <div class="cut"></div>
           <label for="password" class="placeholder">Password</label>
         </div>
-        <div
+        <!-- <div
           style="padding-top: 12px; color: red; text-align: center; right: 30%"
           v-if="this.loginError"
         >
           Error: utilisateur ou mot de passe introuvable
-        </div>
+        </div> -->
         <button
           type="text"
           :class="[
@@ -88,6 +88,7 @@ export default {
       deleteUserLocal: "user/deleteUserLocal",
       loadLoginMessage: "message/loadLoginMessage",
       loadLogoutMessage: "message/loadLogoutMessage",
+      loadNotification: "notifications/loadNotification",
     }),
     closeLogin() {
       this.$emit("closeLogin");
@@ -101,8 +102,11 @@ export default {
         this.email,
         this.password
       ).catch((error) => {
-        this.loginError = true;
-        setTimeout(() => (this.loginError = false), 3500);
+        let notification = {
+          message: this.formatErrorForDisplay(error),
+          type: "alert",
+        };
+        this.loadNotification(notification);
         console.warn(error);
       });
       if (credentials) {
@@ -122,6 +126,13 @@ export default {
     checkPassword(arg) {
       this.validPass = validatorPassword(arg) === "valid";
       return validatorPassword(arg);
+    },
+    formatErrorForDisplay(err) {
+      let phrase = String(err);
+      let word = "Firebase:";
+      let index = phrase.indexOf(word);
+      // TODO:better error text formatting for display`
+      return `${phrase.slice(index + 9)}`;
     },
   },
 };

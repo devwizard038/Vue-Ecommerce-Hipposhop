@@ -53,7 +53,7 @@ export default {
     },
     /**
      * Use in async functions to make function wait for setTimeout
-     * @param {Number} ms
+     * @param {Number} ms - miliseconds
      */
     delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
