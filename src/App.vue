@@ -212,16 +212,19 @@ export default {
      */
     async monitorAuthState() {
       onAuthStateChanged(firebaseAuthInit(firebaseInit), (user) => {
-        if (!user) return;
+        // if the introduced user is not valid or an user is already saved -> return
+        if (!user || this.getUser) return;
+
         this.loadUser(user.email);
         if (user.email === "admin@hipposhop.io") this.loadAdmin(true);
         else this.loadAdmin(false);
+
+        if (this.getUser)
+          this.loadNotification({
+            message: `Signed in to ${this.getUser}`,
+            type: "info",
+          });
       });
-      if (this.getUser)
-        this.loadNotification({
-          message: `Signed in to ${this.getUser}`,
-          type: "info",
-        });
     },
   },
 };
